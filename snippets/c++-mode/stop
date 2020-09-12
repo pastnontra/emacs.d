@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: stop
+# key: stop
+# --
+cin.clear();
+cin.sync();
+cin.get();
