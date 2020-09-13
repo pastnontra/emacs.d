@@ -538,7 +538,7 @@ If INCLUSIVE is t, the text object is inclusive."
   ;; "ff" 'my-toggle-full-window ;; I use WIN+F in i3
   "ip" 'find-file-in-project
   "tt" 'find-file-in-current-directory
-  "jj" 'find-file-in-project-at-poin0t
+  "jj" 'find-file-in-project-at-point
   "kk" 'find-file-in-project-by-selected
   "kn" 'find-file-with-similar-name ; ffip v5.3.1
   "fd" 'find-directory-in-project-by-selected
@@ -691,6 +691,15 @@ If INCLUSIVE is t, the text object is inclusive."
   :states '(normal visual))
 
 (my-space-leader-def
+  "b" '(:ignore t :which-key "buffers")
+  "e" '(:ignore t :which-key "emacs")
+  "f" '(:ignore t :which-key "files")
+  "g" '(:ignore t :which-key "git")
+  "h" '(:ignore t :which-key "help")
+  "o" '(:ignore t :which-key "org")
+  "w" '(:ignore t :which-key "windows")
+  "s" '(:ignore t :which-key "system'")
+
   "SPC" 'counsel-M-x
   "TAB" (lambda () (interactive) (switch-to-buffer nil)) ; last buffer
   ";" 'evilnc-comment-operator
@@ -713,7 +722,10 @@ If INCLUSIVE is t, the text object is inclusive."
   "fj" 'dired-jump
   "fr" 'counsel-recentf
 
+  ;; git
+
   ;; help
+  "hF" 'find-function
   "hf" 'counsel-describe-function
   "hk" 'describe-key
   "hv" 'counsel-describe-variable
@@ -752,8 +764,7 @@ If INCLUSIVE is t, the text object is inclusive."
   "sp" 'paste-from-x-clipboard
   "ss" 'my-switch-to-shell
 
-  "y" 'hydra-launcher/body
-  )
+  "y" 'hydra-launcher/body)
 
 ;; Please check "init-ediff.el" which contains `my-space-leader-def' code too
 (my-comma-leader-def
