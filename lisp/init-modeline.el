@@ -43,15 +43,15 @@
     ;; is this buffer read-only?
     '(:eval (when buffer-read-only
               (concat ","  (propertize "RO" 'face nil 'help-echo "Buffer is read-only"))))
-    "] "
+    "]"
 
     ;;global-mode-string, org-timer-set-timer in org-mode need this
-    (propertize "%M" 'face nil)
+    ;; (propertize "%M" 'face nil)
 
-    " --"
+    ;; " --"
     ;; Don't show `minor-mode'
     ;; minor-mode-alist  ;; list of minor modes
-    "%-" ;; fill with '-'
+    ;; "%-" ;; fill with '-'
     ))
 
 (provide 'init-modeline)
