@@ -513,10 +513,10 @@ If INCLUSIVE is t, the text object is inclusive."
 
 (my-comma-leader-def
   ;; "," 'evilnc-comment-operator
-  "bf" 'beginning-of-defun
-  "bu" 'backward-up-list
-  ;; "bb" (lambda () (interactive) (switch-to-buffer nil)) ; to previous buffer
-  "ef" 'end-of-defun
+  ;; "bf" 'beginning-of-defun
+  ;; "bu" 'backward-up-list
+  ;; ;; "bb" (lambda () (interactive) (switch-to-buffer nil)) ; to previous buffer
+  ;; "ef" 'end-of-defun
   "m" 'evil-set-marker
   "em" 'my-erase-visible-buffer
   ;; "eb" 'eval-buffer
@@ -562,8 +562,8 @@ If INCLUSIVE is t, the text object is inclusive."
   "ft" 'counsel-etags-find-tag
   "yy" 'counsel-browse-kill-ring
   "cf" 'counsel-grep ; grep current buffer
-  "gf" 'counsel-git ; find file
-  "gg" 'my-counsel-git-grep ; quickest grep should be easy to press
+  ;; "gf" 'counsel-git ; find file
+  ;; "gg" 'my-counsel-git-grep ; quickest grep should be easy to press
   "gd" 'ffip-show-diff-by-description ;find-file-in-project 5.3.0+
   "gt" 'my-evil-goto-definition ; "gt" is occupied by evil
   "gl" 'my-git-log-trace-definition ; find history of a function or range
@@ -590,7 +590,7 @@ If INCLUSIVE is t, the text object is inclusive."
   "cxo" 'org-clock-out ; `C-c C-x C-o'
   "cxr" 'org-clock-report ; `C-c C-x C-r'
   "qq" 'my-multi-purpose-grep
-  "dd" 'counsel-etags-grep-current-directory
+  "dd" 'counsel-etags-grep-current-directory ; it seems can't work
   ;; "rr" 'my-counsel-recentf
   "da" 'diff-region-tag-selected-as-a
   "db" 'diff-region-compare-with-b
@@ -696,6 +696,7 @@ If INCLUSIVE is t, the text object is inclusive."
   "f" '(:ignore t :which-key "files")
   "g" '(:ignore t :which-key "git")
   "h" '(:ignore t :which-key "help")
+  "j" '(:ignore t :which-key "jump")
   "o" '(:ignore t :which-key "org")
   "w" '(:ignore t :which-key "windows")
   "s" '(:ignore t :which-key "system'")
@@ -716,19 +717,27 @@ If INCLUSIVE is t, the text object is inclusive."
   ;; emacs/eshell
   "eb" 'eval-buffer
   "ee" 'eval-expression
+  "es" 'eval-last-sexp
 
   ;; files
   "ff" 'counsel-find-file
+  "fg" 'counsel-git ; find file
   "fj" 'dired-jump
   "fr" 'counsel-recentf
 
   ;; git
+  "gg" 'my-counsel-git-grep
 
   ;; help
   "hF" 'find-function
   "hf" 'counsel-describe-function
   "hk" 'describe-key
   "hv" 'counsel-describe-variable
+
+  ;; jump
+  "jb" 'beginning-of-defun
+  "je" 'end-of-defun
+  "ju" 'backward-up-list
 
   "n" 'narrow-or-widen-dwim
 
@@ -758,10 +767,11 @@ If INCLUSIVE is t, the text object is inclusive."
   "wu" 'my-transient-winner-undo
   ;"wr" resize
   "ww" 'delete-other-windows
+  "w TAB" 'alternate-window
 
   ;; system
   "sc" 'copy-to-x-clipboard
-  "sp" 'paste-from-x-clipboard
+  "sv" 'paste-from-x-clipboard
   "ss" 'my-switch-to-shell
 
   "y" 'hydra-launcher/body)
@@ -1046,5 +1056,11 @@ If INCLUSIVE is t, the text object is inclusive."
   ;; Cursor is always black because of evil.
   ;; Here is the workaround
   (setq evil-default-cursor t))
+
+(defun alternate-window ()
+  (interactive)
+  (let ((prev-window (get-mru-window nil t t)))
+  (unless prev-window (user-error "Last window not found."))
+  (select-window prev-window)))
 
 (provide 'init-evil)
