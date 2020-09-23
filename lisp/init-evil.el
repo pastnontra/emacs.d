@@ -537,9 +537,9 @@ If INCLUSIVE is t, the text object is inclusive."
   ;; "xo" 'ace-window
   ;; "ff" 'my-toggle-full-window ;; I use WIN+F in i3
   "ip" 'find-file-in-project
-  "tt" 'find-file-in-current-directory
-  "jj" 'find-file-in-project-at-point
-  "kk" 'find-file-in-project-by-selected
+  ;; "tt" 'find-file-in-current-directory
+  ;; "jj" 'find-file-in-project-at-point
+  ;; "kk" 'find-file-in-project-by-selected
   "kn" 'find-file-with-similar-name ; ffip v5.3.1
   "fd" 'find-directory-in-project-by-selected
   "trm" 'get-term
@@ -571,14 +571,14 @@ If INCLUSIVE is t, the text object is inclusive."
   "rjs" 'run-js
   "jsr" 'js-send-region
   "jsb" 'js-clear-send-buffer
-  "kb" 'kill-buffer-and-window ;; "k" is preserved to replace "C-g"
+  ;; "kb" 'kill-buffer-and-window ;; "k" is preserved to replace "C-g"
   "ls" 'highlight-symbol
   "lq" 'highlight-symbol-query-replace
   "ln" 'highlight-symbol-nav-mode ; use M-n/M-p to navigation between symbols
   "ii" 'my-imenu-or-list-tag-in-current-file
   ;; @see https://github.com/pidu/git-timemachine
   ;; p: previous; n: next; w:hash; W:complete hash; g:nth version; q:quit
-  "tm" 'my-git-timemachine
+  ;; "tm" 'my-git-timemachine
   ;; toggle overview,  @see http://emacs.wordpress.com/2007/01/16/quick-and-dirty-code-folding/
   ;; "op" 'compile
   "c$" 'org-archive-subtree ; `C-c $'
@@ -709,6 +709,7 @@ If INCLUSIVE is t, the text object is inclusive."
 
   ;; buffers
   "bb" 'ivy-switch-buffer-by-pinyin
+  "bk" 'kill-buffer-and-window ;; "k" is preserved to replace "C-g"
 
   "c" 'compile
 
@@ -720,13 +721,19 @@ If INCLUSIVE is t, the text object is inclusive."
   "es" 'eval-last-sexp
 
   ;; files
+  "fd" 'find-file-in-current-directory
   "ff" 'counsel-find-file
   "fg" 'counsel-git ; find file
   "fj" 'dired-jump
+  "fp" 'find-file-in-project-at-point
   "fr" 'counsel-recentf
+  "fs" 'find-file-in-project-by-selected
 
   ;; git
   "gg" 'my-counsel-git-grep
+  ;; @see https://github.com/pidu/git-timemachine
+  ;; p: previous; n: next; w:hash; W:complete hash; g:nth version; q:quit
+  "gm" 'my-git-timemachine
 
   ;; help
   "hF" 'find-function
