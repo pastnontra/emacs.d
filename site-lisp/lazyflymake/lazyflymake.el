@@ -243,14 +243,16 @@ If FORCE is t, the existing set up in `flymake-allowed-file-name-masks' is repla
       (setq output (replace-regexp-in-string "^:elisp-flymake-output-start[\r\n]*" "" output))
       (unless (string= "" output)
         (let* ((original-errors (read output)))
-          (setq errors (mapcar (lambda (e)
-                                 (list buffer-file-name
-                                       (nth 1 e)
-                                       (save-excursion
-                                         (goto-char (nth 1 e))
-                                         (line-end-position))
-                                       (nth 0 e)))
-                               original-errors)))))
+          ;; (read output) may fail
+          (when (listp original-errors)
+            (setq errors (mapcar (lambda (e)
+                                   (list buffer-file-name
+                                         (nth 1 e)
+                                         (save-excursion
+                                           (goto-char (nth 1 e))
+                                           (line-end-position))
+                                         (nth 0 e)))
+                                 original-errors))))))
      (t
       ;; extract syntax errors
       (dolist (l (split-string output "[\r\n]+"  t "[ \t]+"))
@@ -325,7 +327,8 @@ If FORCE is t, the existing set up in `flymake-allowed-file-name-masks' is repla
 Return the running process."
   (let* ((proc (apply 'start-file-process lazyflymake-process-name buffer program args)))
     ;; maybe the temporary source file is already deleted
-    (unless (file-exists-p lazyflymake-temp-source-file-name)
+    (when (not (and lazyflymake-temp-source-file-name
+                    (file-exists-p lazyflymake-temp-source-file-name)))
       (setq lazyflymake-temp-source-file-name nil))
 
     ;; For flymake-mode, I don't use this `process-put' trick
