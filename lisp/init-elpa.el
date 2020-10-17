@@ -11,9 +11,12 @@
 
     ;; esup need call `package-initialize'
     ;; @see https://github.com/jschaf/esup/issues/84
-    (when (or (featurep 'esup-child) (my-vc-merge-p))
-      (package-initialize)))
-   (t
+    (when (or (featurep 'esup-child)
+              (fboundp 'profile-dotemacs)
+              (not (file-exists-p (concat my-emacs-d "elpa")))
+              (my-vc-merge-p))
+     (package-initialize)))
+ (t
   ;; @see https://www.gnu.org/software/emacs/news/NEWS.27.1
     (package-initialize))))
 
@@ -91,7 +94,6 @@
     groovy-mode
     company ; I won't wait another 2 years for stable
     simple-httpd
-    dsvn
     findr
     mwe-log-commands
     noflet
@@ -251,7 +253,6 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
 (require-package 'scratch)
 (require-package 'rainbow-delimiters)
 (require-package 'textile-mode)
-(require-package 'dsvn)
 (require-package 'git-timemachine)
 (require-package 'exec-path-from-shell)
 (require-package 'ivy)
@@ -259,7 +260,6 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
 (require-package 'counsel) ; counsel => swiper => ivy
 (require-package 'find-file-in-project)
 (require-package 'counsel-bbdb)
-(require-package 'ibuffer-vc)
 (require-package 'command-log-mode)
 (require-package 'regex-tool)
 (require-package 'groovy-mode)
