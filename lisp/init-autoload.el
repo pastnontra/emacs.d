@@ -33,6 +33,8 @@
 (autoload 'counsel-etags-scan-code "counsel-etags" "" t nil)
 (autoload 'counsel-etags-grep "counsel-etags" "" t nil)
 (autoload 'counsel-etags-recent-tag "counsel-etags" "" t nil)
+(autoload 'lazyflymake-start "lazyflymake" "" t nil)
+(autoload 'wucuo-start "wucuo" "" t nil)
 (autoload 'markdown-mode "markdown-mode" "Mode for editing Markdown documents" t)
 (autoload 'csv-mode "csv-mode" "Major mode for comma-separated value files." t)
 (autoload 'sdcv-search-pointer "sdcv" "show word explanation in buffer" t)
@@ -79,6 +81,7 @@
 (autoload 'eacl-complete-multiline "eacl" "")
 (autoload 'dropdown-list "dropdown-list" "")
 (autoload 'magit-commit-popup "magit" "")
+(autoload 'global-git-gutter-mode "git-gutter" "" t)
 
 (provide 'init-autoload)
 ;;; init-autoload.el ends here

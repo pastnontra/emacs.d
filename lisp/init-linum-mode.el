@@ -4,6 +4,7 @@
 (defvar my-linum-inhibit-modes
   '(eshell-mode
     shell-mode
+    js-comint-mode
     profiler-report-mode
     ffip-diff-mode
     dictionary-mode
@@ -46,6 +47,6 @@
                                         ;; don't show line number for certain file extensions
                                         (should-use-minimum-resource)))))
   (add-hook 'display-line-numbers-mode-hook 'display-line-numbers-mode-hook-setup)
-  (global-display-line-numbers-mode t))
+  (run-with-idle-timer 2 nil #'global-display-line-numbers-mode))
 
 (provide 'init-linum-mode)

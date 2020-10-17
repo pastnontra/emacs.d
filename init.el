@@ -58,17 +58,6 @@
   (when (or (not maybe-disabled) (not (my-vc-merge-p)))
     (load (file-truename (format "%s/%s" my-lisp-dir pkg)) t t)))
 
-(defun local-require (pkg)
-  "Require PKG in site-lisp directory."
-  (unless (featurep pkg)
-    (load (expand-file-name
-           (cond
-            ((eq pkg 'go-mode-load)
-             (format "%s/go-mode/%s" my-site-lisp-dir pkg))
-            (t
-             (format "%s/%s/%s" my-site-lisp-dir pkg pkg))))
-          t t)))
-
 (defun my-add-subdirs-to-load-path (lisp-dir)
   "Add sub-directories under LISP-DIR into `load-path'."
   (let* ((default-directory lisp-dir))
@@ -153,9 +142,6 @@
   ;; the key bindings in previous configuration
   (require-init 'init-ediff)
 
-  (add-to-list 'load-path "~")
-  (require 'eaf)
-
   ;; @see https://github.com/hlissner/doom-emacs/wiki/FAQ
   ;; Adding directories under "site-lisp/" to `load-path' slows
   ;; down all `require' statement. So we do this at the end of startup
@@ -186,7 +172,7 @@
   (setq gc-cons-percentage 0.1) ; original value
   (garbage-collect))
 
-(run-with-idle-timer 4 t #'my-cleanup-gc)
+(run-with-idle-timer 4 nil #'my-cleanup-gc)
 
 ;;; Local Variables:
 ;;; no-byte-compile: t
