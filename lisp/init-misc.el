@@ -1175,6 +1175,7 @@ See https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber."
 
 (setq visible-bell t)
 
+;; set font
 (add-to-list 'default-frame-alist
              '(font . "Hack-12"))
 (dolist (charset '(kana han cjk-misc bopomofo))
