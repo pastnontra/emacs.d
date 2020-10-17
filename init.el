@@ -153,6 +153,9 @@
   ;; the key bindings in previous configuration
   (require-init 'init-ediff)
 
+  (add-to-list 'load-path "~")
+  (require 'eaf)
+
   ;; @see https://github.com/hlissner/doom-emacs/wiki/FAQ
   ;; Adding directories under "site-lisp/" to `load-path' slows
   ;; down all `require' statement. So we do this at the end of startup
