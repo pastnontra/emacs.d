@@ -365,6 +365,7 @@ If the character before and after CH is space or tab, CH is NOT slash"
 ;; I learn this trick from ReneFroger, need latest expand-region
 ;; @see https://github.com/redguardtoo/evil-matchit/issues/38
 (define-key evil-visual-state-map (kbd "v") 'er/expand-region)
+(define-key evil-insert-state-map (kbd "C-a") 'move-beginning-of-line)
 (define-key evil-insert-state-map (kbd "C-e") 'move-end-of-line)
 (define-key evil-insert-state-map (kbd "C-k") 'kill-line)
 (define-key evil-insert-state-map (kbd "M-j") 'yas-expand)
@@ -1070,5 +1071,11 @@ If INCLUSIVE is t, the text object is inclusive."
   (let ((prev-window (get-mru-window nil t t)))
   (unless prev-window (user-error "Last window not found."))
   (select-window prev-window)))
+
+;; Make the behavior same with vim, but it may be change
+(custom-set-variables
+ '(evil-want-C-u-scroll t)
+ '(evil-want-C-u-delete t)
+ '(evil-want-C-d-scroll t))
 
 (provide 'init-evil)
