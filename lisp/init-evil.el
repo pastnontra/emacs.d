@@ -558,10 +558,8 @@ If INCLUSIVE is t, the text object is inclusive."
   "ct" 'evilnc-comment-or-uncomment-html-tag ; evil-nerd-commenter v3.3.0 required
   "ic" 'my-imenu-comments
   "rv" 'my-rename-thing-at-point
-  "rb" 'evilmr-replace-in-buffer
+  ;; "rb" 'evilmr-replace-in-buffer
   "ts" 'evilmr-tag-selected-region ;; recommended
-  "cby" 'cb-switch-between-controller-and-view
-  "cbu" 'cb-get-url-from-controller
   "rt" 'counsel-etags-recent-tag
   "ft" 'counsel-etags-find-tag
   "yy" 'counsel-browse-kill-ring
@@ -779,6 +777,7 @@ If INCLUSIVE is t, the text object is inclusive."
   "ww" 'delete-other-windows
   "w TAB" 'alternate-window
 
+  "r" 'evilmr-replace-in-buffer
   ;; system
   "sc" 'copy-to-x-clipboard
   "sv" 'paste-from-x-clipboard
