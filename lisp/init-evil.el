@@ -551,7 +551,7 @@ If INCLUSIVE is t, the text object is inclusive."
   "tfm" 'toggle-frame-maximized
   "ti" 'fastdef-insert
   "th" 'fastdef-insert-from-history
-  "ci" 'evilnc-comment-or-uncomment-lines
+  ;; "ci" 'evilnc-comment-or-uncomment-lines
   "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
   "cc" 'evilnc-copy-and-comment-lines
   "cp" 'my-evilnc-comment-or-uncomment-paragraphs
@@ -704,7 +704,7 @@ If INCLUSIVE is t, the text object is inclusive."
 
   "SPC" 'counsel-M-x
   "TAB" (lambda () (interactive) (switch-to-buffer nil)) ; last buffer
-  ";" 'evilnc-comment-operator
+  ";" 'evilnc-comment-or-uncomment-lines
 
   ;; app
 
@@ -750,6 +750,8 @@ If INCLUSIVE is t, the text object is inclusive."
   "n" 'narrow-or-widen-dwim
 
   ;; org
+
+  "t" 'random-healthy-color-theme
 
   "v" 'er/expand-region
 
@@ -801,7 +803,7 @@ If INCLUSIVE is t, the text object is inclusive."
 
   "SPC jj" 'scroll-other-window
   "SPC kk" 'scroll-other-window-up
-  "SPC hh" 'random-healthy-color-theme
+  ;; "SPC hh" 'random-healthy-color-theme
   ;; "SPC yy" 'hydra-launcher/body
   "SPC yy" 'hydra-launcher/body
   "SPC ii" 'my-toggle-indentation
@@ -828,35 +830,7 @@ If INCLUSIVE is t, the text object is inclusive."
   "SPC de" 'js2-display-error-list
   "SPC nn" 'js2-next-error
   "SPC te" 'js2-mode-toggle-element
-  "SPC tf" 'js2-mode-toggle-hide-functions
-  "SPC jeo" 'js2r-expand-object
-  "SPC jco" 'js2r-contract-object
-  "SPC jeu" 'js2r-expand-function
-  "SPC jcu" 'js2r-contract-function
-  "SPC jea" 'js2r-expand-array
-  "SPC jca" 'js2r-contract-array
-  "SPC jwi" 'js2r-wrap-buffer-in-iife
-  "SPC jig" 'js2r-inject-global-in-iife
-  "SPC jev" 'js2r-extract-var
-  "SPC jiv" 'js2r-inline-var
-  "SPC jrv" 'js2r-rename-var
-  "SPC jvt" 'js2r-var-to-this
-  "SPC jag" 'js2r-add-to-globals-annotation
-  "SPC jsv" 'js2r-split-var-declaration
-  "SPC jss" 'js2r-split-string
-  "SPC jef" 'js2r-extract-function
-  "SPC jem" 'js2r-extract-method
-  "SPC jip" 'js2r-introduce-parameter
-  "SPC jlp" 'js2r-localize-parameter
-  "SPC jtf" 'js2r-toggle-function-expression-and-declaration
-  "SPC jao" 'js2r-arguments-to-object
-  "SPC juw" 'js2r-unwrap
-  "SPC jwl" 'js2r-wrap-in-for-loop
-  "SPC j3i" 'js2r-ternary-to-if
-  "SPC jlt" 'js2r-log-this
-  "SPC jsl" 'js2r-forward-slurp
-  "SPC jba" 'js2r-forward-barf
-  "SPC jk" 'js2r-kill)
+  "SPC tf" 'js2-mode-toggle-hide-functions)
 ;; }}
 
 (defun my-evil-delete-hack (orig-func &rest args)

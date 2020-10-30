@@ -360,51 +360,6 @@ This function can be re-used by other major modes after compilation."
   (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer))
 ;; }}
 
-;; @see http://emacs.stackexchange.com/questions/14129/which-keyboard-shortcut-to-use-for-navigating-out-of-a-string
-(defun font-face-is-similar (f1 f2)
-  "Font face F1 and F2 are similar or same."
-  ;; (message "f1=%s f2=%s" f1 f2)
-  ;; in emacs-lisp-mode, the '^' from "^abde" has list of faces:
-  ;;   (font-lock-negation-char-face font-lock-string-face)
-  (if (listp f1) (setq f1 (nth 1 f1)))
-  (if (listp f2) (setq f2 (nth 1 f2)))
-
-  (or (eq f1 f2)
-      ;; C++ comment has different font face for limit and content
-      ;; f1 or f2 could be a function object because of rainbow mode
-      (and (string-match "-comment-" (format "%s" f1))
-           (string-match "-comment-" (format "%s" f2)))))
-
-(defun font-face-at-point-similar-p (font-face-list)
-  "Test if font face at point is similar to any font in FONT-FACE-LIST."
-  (let* ((f (get-text-property (point) 'face))
-         rlt)
-    (dolist (ff font-face-list)
-      (if (font-face-is-similar f ff) (setq rlt t)))
-    rlt))
-
-;; {{
-(defun goto-edge-by-comparing-font-face (&optional step)
-  "Goto either the begin or end of string/comment/whatever.
-If step is -1, go backward."
-  (interactive "P")
-  (let* ((cf (get-text-property (point) 'face))
-         (p (point))
-         rlt
-         found
-         end)
-    (unless step (setq step 1)) ;default value
-    (setq end (if (> step 0) (point-max) (point-min)))
-    (while (and (not found) (not (= end p)))
-      (if (not (font-face-is-similar (get-text-property p 'face) cf))
-          (setq found t)
-        (setq p (+ p step))))
-    (if found (setq rlt (- p step))
-      (setq rlt p))
-    ;; (message "rlt=%s found=%s" rlt found)
-    (goto-char rlt)))
-;; }}
-
 (defun my-minibuffer-setup-hook ()
   (local-set-key (kbd "M-y") 'paste-from-x-clipboard)
   (local-set-key (kbd "C-k") 'kill-line)
@@ -413,7 +368,7 @@ If step is -1, go backward."
 
 (defun my-minibuffer-exit-hook ()
   ;; evil-mode also use minibuf
-  (setq gc-cons-threshold best-gc-cons-threshold))
+  (setq gc-cons-threshold 67108864))
 
 ;; @see http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
 (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
@@ -751,6 +706,13 @@ If no region is selected, `kill-ring' or clipboard is used instead."
   (define-key grep-mode-map
     (kbd "C-x C-q") 'wgrep-change-to-wgrep-mode))
 
+(defun my-wgrep-mark-deletion-hack (&optional arg)
+  "After mark a line for deletion, move to next line.
+ARG is ignored."
+  (ignore arg)
+  (forward-line))
+(advice-add 'wgrep-mark-deletion :after #'my-wgrep-mark-deletion-hack)
+
 ;; wgrep and rgrep, inspired by http://oremacs.com/2015/01/27/my-refactoring-workflow/
 (with-eval-after-load 'wgrep
   '(define-key grep-mode-map
@@ -1019,18 +981,18 @@ might be bad."
   ;; Instead of calling `pomodoro-add-to-mode-line`
   (push '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format))
 
-  ;; {{ epub setup
-  (defun nov-mode-hook-setup ()
-    "Set up of `nov-mode'."
-    (local-set-key (kbd "d")
-		           (lambda ()
-		             (interactive)
-		             ;; go to end of word to workaround `nov-mode' bug
-		             (forward-word)
-		             (forward-char -1)
-		             (sdcv-search-input (thing-at-point 'word))))
-    (local-set-key (kbd "w") 'mybigword-pronounce-word)
-    (local-set-key (kbd ";") 'avy-goto-char-2))
+;; {{ epub setup
+(defun nov-mode-hook-setup ()
+  "Set up of `nov-mode'."
+  (local-set-key (kbd "d")
+		 (lambda ()
+		   (interactive)
+		   ;; go to end of word to workaround `nov-mode' bug
+		   (forward-word)
+		   (forward-char -1)
+		   (sdcv-search-input (thing-at-point 'word))))
+  (local-set-key (kbd "w") 'mybigword-pronounce-word)
+  (local-set-key (kbd ";") 'avy-goto-char-2))
 (add-hook 'nov-mode-hook 'nov-mode-hook-setup)
 ;; }}
 
@@ -1158,19 +1120,5 @@ See https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber."
   ;; I don't use those exec path anyway.
   (run-with-idle-timer 4 nil #'exec-path-from-shell-initialize))
 ;; }}
-
-(setq visible-bell t)
-
-;; set font
-(add-to-list 'default-frame-alist
-             '(font . "Hack-12"))
-(dolist (charset '(kana han cjk-misc bopomofo))
-  (set-fontset-font (frame-parameter nil 'font) charset
-                    (font-spec :family "微软雅黑" :size 15)))
-
-(global-set-key (kbd "C-h") 'delete-backward-char)
-(define-key isearch-mode-map "\C-h" 'isearch-delete-char)
-
-(load-theme 'molokai t)
 
 (provide 'init-misc)
