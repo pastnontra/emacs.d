@@ -148,13 +148,31 @@
   ;; @see https://github.com/hlissner/doom-emacs/wiki/FAQ
   ;; Adding directories under "site-lisp/" to `load-path' slows
   ;; down all `require' statement. So we do this at the end of startup
-  ;; NO ELPA package is dependent on "site-lisp/".
+  ;; NO ELPA package i dependent on "site-lisp/".
   (setq load-path (cdr load-path))
   (my-add-subdirs-to-load-path (file-name-as-directory my-site-lisp-dir))
   (require-init 'init-flymake t)
-
   (add-to-list 'load-path "~/emacs-application-framework")
-  (require 'eaf)
+  (if *linux*
+   ((require 'eaf)
+   (add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp/nox"))))
+  (require 'posframe)
+  (require 'xref)
+  (require 'nox)
+  (dolist (hook (list
+                 'js-mode-hook
+                 'rust-mode-hook
+                 'python-mode-hook
+                 'ruby-mode-hook
+                 'java-mode-hook
+                 'sh-mode-hook
+                 'php-mode-hook
+                 'c-mode-common-hook
+                 'c-mode-hook
+                 'c++-mode-hook
+                 'haskell-mode-hook
+                 ))
+    (add-hook hook '(lambda () (nox-ensure))))
 
   (unless (my-vc-merge-p)
     ;; @see https://www.reddit.com/r/emacs/comments/4q4ixw/how_to_forbid_emacs_to_touch_configuration_files/

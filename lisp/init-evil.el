@@ -233,8 +233,9 @@ If the character before and after CH is space or tab, CH is NOT slash"
 ;; }}
 
 ;; {{ https://github.com/syl20bnr/evil-escape
-(setq evil-escape-excluded-major-modes '(dired-mode))
 (global-set-key (kbd "<escape>") 'evil-escape)
+(setq-default evil-escape-key-sequence nil)
+(setq evil-escape-excluded-major-modes '(dired-mode))
 ;; disable evil-escape when input method is on
 (evil-escape-mode 1)
 ;; }}
@@ -767,7 +768,7 @@ If INCLUSIVE is t, the text object is inclusive."
   "8" 'winum-select-window-8
   "9" 'winum-select-window-9
   "wf" 'my-toggle-full-window
-  "wq" 'delete-window
+  "wq" 'delete-window ; I dislike this keybindingb
   "wv" 'split-window-vertically
   "wg" 'split-window-horizontally
   "wh" 'evil-window-left
@@ -1051,5 +1052,10 @@ If INCLUSIVE is t, the text object is inclusive."
  '(evil-want-C-u-scroll t)
  '(evil-want-C-u-delete t)
  '(evil-want-C-d-scroll t))
+
+(setq-default my-use-m-for-matchit t)
+
+;; @see https://github.com/emacs-evil/evil-surround/pull/48
+(evil-define-key 'visual evil-surround-mode-map "s" 'evil-surround-region)
 
 (provide 'init-evil)
