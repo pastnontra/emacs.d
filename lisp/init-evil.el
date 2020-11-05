@@ -523,7 +523,7 @@ If INCLUSIVE is t, the text object is inclusive."
   ;; ;; "bb" (lambda () (interactive) (switch-to-buffer nil)) ; to previous buffer
   ;; "ef" 'end-of-defun
   "m" 'evil-set-marker
-  "em" 'my-erase-visible-buffer
+  "em" 'shellcop-erase-buffer
   ;; "eb" 'eval-buffer
   "sc" 'scratch
   ;; "ee" 'eval-expression
@@ -859,16 +859,17 @@ If INCLUSIVE is t, the text object is inclusive."
   ;;    (set-face-attribute 'avy-lead-face-0 nil :background "#f86bf3"))
   ";" 'ace-pinyin-jump-char-2
   "w" 'avy-goto-word-or-subword-1
-  "a" 'avy-goto-char-timer
+  ;; "a" 'avy-goto-char-timer
   "db" 'sdcv-search-input ; details
   "dt" 'sdcv-search-input+ ; summary
   "dd" 'my-lookup-dict-org
   "mm" 'lookup-doc-in-man
-  "gg" 'w3m-google-search
-  "gd" 'w3m-search-financial-dictionary
-  "ga" 'w3m-java-search
-  "gh" 'w3mext-hacker-search ; code search in all engines with firefox
-  "gq" 'w3m-stackoverflow-search)
+  ;; "gg" 'w3m-google-search
+  ;; "gd" 'w3m-search-financial-dictionary
+  ;; "ga" 'w3m-java-search
+  ;; "gh" 'w3mext-hacker-search ; code search in all engines with firefox
+  ;; "gq" 'w3m-stackoverflow-search
+  )
 ;; }}
 
 ;; {{ remember what we searched
@@ -1057,5 +1058,7 @@ If INCLUSIVE is t, the text object is inclusive."
 
 ;; @see https://github.com/emacs-evil/evil-surround/pull/48
 (evil-define-key 'visual evil-surround-mode-map "s" 'evil-surround-region)
+
+(define-key evil-normal-state-map "t" 'avy-goto-char-timer)
 
 (provide 'init-evil)

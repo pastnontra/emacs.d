@@ -153,7 +153,7 @@
   (my-add-subdirs-to-load-path (file-name-as-directory my-site-lisp-dir))
   (require-init 'init-flymake t)
   (add-to-list 'load-path "~/emacs-application-framework")
-  (if *linux*
+  (when *linux*
    ((require 'eaf)
    (add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp/nox"))))
   (require 'posframe)
