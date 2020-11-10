@@ -89,19 +89,12 @@
   (dolist (pattern patterns)
     (add-to-list 'interpreter-mode-alist (cons pattern mode))))
 
-(defun font-belongs-to (pos fonts)
-  "Current font at POS belongs to FONTS."
-  (let* ((fontfaces (get-text-property pos 'face)))
-    (when (not (listp fontfaces))
-      (setf fontfaces (list fontfaces)))
-    (delq nil
-          (mapcar (lambda (f)
-                    (member f fonts))
-                  fontfaces))))
+(defun my-what-face (&optional position)
+  "Shows all faces at POSITION."
+  (let* ((face (get-text-property (or position (point)) 'face)))
+    (unless (keywordp (car-safe face)) (list face))))
 
-;;----------------------------------------------------------------------------
 ;; String utilities missing from core emacs
-;;----------------------------------------------------------------------------
 (defun string-all-matches (regex str &optional group)
   "Find all matches for `REGEX' within `STR', returning the full match string or group `GROUP'."
   (let ((result nil)
@@ -111,11 +104,6 @@
       (push (match-string group str) result)
       (setq pos (match-end group)))
     result))
-
-;; Find the directory containing a given library
-(defun directory-of-library (library-name)
-  "Return the directory in which the `LIBRARY-NAME' load file is found."
-  (file-name-as-directory (file-name-directory (find-library-name library-name))))
 
 (defun path-in-directory-p (file directory)
   "FILE is in DIRECTORY."
@@ -226,10 +214,12 @@ If HINT is empty, use symbol at point."
 (defvar cached-normal-file-full-path nil)
 
 (defun buffer-too-big-p ()
+  "Test if current buffer is too big."
   ;; 5000 lines
   (> (buffer-size) (* 5000 80)))
 
-(defun file-too-big-p (file)
+(defun my-file-too-big-p (file)
+  "Test if FILE is too big."
   (> (nth 7 (file-attributes file))
      (* 5000 64)))
 
@@ -262,19 +252,24 @@ If HINT is empty, use symbol at point."
     rlt))
 
 (defvar my-mplayer-extra-opts ""
-  "Extra options for mplayer (ao or vo setup).  For example,
-you can '(setq my-mplayer-extra-opts \"-ao alsa -vo vdpau\")'.")
+  "Extra options for mplayer (ao or vo setup).
+For example, you can '(setq my-mplayer-extra-opts \"-ao alsa -vo vdpau\")'.")
 
 (defun my-guess-mplayer-path ()
+  "Guess cli program mplayer's path."
   (let* ((rlt "mplayer"))
     (cond
-     (*is-a-mac* (setq rlt "mplayer -quiet"))
+     (*is-a-mac*
+      (setq rlt "mplayer -quiet"))
+
      (*linux*
-      (setq rlt (format "mplayer -quiet -stop-xscreensaver %s" my-mplayer-extra-opts)))
+      (setq rlt (format "mplayer -quiet -stop-xscreensaver %s"
+                        my-mplayer-extra-opts)))
      (*cygwin*
       (if (file-executable-p "/cygdrive/c/mplayer/mplayer.exe")
           (setq rlt "/cygdrive/c/mplayer/mplayer.exe -quiet")
         (setq rlt "/cygdrive/d/mplayer/mplayer.exe -quiet")))
+
      (t ; windows
       (if (file-executable-p "c:\\\\mplayer\\\\mplayer.exe")
           (setq rlt "c:\\\\mplayer\\\\mplayer.exe -quiet")
@@ -442,6 +437,70 @@ If STEP is 1,  search in forward direction, or else in backward direction."
          (imenu-auto-rescan-maxout (buffer-size))
          (items (imenu--make-index-alist t)))
     (delete (assoc "*Rescan*" items) items)))
+
+(defun my-create-range (&optional inclusive)
+  "Return range by font face.
+Copied from 3rd party package evil-textobj."
+  (let* ((point-face (my-what-face))
+         (pos (point))
+         (backward-point pos) ; last char when stop, including white space
+         (backward-none-space-point pos) ; last none white space char
+         (forward-point pos) ; last char when stop, including white space
+         (forward-none-space-point pos) ; last none white space char
+         (start pos)
+         (end pos))
+
+    ;; check chars backward,
+    ;; stop when char is not white space and has different face
+    (save-excursion
+      (let ((continue t))
+        (while (and continue (>= (- (point) 1) (point-min)))
+          (backward-char)
+          (if (= 32 (char-after))
+              (setq backward-point (point))
+            (if (equal point-face (my-what-face))
+                (progn (setq backward-point (point))
+                       (setq backward-none-space-point (point)))
+              (setq continue nil))))))
+
+    ;; check chars forward,
+    ;; stop when char is not white space and has different face
+    (save-excursion
+      (let ((continue t))
+        (while (and continue (< (+ (point) 1) (point-max)))
+          (forward-char)
+          (let ((forward-point-face (my-what-face)))
+            (if (= 32 (char-after))
+                (setq forward-point (point))
+              (if (equal point-face forward-point-face)
+                  (progn (setq forward-point (point))
+                         (setq forward-none-space-point (point)))
+                (setq continue nil)))))))
+
+    (cond
+     (inclusive
+      (setq start backward-none-space-point)
+      (setq end forward-none-space-point))
+     (t
+      (setq start (1+ backward-none-space-point))
+      (setq end (1- forward-none-space-point))))
+
+    (cons start (1+ end))))
+
+(defun my-pinyinlib-build-regexp-string (str)
+  "Build pinyin regexp from STR."
+  (my-ensure 'pinyinlib)
+  (let* (rlt (i 0) ch)
+    (while (< i (length str))
+      (setq ch (elt str i))
+      (setq rlt (concat rlt
+                        (cond
+                         ((and (<= ?a ch) (<= ch ?z))
+                          (pinyinlib-build-regexp-char ch))
+                         (t
+                          (char-to-string ch)))))
+      (setq i (1+ i)))
+    rlt))
 
 (provide 'init-utils)
 ;;; init-utils.el ends here

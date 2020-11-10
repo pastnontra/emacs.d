@@ -152,10 +152,11 @@
   (setq load-path (cdr load-path))
   (my-add-subdirs-to-load-path (file-name-as-directory my-site-lisp-dir))
   (require-init 'init-flymake t)
-  (add-to-list 'load-path "~/emacs-application-framework")
+
   (when *linux*
-   ((require 'eaf)
-   (add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp/nox"))))
+    (add-to-list 'load-path "~/emacs-application-framework")
+    (require 'eaf))
+  (add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp/nox"))
   (require 'posframe)
   (require 'xref)
   (require 'nox)

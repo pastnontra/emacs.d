@@ -29,15 +29,13 @@
    ((= n 5)
     ;; grep Chinese using pinyinlib.
     ;; In ivy filter, trigger key must be pressed before filter chinese
-    (my-ensure 'pinyinlib)
     (let* ((counsel-etags-convert-grep-keyword
             (lambda (keyword)
               (if (and keyword (> (length keyword) 0))
-                  (pinyinlib-build-regexp-string keyword t)
+                  (my-pinyinlib-build-regexp-string keyword)
                 keyword))))
       (counsel-etags-grep)))))
 
-;; {{ message buffer things
 ;; {{ narrow region
 (defun narrow-to-region-indirect-buffer-maybe (start end use-indirect-buffer)
   "Indirect buffer could multiple widen on same file."

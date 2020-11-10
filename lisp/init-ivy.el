@@ -146,7 +146,7 @@ If N is 2, list files in my recent 20 commits."
       (message "%s => kill-ring" val)
       (insert val))))
 
-(defun counsel-recent-directory (&optional n)
+(defun my-recent-directory (&optional n)
   "Goto recent directories.
 If N is not nil, only list directories in current project."
   (interactive "P")
@@ -209,11 +209,7 @@ If N is nil, use `ivy-mode' to browse `kill-ring'."
                                 (kill-new plain-str)))))
 
 (defun ivy-switch-buffer-matcher-pinyin (regexp candidates)
-  (my-ensure 'pinyinlib)
-  (let* ((pys (split-string regexp "[ \t]+"))
-         (regexp (format ".*%s.*"
-                         (mapconcat 'pinyinlib-build-regexp-string pys ".*"))))
-    (ivy--switch-buffer-matcher regexp candidates)))
+  (ivy--switch-buffer-matcher (my-pinyinlib-build-regexp-string regexp) candidates))
 
 (defun ivy-switch-buffer-by-pinyin ()
   "Switch to another buffer."
@@ -247,14 +243,14 @@ If N is nil, use `ivy-mode' to browse `kill-ring'."
      ;; do nothing
      ((<= (length str) 0))
 
-     ;; If the first charater of input in ivy is ":",
+     ;; If the first character of input in ivy is ":",
      ;; remaining input is converted into Chinese pinyin regex.
-     ;; For example, input "/ic" match "isController" or "isCollapsed"
      ((string= (substring str 0 1) ":")
-      (setq str (pinyinlib-build-regexp-string (substring str 1 len) t)))
+      (setq str (my-pinyinlib-build-regexp-string (substring str 1 len))))
 
-     ;; If the first charater of input in ivy is "/",
+     ;; If the first character of input in ivy is "/",
      ;; remaining input is converted to pattern to search camel case word
+     ;; For example, input "/ic" match "isController" or "isCollapsed"
      ((string= (substring str 0 1) "/")
       (let* ((rlt "")
              (i 0)
@@ -282,9 +278,9 @@ If N is nil, use `ivy-mode' to browse `kill-ring'."
   (my-ensure 'counsel)
   (cond
    ;; `counsel--imenu-candidates' was created on 2019-10-12
-    ((and (fboundp 'counsel--imenu-candidates)
-          (not (memq major-mode '(pdf-view-mode))))
-     (let* ((cands (counsel--imenu-candidates))
+   ((and (fboundp 'counsel--imenu-candidates)
+         (not (memq major-mode '(pdf-view-mode))))
+    (let* ((cands (counsel--imenu-candidates))
            (pre-selected (thing-at-point 'symbol))
            (pos (point))
            closest)
