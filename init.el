@@ -156,6 +156,7 @@
   (when *linux*
     (add-to-list 'load-path "~/emacs-application-framework")
     (require 'eaf))
+
   (add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp/nox"))
   (require 'posframe)
   (require 'xref)
