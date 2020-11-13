@@ -1,6 +1,7 @@
 ;; -*- coding: utf-8; lexical-binding: t; -*-
 
 (set-language-environment "UTF-8")
+
 (setq visible-bell t)
 
 ;; font
@@ -15,9 +16,6 @@
 
 (global-set-key (kbd "C-h") 'delete-backward-char)
 (define-key isearch-mode-map "\C-h" 'isearch-delete-char)
-
-(require 'init-evil)
-(require 'evil-matchit)
 
 ;; theme
 (load-theme 'doom-monokai-pro t)
