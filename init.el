@@ -85,6 +85,11 @@
   (require-init 'init-utils)
   (require-init 'init-file-type)
   (require-init 'init-elpa)
+
+  ;; for unit test
+  (when my-disable-idle-timer
+    (my-add-subdirs-to-load-path (file-name-as-directory my-site-lisp-dir)))
+
   (require-init 'init-exec-path t) ;; Set up $PATH
   ;; Any file use flyspell should be initialized after init-spelling.el
   (require-init 'init-spelling t)
@@ -150,7 +155,9 @@
   ;; down all `require' statement. So we do this at the end of startup
   ;; NO ELPA package i dependent on "site-lisp/".
   (setq load-path (cdr load-path))
-  (my-add-subdirs-to-load-path (file-name-as-directory my-site-lisp-dir))
+  (unless my-disable-idle-timer
+    (my-add-subdirs-to-load-path (file-name-as-directory my-site-lisp-dir)))
+
   (require-init 'init-flymake t)
 
   (when *linux*

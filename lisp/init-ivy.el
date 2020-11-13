@@ -1,6 +1,6 @@
 ;; -*- coding: utf-8; lexical-binding: t; -*-
 
-(run-with-idle-timer 1 nil #'ivy-mode) ; it enables ivy UI for `kill-buffer'
+(my-run-with-idle-timer 1 #'ivy-mode) ; it enables ivy UI for `kill-buffer'
 
 (with-eval-after-load 'counsel
   ;; automatically pick up cygwin cli tools for counsel
@@ -241,7 +241,7 @@ If N is nil, use `ivy-mode' to browse `kill-ring'."
   (let* ((len (length str)))
     (cond
      ;; do nothing
-     ((<= (length str) 0))
+     ((<= (length str) 1))
 
      ;; If the first character of input in ivy is ":",
      ;; remaining input is converted into Chinese pinyin regex.
