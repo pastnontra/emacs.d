@@ -1,5 +1,6 @@
 ;; -*- coding: utf-8; lexical-binding: t; -*-
 
+(set-language-environment "UTF-8")
 (setq visible-bell t)
 
 ;; font
