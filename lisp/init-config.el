@@ -25,4 +25,6 @@
 ;; (set-background-color "#0B1013") ; KUROTSURUBAMI
 ;; (set-background-color "#1C1C1C") ; SUMI for comment?
 
+(set-language-environment "UTF-8")
+
 (provide 'init-config)
