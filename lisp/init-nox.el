@@ -18,6 +18,6 @@
                  'haskell-mode-hook
                  ))
     (add-hook hook '(lambda () (nox-ensure))))
-  (set 'nox-python-server-dir "~/python-language-server/output/bin/Release/")
+  (set 'nox-python-server-dir "~/python-language-server/output/bin/Debug/")
 
 (provide 'init-nox)
