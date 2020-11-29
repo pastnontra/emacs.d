@@ -200,4 +200,15 @@ skip user's own code in `org-mode-hook'."
         ;; @see http://irreal.org/blog/1
         org-src-fontify-natively t))
 
+;; my config
+(require 'evil)
+(add-hook 'org-mode-hook
+          (lambda ()
+            (local-set-key (kbd "M-h") 'org-metaleft)
+            (local-set-key (kbd "M-H") 'org-promote-subtree)
+            (local-set-key (kbd "M-l") 'org-metaright)
+            (local-set-key (kbd "M-L") 'org-demote-subtree)
+            (local-set-key (kbd "M-j") 'org-metadown)
+            (local-set-key (kbd "M-k") 'org-metaup)))
+
 (provide 'init-org)

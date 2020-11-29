@@ -160,10 +160,7 @@
 
   (require-init 'init-flymake t)
 
-  (when *linux*
-    (add-to-list 'load-path "~/emacs-application-framework")
-    (require 'eaf))
-
+  (require-init 'init-eaf t)
   (require-init 'init-nox t)
 
   (unless (my-vc-merge-p)

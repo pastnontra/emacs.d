@@ -549,8 +549,8 @@ If N > 0, only occurrences in current N line are renamed."
   "kn" 'find-file-with-similar-name ; ffip v5.3.1
   "fd" 'find-directory-in-project-by-selected
   "trm" 'get-term
-  "tff" 'toggle-frame-fullscreen
-  "tfm" 'toggle-frame-maximized
+  ;; "tff" 'toggle-frame-fullscreen
+  ;; "tfm" 'toggle-frame-maximized
   "ti" 'fastdef-insert
   "th" 'fastdef-insert-from-history
   ;; "ci" 'evilnc-comment-or-uncomment-lines
@@ -770,13 +770,13 @@ If N > 0, only occurrences in current N line are renamed."
   "8" 'winum-select-window-8
   "9" 'winum-select-window-9
   "wf" 'my-toggle-full-window
-  "wq" 'delete-window ; I dislike this keybindingb
-  "wv" 'split-window-vertically
   "wg" 'split-window-horizontally
+  "wv" 'split-window-vertically
   "wh" 'evil-window-left
   "wl" 'evil-window-right
   "wk" 'evil-window-up
   "wj" 'evil-window-down
+  "wq" 'delete-window ; I dislike this keybindingb
   "wu" 'my-transient-winner-undo
   ;"wr" resize
   "ww" 'delete-other-windows
@@ -1055,8 +1055,6 @@ If N > 0, only occurrences in current N line are renamed."
  '(evil-want-C-u-scroll t)
  '(evil-want-C-u-delete t)
  '(evil-want-C-d-scroll t))
-
-(setq-default my-use-m-for-matchit t)
 
 ;; @see https://github.com/emacs-evil/evil-surround/pull/48
 (evil-define-key 'visual evil-surround-mode-map "s" 'evil-surround-region)
