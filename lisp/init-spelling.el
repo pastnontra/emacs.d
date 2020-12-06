@@ -137,6 +137,8 @@ When fixing a typo, avoid pass camel case option to cli program."
          (lines (my-read-lines dict))
          ;; sort words
          (aspell-words (sort (cdr lines) 'string<)))
+    (save-buffer)
+    (sit-for 1)
     (with-temp-file dict
       (insert (format "%s %d\n%s"
                         "personal_ws-1.1 en"
@@ -162,19 +164,14 @@ When fixing a typo, avoid pass camel case option to cli program."
                                         org-level-1
                                         org-document-info))
                   (rlt t)
-                  ff
                   th
                   b e)
              (save-excursion
                (goto-char start)
 
-               ;; get current font face
-               (setq ff (get-text-property start 'face))
-               (if (listp ff) (setq ff (car ff)))
-
                ;; ignore certain errors by set rlt to nil
                (cond
-                ((memq ff ignored-font-faces)
+                ((cl-intersection (my-what-face start) ignored-font-faces)
                  ;; check current font face
                  (setq rlt nil))
                 ((or (string-match "^ *- $" (buffer-substring (line-beginning-position) (+ start 2)))
@@ -196,9 +193,27 @@ When fixing a typo, avoid pass camel case option to cli program."
                  (setq b (re-search-backward begin-regexp nil t))
                  (if b (setq e (re-search-forward end-regexp nil t)))
                  (if (and b e (< start e)) (setq rlt nil)))))
-             ;; (if rlt (message "start=%s end=%s ff=%s" start end ff))
              rlt))))
 ;; }}
+
+
+(defun my-personal-typo-checker (typo)
+  "Double check TYPO reported."
+  (ignore typo)
+  (let* ((typo-p t))
+    (when (memq major-mode '(python-mode))
+      (save-excursion
+        (backward-word)
+        (let* ((pos (point)))
+          (when (eq (get-text-property pos 'face) 'font-lock-string-face)
+            ;; aspell regard symbol as part of word
+            ;; @see http://aspell.net/0.61/man-html/Words-With-Symbols-in-Them.html#Words-With-Symbols-in-Them
+            ;; @see https://github.com/redguardtoo/emacs.d/issues/892
+            (when (and (eq (my-get-char (1- pos)) ?')
+                       (<= ?a (my-get-char (- pos 2)))
+                       (>= ?z (my-get-char (- pos 2))))
+              (setq typo-p nil))))))
+    typo-p))
 
 (with-eval-after-load 'wucuo
   ;; {{ wucuo is used to check camel cased code and plain text.  Code is usually written
@@ -209,6 +224,7 @@ When fixing a typo, avoid pass camel case option to cli program."
   ;; (setq wucuo-hunspell-dictionary-base-name "en_US")
 
   ;; }}
+  (setq wucuo-extra-predicate 'my-personal-typo-checker)
 
   ;; do NOT turn on `flyspell-mode' automatically.
   ;; check buffer or visible region only

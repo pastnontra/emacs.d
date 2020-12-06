@@ -456,12 +456,12 @@ Git:
 "
   ("ri" my-git-rebase-interactive)
   ("rr" git-gutter-reset-to-default)
-  ("rh" git-gutter-reset-to-head-parent)
+  ("rh" my-git-gutter-reset-to-head-parent)
   ("s" my-git-show-commit)
   ("l" magit-log-buffer-file)
   ("b" magit-show-refs-popup)
   ("k" git-link)
-  ("g" magit-status)
+  ("g" magit-status)n
   ("ta" magit-stash-apply)
   ("tt" magit-stash)
   ("dd" magit-diff-dwim)
@@ -469,7 +469,7 @@ Git:
   ("dr" (progn (magit-diff-range (my-git-commit-id))))
   ("cc" magit-commit-popup)
   ("ca" magit-commit-amend)
-  ("ja" (magit-commit-amend "--reuse-message=HEAD"))
+  ("ja" (magit-commit-amend "--reuse-message=HEAD --no-verify"))
   ("au" magit-stage-modified)
   ("Q" git-gutter-toggle)
   ("f" my-git-find-file-in-commit)
