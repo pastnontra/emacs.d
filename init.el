@@ -148,6 +148,7 @@
   (require-init 'init-ediff)
 
   ;; It is my config
+  ;; (require-init 'nano-theme)
   (require-init 'init-config)
 
   ;; @see https://github.com/hlissner/doom-emacs/wiki/FAQ
@@ -183,6 +184,8 @@
   (garbage-collect))
 
 (run-with-idle-timer 4 nil #'my-cleanup-gc)
+
+(set-background-color "#121212")
 
 ;;; Local Variables:
 ;;; no-byte-compile: t
