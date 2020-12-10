@@ -303,14 +303,15 @@ If USER-SELECT-BRANCH is not nil, rebase on the tag or branch selected by user."
 
 ;; }}
 
-(defun my-git-find-file-in-commit (&optional arg)
-  "Find file in previous commit with ARG.
-If ARG is 1, find file in previous commit."
+(defun my-git-find-file-in-commit (&optional level)
+  "Find file in previous commit with LEVEL.
+If LEVEL > 0, find file in previous LEVEL commit."
   (interactive "P")
   (my-ensure 'magit)
-  (let* ((rev (concat "HEAD" (if (eq arg 1) "^")))
-         (prompt (format "Find file from commit %s" rev))
-         (cmd (my-git-files-in-rev-command rev arg))
+  (let* ((rev (concat "HEAD" (if (and level (> level 0)) (make-string level ?^))))
+         (pretty (string-trim (shell-command-to-string (format "git --no-pager log %s --oneline --no-walk" rev))))
+         (prompt (format "Find file from commit [%s]: " pretty))
+         (cmd (my-git-files-in-rev-command rev level))
          (default-directory (my-git-root-dir))
          (file (completing-read prompt (my-lines-from-command-output cmd))))
     (when file
@@ -346,33 +347,5 @@ If nothing is selected, use the word under cursor as function name to look up."
       ;; (message cmd)
       (my-ensure 'find-file-in-project)
       (ffip-show-content-in-diff-mode (shell-command-to-string cmd)))))
-
-(with-eval-after-load 'vc-msg-git
-  ;; open file of certain revision
-  (push '("m" "[m]agit-find-file"
-          (lambda ()
-            (let* ((info vc-msg-previous-commit-info))
-              (magit-find-file (plist-get info :id )
-                               (concat (vc-msg-sdk-git-rootdir)
-                                       (plist-get info :filename))))))
-        vc-msg-git-extra)
-
-  ;; copy commit hash
-  (push '("h" "[h]ash"
-          (lambda ()
-            (let* ((info vc-msg-previous-commit-info)
-                   (id (plist-get info :id)))
-              (kill-new id)
-              (message "%s => kill-ring" id))))
-        vc-msg-git-extra)
-
-  ;; copy author
-  (push '("a" "[a]uthor"
-          (lambda ()
-            (let* ((info vc-msg-previous-commit-info)
-                   (author (plist-get info :author)))
-              (kill-new author)
-              (message "%s => kill-ring" author))))
-        vc-msg-git-extra))
 
 (provide 'init-git)

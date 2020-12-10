@@ -1,8 +1,6 @@
 # -*- coding: utf-8; mode: snippet -*-
-# name: for i = 1:m
-# key: for
+# name: first N rows of matrix
+# key: n
 # contributor: Chen Bin <chenbin DOT sh AT gmail>
 # --
-for i = 1:${1:m}
-  $0
-end
+${1:MATRIX}(1:$0, :)
