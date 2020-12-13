@@ -69,4 +69,5 @@ transient/
 elpy/
 package-quickstart.el
 eaf/
-eln-cache/
+/eln-cache
+/nox
