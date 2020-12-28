@@ -17,7 +17,7 @@
 (global-set-key (kbd "C-h") 'delete-backward-char)
 (define-key isearch-mode-map "\C-h" 'isearch-delete-char)
 
-;; theme
+; theme
 (load-theme 'doom-monokai-pro t)
 
 ;; In light environment, there are little different between above 3 color
@@ -26,5 +26,31 @@
 ;; (set-background-color "#0C0C0C") ; RO
 ;; (set-background-color "#0B1013") ; KUROTSURUBAMI
 ;; (set-background-color "#1C1C1C") ; SUMI for comment?
+
+
+; rime
+(require 'rime)
+
+(when *linux*
+  (setq rime-user-data-dir "~/.config/ibus/rime"))
+(when *is-a-mac*
+  (setq rime-user-data-dir "~/Library/Rime"))
+(when *win64*
+  (setq rime-user-data-dir "~/AppData/Roaming/Rime"))
+
+(global-set-key (kbd "C-\\") 'toggle-input-method)
+(setq rime-cursor "˰")
+(setq rime-translate-keybindings '("C-h"))
+(setq rime-posframe-style 'vertical)
+
+
+(setq rime-posframe-properties
+      (list :background-color "#333333"
+            :foreground-color "#dcdccc"
+            :font "WenQuanYi Micro Hei Mono-14"
+            :internal-border-width 10))
+
+(setq default-input-method "rime"
+      rime-show-candidate 'posframe)
 
 (provide 'init-config)
