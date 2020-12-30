@@ -122,7 +122,9 @@
     workgroups2
     zoutline
     company-c-headers
-    company-statistics)
+    company-statistics
+    ;; my installed
+    rime)
   "Packages to install from melpa-unstable.")
 
 (defvar melpa-stable-banned-packages nil
@@ -349,6 +351,9 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
 ;; BTW, this setup uses MELPA only. So GNU ELPA GPG key is not used.
 (require-package 'gnu-elpa-keyring-update)
 ;; }}
+
+;; my installed
+(require-package 'rime)
 
 (when *emacs26*
   ;; org => ppt, org v8.3 is required (Emacs 25 uses org v8.2)

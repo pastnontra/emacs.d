@@ -34,7 +34,9 @@
 (when *linux*
   (setq rime-user-data-dir "~/.config/ibus/rime"))
 (when *is-a-mac*
-  (setq rime-user-data-dir "~/Library/Rime"))
+  (setq rime-user-data-dir "~/Library/Rime")
+  (setq rime-librime-root "~/librime/dist")
+  (setq rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include"))
 (when *win64*
   (setq rime-user-data-dir "~/AppData/Roaming/Rime"))
 
@@ -47,7 +49,8 @@
 (setq rime-posframe-properties
       (list :background-color "#333333"
             :foreground-color "#dcdccc"
-            :font "WenQuanYi Micro Hei Mono-14"
+            :font "Arial-12"
+            ;; :font "WenQuanYi Micro Hei Mono-14"
             :internal-border-width 10))
 
 (setq default-input-method "rime"
