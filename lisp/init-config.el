@@ -1,7 +1,7 @@
 ;; -*- coding: utf-8; lexical-binding: t; -*-
 
 (set-language-environment "UTF-8")
-
+; enhancement
 (setq visible-bell t)
 
 ;; font
@@ -42,7 +42,9 @@
 
 (global-set-key (kbd "C-\\") 'toggle-input-method)
 (setq rime-cursor "˰")
-(setq rime-translate-keybindings '("C-h"))
+(setq rime-translate-keybindings '("C-h"
+                                   "C-p"
+                                   "C-n"))
 (setq rime-posframe-style 'vertical)
 
 

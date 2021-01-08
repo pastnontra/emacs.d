@@ -367,7 +367,7 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
 (require-package 'magit)
 (require-package 'which-key)
 
-;; most popular 100 themes
+;; most popular 100 themee
 (my-install-popular-themes
  '(
    afternoon-theme
