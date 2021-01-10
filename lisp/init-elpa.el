@@ -355,6 +355,7 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
 
 ;; my installed
 (require-package 'rime)
+(require-package 'org-superstar)
 
 (when *emacs26*
   ;; org => ppt, org v8.3 is required (Emacs 25 uses org v8.2)
