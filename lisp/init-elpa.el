@@ -124,7 +124,8 @@
     company-c-headers
     company-statistics
     ;; my installed
-    rime)
+    rime
+    org-superstar)
   "Packages to install from melpa-unstable.")
 
 (defvar melpa-stable-banned-packages nil
