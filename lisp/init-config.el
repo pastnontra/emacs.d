@@ -1,8 +1,11 @@
 ;; -*- coding: utf-8; lexical-binding: t; -*-
 
 (set-language-environment "UTF-8")
-; enhancement
+
+;;; init-enhancement
 (setq visible-bell t)
+
+;;; init-appearance
 
 ;; font
 (set-face-attribute 'default nil :font "hack 12")
@@ -14,9 +17,6 @@
                         (font-spec :family "等距更纱黑体 T SC")))
 
 
-(global-set-key (kbd "C-h") 'delete-backward-char)
-(define-key isearch-mode-map "\C-h" 'isearch-delete-char)
-
 ; theme
 (load-theme 'doom-monokai-pro t)
 
@@ -26,9 +26,15 @@
 ;; (set-background-color "#0C0C0C") ; RO
 ;; (set-background-color "#0B1013") ; KUROTSURUBAMI
 ;; (set-background-color "#1C1C1C") ; SUMI for comment?
+(set-background-color "#121212")
+
+(global-set-key (kbd "C-h") 'delete-backward-char)
+(define-key isearch-mode-map "\C-h" 'isearch-delete-char)
 
 
-; rime
+;;; init-language
+
+;;; rime
 (require 'rime)
 
 (when *linux*
@@ -57,5 +63,12 @@
 
 (setq default-input-method "rime"
       rime-show-candidate 'posframe)
+
+; init-org
+(require 'org-superstar)
+(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+(setq org-superstar-cycle-headline-bullets t)
+(setq org-hide-leading-stars t)
+(setq org-superstar-special-todo-items t)
 
 (provide 'init-config)
