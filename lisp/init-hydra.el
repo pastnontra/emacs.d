@@ -14,8 +14,8 @@
 [_m_] Goto bookmark       [_im_] Image of word       [_P_] Emms Pause
 [_bb_] Switch Gnus buffer [_s1_] Pomodoro tiny task  [_O_] Emms Open
 [_e_] Erase buffer        [_s2_] Pomodoro big task   [_L_] Emms Playlist
-[_r_] Erase this buffer   [_st_] Pomodoro stop       [_E_] Typewriter on
-[_f_] Recent file         [_sr_] Pomodoro resume     [_V_] Old typewriter
+[_r_] Erase this buffer   [_st_] Pomodoro stop
+[_f_] Recent file         [_sr_] Pomodoro resume
 [_d_] Recent directory    [_sp_] Pomodoro pause
 [_bh_] Bash history
 [_hr_] Dired CMD history
@@ -36,7 +36,6 @@
 
   ("e" shellcop-erase-buffer)
   ("r" shellcop-reset-with-new-command)
-  ("E" my-toggle-typewriter)
   ("V" twm/toggle-sound-style)
   ("s1" (pomodoro-start 15))
   ("s2" (pomodoro-start 60))

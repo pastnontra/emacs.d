@@ -709,15 +709,6 @@ If no region is selected, `kill-ring' or clipboard is used instead."
   (setq eacl-git-grep-untracked nil))
 ;; }}
 
-;; {{
-(defun my-toggle-typewriter ()
-  "Turn on/off typewriter."
-  (interactive)
-  (if (bound-and-true-p typewriter-mode)
-      (typewriter-mode -1)
-    (typewriter-mode 1)))
-;; }}
-
 (with-eval-after-load 'grep
   ;; eacl and other general grep (rgrep, grep ...) setup
   (dolist (v '("auto"
