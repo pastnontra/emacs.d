@@ -1,12 +1,24 @@
 ;; -*- coding: utf-8; lexical-binding: t; -*-
 
-(set-language-environment "UTF-8")
-
 ;;; init-enhancement
+(set-language-environment "UTF-8")
 (setq visible-bell t)
 
-;;; init-appearance
+;; Keybindings
+(require 'company)
+(with-eval-after-load 'company (define-key company-active-map (kbd "C-n") 'company-select-next)
+                               (define-key company-search-map (kbd "C-n") 'company-select-next)
+                               (define-key company-active-map (kbd "C-p") 'company-select-previous)
+                               (define-key company-search-map (kbd "C-p") 'company-select-previous)
+                               (define-key company-active-map (kbd "C-h") nil)
+                               (define-key company-active-map (kbd "C-w") nil)
+                               (define-key company-active-map (kbd "C-u") nil))
 
+(global-set-key (kbd "C-h") 'delete-backward-char)
+(define-key isearch-mode-map "\C-h" 'isearch-delete-char)
+
+
+;;; init-appearance
 ;; font
 (set-face-attribute 'default nil :font "hack 12")
 (setq face-font-rescale-alist '(("等距更纱黑体 T SC" . 1)))
@@ -17,7 +29,7 @@
                         (font-spec :family "等距更纱黑体 T SC")))
 
 
-; theme
+;; theme
 (load-theme 'doom-monokai-pro t)
 
 ;; In light environment, there are little different between above 3 color
@@ -28,18 +40,16 @@
 ;; (set-background-color "#1C1C1C") ; SUMI for comment?
 (set-background-color "#121212")
 
-(global-set-key (kbd "C-h") 'delete-backward-char)
-(define-key isearch-mode-map "\C-h" 'isearch-delete-char)
-
 
 ;;; init-language
 
-;;; rime
+;; rime
 (require 'rime)
 
 (when *linux*
   (setq rime-user-data-dir "~/.config/ibus/rime"))
 (when *is-a-mac*
+  ;; It's better changer the location
   (setq rime-user-data-dir "~/Library/Rime")
   (setq rime-librime-root "~/librime/dist")
   (setq rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include"))
@@ -64,7 +74,7 @@
 (setq default-input-method "rime"
       rime-show-candidate 'posframe)
 
-; init-org
+;;; init-org
 (require 'org-superstar)
 (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
 (setq org-superstar-cycle-headline-bullets t)
