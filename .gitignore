@@ -71,3 +71,4 @@ package-quickstart.el
 eaf/
 /eln-cache
 /nox
+.DS_Store

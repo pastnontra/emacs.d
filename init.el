@@ -147,9 +147,6 @@
   ;; the key bindings in previous configuration
   (require-init 'init-ediff)
 
-  ;; It is my config
-  ;; (require-init 'nano-theme)
-  (require-init 'init-config)
 
   ;; @see https://github.com/hlissner/doom-emacs/wiki/FAQ
   ;; Adding directories under "site-lisp/" to `load-path' slows
@@ -161,8 +158,11 @@
 
   (require-init 'init-flymake t)
 
+  ;; It is my config
+  ;; (require-init 'nano-theme)
   (require-init 'init-eaf t)
   (require-init 'init-nox t)
+  (require-init 'init-config)
 
   (unless (my-vc-merge-p)
     ;; @see https://www.reddit.com/r/emacs/comments/4q4ixw/how_to_forbid_emacs_to_touch_configuration_files/
