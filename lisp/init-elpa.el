@@ -128,7 +128,11 @@
     company-statistics
     ;; my installed
     rime
-    org-superstar)
+    org-superstar
+    ctable
+    concurrent;dependency
+    deferred
+    epc)
   "Packages to install from melpa-unstable.")
 
 (defvar melpa-stable-banned-packages nil
@@ -359,6 +363,9 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
 ;; my installed
 (require-package 'rime)
 (require-package 'org-superstar)
+(require-package 'ctable)
+(require-package 'deferred)
+(require-package 'epc)
 
 (when *emacs26*
   ;; org => ppt, org v8.3 is required (Emacs 25 uses org v8.2)

@@ -74,11 +74,15 @@
       rime-show-candidate 'posframe)
 
 ;;; init-org
-;;; apperance
+;;; Appearance
 (require 'org-superstar)
 (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
 (setq org-superstar-cycle-headline-bullets t)
 (setq org-hide-leading-stars t)
 (setq org-superstar-special-todo-items t)
+
+;;; Keybindings
+(evil-define-key 'normal org-mode-map (kbd "j") 'evil-next-visual-line
+                                      (kbd "k") 'evil-previous-visual-line)
 
 (provide 'init-config)
