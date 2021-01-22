@@ -1,4 +1,4 @@
-; -*- coding: utf-8; lexical-binding: t; -*-
+;; -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; init-default
 (set-language-environment "UTF-8")
@@ -50,7 +50,7 @@
 (when *is-a-mac*
   ;; It's better changer the location
   (setq rime-user-data-dir "~/Library/Rime")
-  (setq rime-librime-root "~/librime/dist")
+  (setq rime-librime-root "/usr/local/share/librime/dist")
   (setq rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include"))
 (when *win64*
   (setq rime-user-data-dir "~/AppData/Roaming/Rime"))
@@ -74,6 +74,7 @@
       rime-show-candidate 'posframe)
 
 ;;; init-org
+;;; apperance
 (require 'org-superstar)
 (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
 (setq org-superstar-cycle-headline-bullets t)
