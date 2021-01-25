@@ -69,7 +69,9 @@ nov-places
 transient/
 elpy/
 package-quickstart.el
-eaf/
-/eln-cache
-/nox
+.lsp-session*
+eaf
+eln-cache
+nox
 .DS_Store
+site-lisp/emacs-application-framework

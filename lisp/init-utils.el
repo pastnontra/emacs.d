@@ -78,18 +78,18 @@
     (my-write-to-file str file)))
 
 ;; Handier way to add modes to auto-mode-alist
-(defun add-auto-mode (mode &rest patterns)
+(defun my-add-auto-mode (mode &rest patterns)
   "Add entries to `auto-mode-alist' to use `MODE' for all given file `PATTERNS'."
   (dolist (pattern patterns)
-    (add-to-list 'auto-mode-alist (cons pattern mode))))
+    (push (cons pattern mode) auto-mode-alist)))
 
-(defun add-interpreter-mode (mode &rest patterns)
+(defun my-add-interpreter-mode (mode &rest patterns)
   "Add entries to `interpreter-mode-alist' to use `MODE' for all given file `PATTERNS'."
   (dolist (pattern patterns)
-    (add-to-list 'interpreter-mode-alist (cons pattern mode))))
+    (push (cons pattern mode) interpreter-mode-alist )))
 
 (defun my-what-face (&optional position)
-  "Shows all faces at POSITION."
+  "Show all faces at POSITION."
   (let* ((face (get-text-property (or position (point)) 'face)))
     (unless (keywordp (car-safe face)) (list face))))
 
@@ -300,7 +300,7 @@ For example, you can '(setq my-mplayer-extra-opts \"-ao alsa -vo vdpau\")'.")
   (let* ((powershell-program (executable-find "powershell.exe")))
     (cond
      ;; Windows
-     ((fboundp 'w32-get-clipboard-data)
+     ((and *win64* (fboundp 'w32-get-clipboard-data))
       ;; `w32-set-clipboard-data' makes `w32-get-clipboard-data' always return null
       (w32-get-clipboard-data))
 
@@ -323,15 +323,16 @@ For example, you can '(setq my-mplayer-extra-opts \"-ao alsa -vo vdpau\")'.")
   (let* ((win64-clip-program (executable-find "clip.exe"))
          ssh-client)
     (cond
-     ;; Windows
-     ((fboundp 'w32-set-clipboard-data)
-      (w32-set-clipboard-data str-val))
-
-     ;; Windows 10
+     ;; Windows 10 or Windows 7
      ((and win64-clip-program)
       (with-temp-buffer
         (insert str-val)
         (call-process-region (point-min) (point-max) win64-clip-program)))
+
+     ;; Windows
+     ((and *win64* (fboundp 'w32-set-clipboard-data))
+      ;; Don't know why, but on Windows 7 this API does not work.
+      (w32-set-clipboard-data str-val))
 
      ;; If Emacs is inside an ssh session, place the clipboard content
      ;; into "~/.tmp-clipboard" and send it back into ssh client
@@ -354,7 +355,7 @@ For example, you can '(setq my-mplayer-extra-opts \"-ao alsa -vo vdpau\")'.")
       (xclip-set-selection 'clipboard str-val)))))
 ;; }}
 
-(defun should-use-minimum-resource ()
+(defun my-should-use-minimum-resource ()
   "Some files should use minimum resource (no syntax highlight, no line number display)."
   (and buffer-file-name
        (string-match-p "\.\\(mock\\|min\\|bundle\\)\.js" buffer-file-name)))

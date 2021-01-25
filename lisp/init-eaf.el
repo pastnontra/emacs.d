@@ -1,7 +1,7 @@
 ;; -*- coding: utf-8; lexical-binding: t; -*-
 
 (when *linux*
-  (add-to-list 'load-path "~/emacs-application-framework")
+  (add-to-list 'load-path "~.emacs.d/site-lisp/emacs-application-framework")
   (require 'eaf))
 
 ;; ;; Jupyter

@@ -1,10 +1,10 @@
 ;; -*- coding: utf-8; lexical-binding: t; -*-
 
-;;; init-default
+;;;; init-default
 (set-language-environment "UTF-8")
 (setq visible-bell t)
 
-;; Keybindings
+;;; Keybindings
 (require 'company)
 (with-eval-after-load 'company (define-key company-active-map (kbd "C-n") 'company-select-next)
                                (define-key company-search-map (kbd "C-n") 'company-select-next)
@@ -18,20 +18,19 @@
 (define-key isearch-mode-map "\C-h" 'isearch-delete-char)
 
 
-;;; init-appearance
-;; font
+;;;; init-appearance
+;;; font
 (set-face-attribute 'default nil :font "hack 12")
 (setq face-font-rescale-alist '(("等距更纱黑体 T SC" . 1)))
 
-(dolist (charset '(kana han symbol cjk-misc bopomofo))
+(dolist (charset '(han kana symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
                     charset
                         (font-spec :family "等距更纱黑体 T SC")))
 
 
-;; theme
+;;; theme
 (load-theme 'doom-monokai-pro t)
-(set-background-color "#121212")
 ;; In light environment, there are little different between above 3 color
 ;; (set-background-color "#000000") ; BLACK
 ;; (set-background-color "#080808") ; KURO
@@ -84,5 +83,6 @@
 ;;; Keybindings
 (evil-define-key 'normal org-mode-map (kbd "j") 'evil-next-visual-line
                                       (kbd "k") 'evil-previous-visual-line)
+
 
 (provide 'init-config)
