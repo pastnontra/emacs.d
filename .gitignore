@@ -75,3 +75,4 @@ eln-cache
 nox
 .DS_Store
 site-lisp/emacs-application-framework
+quelpa
