@@ -79,6 +79,9 @@
 (setq org-superstar-cycle-headline-bullets t)
 (setq org-hide-leading-stars t)
 (setq org-superstar-special-todo-items t)
+(setq org-ellipsis " ▾")
+(setq org-hide-emphasis-markers t)
+
 
 ;;; Keybindings
 (evil-define-key 'normal org-mode-map (kbd "j") 'evil-next-visual-line

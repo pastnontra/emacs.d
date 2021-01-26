@@ -43,29 +43,29 @@ Also remove buffers whose binding files already merged in `buffer-list'."
                       (ediff-get-region-contents ediff-current-difference 'A ediff-control-buffer)
                       (ediff-get-region-contents ediff-current-difference 'B ediff-control-buffer))))
 
-  (my-space-leader-def
-    "a" (lambda () (interactive) (jump-to-register ?a))
-    "t" (my-ediff-command 'ediff-toggle-show-clashes-only t)
-    "n" (my-ediff-command (lambda (arg)
+  (my-comma-leader-def
+    "SPC a" (lambda () (interactive) (jump-to-register ?a))
+    "SPC t" (my-ediff-command 'ediff-toggle-show-clashes-only t)
+    "SPC n" (my-ediff-command (lambda (arg)
                             (cond
                              ((< ediff-current-difference (1- ediff-number-of-differences))
                               (ediff-next-difference arg))
                              (t
                               (message "This is last difference!")))))
-    "p" (my-ediff-command (lambda (arg)
+    "SPC p" (my-ediff-command (lambda (arg)
                             (cond
                              ((> ediff-current-difference 0)
                               (ediff-previous-difference arg))
                              (t
                               (message "This is first difference!")))))
-    "r" (my-ediff-command 'ediff-restore-diff-in-merge-buffer)
+    "SPC r" (my-ediff-command 'ediff-restore-diff-in-merge-buffer)
     ;; press "1-space-R" to revert without confirmation
-    "R" (my-ediff-command 'ediff-revert-buffers-then-recompute-diffs)
-    "xa" (lambda () (interactive) (save-buffers-kill-terminal t)) ; similar to vim
+    "SPC R" (my-ediff-command 'ediff-revert-buffers-then-recompute-diffs)
+    "SPC xa" (lambda () (interactive) (save-buffers-kill-terminal t)) ; similar to vim
     ;; use 1 3 as hotkey to be consistent with vim
-    "1" (my-ediff-command 'ediff-copy-A-to-C)
-    "3" (my-ediff-command 'ediff-copy-B-to-C)
-    "b" (my-ediff-command 'ediff-copy-both-to-C))
+    "SPC 1" (my-ediff-command 'ediff-copy-A-to-C)
+    "SPC 3" (my-ediff-command 'ediff-copy-B-to-C)
+    "SPC b" (my-ediff-command 'ediff-copy-both-to-C))
 
   (defun ediff-startup-hook-setup ()
     ;; hide control panel if it's current buffer

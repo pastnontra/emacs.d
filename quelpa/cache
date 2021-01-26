@@ -1,0 +1,1 @@
+((eaf :fetcher git :url "https://gitclone.com/github.com/manateelazycat/emacs-application-framework.git" :files ("*")))

@@ -19,7 +19,7 @@
     ;; the current major mode for the buffer.
     '(:eval (propertize "%m" 'face nil 'help-echo buffer-file-coding-system))
 
-    " "
+    ""
     ;; buffer file encoding
     '(:eval (let ((sys (coding-system-plist buffer-file-coding-system)))
               (if (memq (plist-get sys :category)

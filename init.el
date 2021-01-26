@@ -159,10 +159,10 @@
   (require-init 'init-flymake t)
 
   ;; It is my config
-  ;; (require-init 'nano-theme)
-  (require-init 'init-eaf t)
+  ;; (require-init 'init-eaf t)
   (require-init 'init-nox t)
   (require-init 'init-config t)
+  (require-init 'init-package t)
 
   (unless (my-vc-merge-p)
     ;; @see https://www.reddit.com/r/emacs/comments/4q4ixw/how_to_forbid_emacs_to_touch_configuration_files/
