@@ -22,6 +22,10 @@
 
 ;; (setq enable-recursive-minibuffers t)
 
+;; compile
+(require 'compile-dwim)
+(require 'smart-compile)
+
 
 ;;; Keybindings
 (require 'company)
