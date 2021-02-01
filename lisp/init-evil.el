@@ -366,9 +366,9 @@ If the character before and after CH is space or tab, CH is NOT slash"
 ;; I learn this trick from ReneFroger, need latest expand-region
 ;; @see https://github.com/redguardtoo/evil-matchit/issues/38
 (define-key evil-visual-state-map (kbd "v") 'er/expand-region)
-(define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
+(define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up) ;evil-want-u-scorll
 (define-key evil-insert-state-map (kbd "C-u") 'evil-delete-back-to-indentation)
-;; It's not the finall version for indent
+;; It's not the final version for indent
 (define-key evil-insert-state-map (kbd "<backtab>") 'evil-shift-left-line)
 (define-key evil-insert-state-map (kbd "C-a") 'move-beginning-of-line)
 (define-key evil-insert-state-map (kbd "C-e") 'move-end-of-line)

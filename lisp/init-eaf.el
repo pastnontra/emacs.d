@@ -3,13 +3,13 @@
 (unless *is-a-mac*
   (require 'eaf))
 
-;; ;; Jupyter
+;; Jupyter
+
 ;; (defcustom eaf-jupyter-keybinding
-;;   '(("M-x" . "eaf-send-key-sequence")
+;;   `(,("C-h" ."eaf-send-key-sequence")
 ;;     ("C-w" . "eaf-send-key-sequence")
-;;     ("C-m" . "")
-;;     )
-;;   "Additions to default keybindings of EAF Jupyter."
-;;   :type 'cons)
+;;     ("C-m" . "")))
+
+
 
 (provide 'init-eaf)
