@@ -70,9 +70,9 @@ transient/
 elpy/
 package-quickstart.el
 .lsp-session*
-eaf
-eln-cache
-nox
-.DS_Store
+eaf/
+eln-cache/
+nox/
+**/.DS_Store
 site-lisp/emacs-application-framework
-quelpa
+quelpa/
