@@ -67,33 +67,32 @@
 ;; rime
 (require 'rime)
 
-(when *linux*
-  (setq rime-user-data-dir "~/.config/ibus/rime"))
 (when *is-a-mac*
-  ;; It's better changer the location
   (setq rime-user-data-dir "~/Library/Rime")
   (setq rime-librime-root "/usr/local/share/librime/dist")
   (setq rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include"))
-(when *win64*
-  (setq rime-user-data-dir "~/AppData/Roaming/Rime"))
 
 (global-set-key (kbd "C-\\") 'toggle-input-method)
-(setq rime-cursor "˰")
+
 (setq rime-translate-keybindings '("C-h"
                                    "C-p"
-                                   "C-n"))
-(setq rime-posframe-style 'vertical)
+                                   "C-n"
+                                   "C-`"))
 
+
+(setq default-input-method "rime"
+      rime-show-candidate 'posframe)
 
 (setq rime-posframe-properties
       (list :background-color "#333333"
             :foreground-color "#dcdccc"
-            :font "Arial-12"
-            ;; :font "WenQuanYi Micro Hei Mono-14"
+            :font "Arial-14"
             :internal-border-width 10))
 
-(setq default-input-method "rime"
-      rime-show-candidate 'posframe)
+(setq rime-posframe-style 'vertical)
+
+(setq rime-cursor "˰")
+
 
 ;;; init-org
 ;;; Appearance
