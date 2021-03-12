@@ -809,8 +809,14 @@ If N > 0, only occurrences in current N line are renamed."
 
 ;; Please check "init-ediff.el" which contains `my-space-leader-def' code too
 (my-comma-leader-def
-  "SPC n" 'my-goto-next-hunk
-  "SPC p" 'my-goto-previous-hunk
+  "SPC n" (lambda ()
+            (interactive)
+            (if (derived-mode-p 'diff-mode) (my-search-next-diff-hunk)
+              (my-search-next-merge-conflict)))
+  "SPC p" (lambda ()
+            (interactive)
+            (if (derived-mode-p 'diff-mode) (my-search-prev-diff-hunk)
+              (my-search-prev-merge-conflict)))
   "SPC ch" 'my-dired-redo-from-commands-history
   "SPC dd" 'pwd
   "SPC mm" 'counsel-evil-goto-global-marker

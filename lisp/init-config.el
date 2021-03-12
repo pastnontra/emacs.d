@@ -43,13 +43,21 @@
 
 ;;;; init-appearance
 ;;; font
+;; (set-face-attribute 'default nil :font "hack 12")
+;; (setq face-font-rescale-alist '(("等距更纱黑体 T SC" . 1)))
+
+;; (dolist (charset '(han kana symbol cjk-misc bopomofo))
+;;   (set-fontset-font (frame-parameter nil 'font)
+;;                     charset
+;;                         (font-spec :family "等距更纱黑体 T SC")))
+
 (set-face-attribute 'default nil :font "hack 12")
-(setq face-font-rescale-alist '(("等距更纱黑体 T SC" . 1)))
+(setq face-font-rescale-alist '(("思源黑体" . 1)))
 
 (dolist (charset '(han kana symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
                     charset
-                        (font-spec :family "等距更纱黑体 T SC")))
+                        (font-spec :family "思源黑体")))
 
 
 ;;; theme

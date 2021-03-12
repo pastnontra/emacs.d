@@ -217,6 +217,7 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
 (advice-add 'package--add-to-archive-contents :around #'my-package--add-to-archive-contents-hack)
 
 ;; On-demand installation of packages
+(my-ensure 'package)
 (defun require-package (package &optional min-version no-refresh)
   "Ask elpa to install given PACKAGE."
   (cond
