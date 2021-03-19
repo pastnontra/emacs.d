@@ -10,10 +10,7 @@ EVENT is ignored."
 ;; {{ @see https://coredumped.dev/2020/01/04/native-shell-completion-in-emacs/
 ;; Enable auto-completion in `shell'.
 (with-eval-after-load 'shell
-  ;; `comint-terminfo-terminal' is invented in Emacs 26
-  (unless (and (boundp 'comint-terminfo-terminal)
-               comint-terminfo-terminal)
-    (setq comint-terminfo-terminal "dumb"))
+  (unless comint-terminfo-terminal (setq comint-terminfo-terminal "dumb"))
   (native-complete-setup-bash))
 
 ;; `bash-completion-tokenize' can handle garbage output of "complete -p"
@@ -45,6 +42,10 @@ EVENT is ignored."
   (setq-local company-backends '((company-files company-native-complete)))
   ;; `company-native-complete' is better than `completion-at-point'
   (local-set-key (kbd "TAB") 'company-complete)
+
+  ;; @see https://github.com/redguardtoo/emacs.d/issues/882
+  (setq-local company-idle-delay 1)
+
   ;; try to kill buffer when exit shell
   (let* ((proc (get-buffer-process (current-buffer)))
          (shell (file-name-nondirectory (car (process-command proc)))))
@@ -64,7 +65,7 @@ EVENT is ignored."
 (advice-add 'term-sentinel :after #'my-kill-process-buffer-when-exit)
 
 ;; always use bash
-(defvar my-term-program "/bin/zsh")
+(defvar my-term-program "/bin/bash")
 
 ;; utf8
 (defun my-term-use-utf8 ()
@@ -81,14 +82,16 @@ EVENT is ignored."
   (setq my-comint-full-input nil))
 (advice-add 'counsel-shell-history :around #'my-counsel-shell-history-hack)
 (defun my-ivy-history-contents-hack (orig-func &rest args)
+  "Make sure `ivy-history-contents' returns items matching `my-comint-full-input'."
   (let* ((rlt (apply orig-func args))
          (input my-comint-full-input))
     (when (and input (not (string= input "")))
       ;; filter shell history with current input
       (setq rlt
             (delq nil (mapcar
-                       `(lambda (s)
-                          (if (string-match (regexp-quote ,input) s) s))
+                       `(lambda (item)
+                          (let* ((cli (if (stringp item) item (car item))))
+                            (and (string-match (regexp-quote ,input) cli) item)))
                        rlt))))
     (when (and rlt (> (length rlt) 0)))
     rlt))
@@ -111,4 +114,3 @@ EVENT is ignored."
 ;; }}
 
 (provide 'init-term-mode)
-

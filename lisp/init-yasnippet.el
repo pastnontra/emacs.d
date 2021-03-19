@@ -12,7 +12,6 @@
 ;; {{ modes do NOT inherit from prog-mode
 (add-hook 'cmake-mode-hook 'my-enable-yas-minor-mode)
 (add-hook 'web-mode-hook 'my-enable-yas-minor-mode)
-(add-hook 'scss-mode-hook 'my-enable-yas-minor-mode)
 ;; }}
 
 (defun my-yas-expand-from-trigger-key-hack (orig-func &rest args)
@@ -20,7 +19,7 @@
   (cond
    ;; skip yas expand in org heading
    ((and (eq major-mode 'org-mode)
-         (string-match "^org-level-" (format "%S" (get-text-property (point) 'face))))
+         (string-match "^org-level-" (format "%S" (my-what-face))))
     (org-cycle))
    (t
     (apply orig-func args))))

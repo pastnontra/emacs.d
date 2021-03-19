@@ -14,8 +14,8 @@
 [_m_] Goto bookmark       [_im_] Image of word       [_P_] Emms Pause
 [_bb_] Switch Gnus buffer [_s1_] Pomodoro tiny task  [_O_] Emms Open
 [_e_] Erase buffer        [_s2_] Pomodoro big task   [_L_] Emms Playlist
-[_r_] Erase this buffer   [_st_] Pomodoro stop
-[_f_] Recent file         [_sr_] Pomodoro resume
+[_r_] Erase this buffer   [_st_] Pomodoro stop       [_E_] Typewriter on
+[_f_] Recent file         [_sr_] Pomodoro resume     [_V_] Old typewriter
 [_d_] Recent directory    [_sp_] Pomodoro pause
 [_bh_] Bash history
 [_hr_] Dired CMD history
@@ -36,6 +36,7 @@
 
   ("e" shellcop-erase-buffer)
   ("r" shellcop-reset-with-new-command)
+  ("E" my-toggle-typewriter)
   ("V" twm/toggle-sound-style)
   ("s1" (pomodoro-start 15))
   ("s2" (pomodoro-start 60))
@@ -444,15 +445,17 @@ _SPC_ cancel _o_nly this     _d_elete
                      :color blue)
 "
 Git:
-[_dd_] Diff         [_ri_] Rebase closest
-[_dc_] Diff staged  [_s_] Show commit
-[_dr_] Diff range   [_rr_] Reset gutter
-[_au_] Add modified [_rh_] Gutter => HEAD
-[_cc_] Commit       [_l_] Log selected/file
-[_ca_] Amend        [_b_] Branches
-[_ja_] Amend silent [_k_] Git commit link
-[_tt_] Stash        [_Q_] Quit gutter
-[_ta_] Apply Stash  [_f_] Find file in commit
+[_dd_] Diff               [_ri_] Rebase closest
+[_dc_] Diff staged        [_s_] Show commit
+[_dr_] Diff range         [_rr_] Reset gutter
+[_au_] Add modified       [_rh_] Gutter => HEAD
+[_cc_] Commit             [_l_] Log selected/file
+[_ca_] Amend              [_b_] Branches
+[_ja_] Amend silent       [_k_] Git commit link
+[_tt_] Stash              [_Q_] Quit gutter
+[_ta_] Apply stash        [_cr_] Cherry pick from reflog
+[_f_] Find file in commit
+
 "
   ("ri" my-git-rebase-interactive)
   ("rr" git-gutter-reset-to-default)
@@ -467,12 +470,13 @@ Git:
   ("dd" magit-diff-dwim)
   ("dc" magit-diff-staged)
   ("dr" (progn (magit-diff-range (my-git-commit-id))))
-  ("cc" magit-commit-popup)
+  ("cc" magit-commit-create)
   ("ca" magit-commit-amend)
   ("ja" (magit-commit-amend "--reuse-message=HEAD --no-verify"))
   ("au" magit-stage-modified)
   ("Q" git-gutter-toggle)
   ("f" my-git-find-file-in-commit)
+  ("cr" my-git-cherry-pick-from-reflog)
   ("q" nil))
 (global-set-key (kbd "C-c C-g") 'hydra-git/body)
 ;; }}

@@ -732,7 +732,7 @@ If N > 0, only occurrences in current N line are renamed."
   "bb" 'ivy-switch-buffer-by-pinyin
   "bk" 'kill-buffer-and-window ;; "k" is preserved to replace "C-g"
 
-  "c" 'compile
+  "c" 'my-compile
 
   ;; debug
 
@@ -936,6 +936,8 @@ If N > 0, only occurrences in current N line are renamed."
 ;; {{ evil-nerd-commenter
 (my-run-with-idle-timer 2 #'evilnc-default-hotkeys)
 (define-key evil-motion-state-map "gc" 'evilnc-comment-operator) ; same as doom-emacs
+(define-key evil-motion-state-map "gb" 'evilnc-copy-and-comment-operator)
+(define-key evil-motion-state-map "gc" 'evilnc-yank-and-comment-operator)
 
 (defun my-current-line-html-p (paragraph-region)
   "Is current line html?"
@@ -1067,6 +1069,12 @@ If N > 0, only occurrences in current N line are renamed."
   ;; Here is the workaround
   (setq evil-default-cursor t))
 
+(with-eval-after-load 'web-mode
+   (mapc #'evil-declare-change-repeat
+         '(web-mode-element-rename))
+;; (mapc #'evil-declare-change-repeat
+;;       '(web-mode-element-rename))
+)
 (defun alternate-window ()
   (interactive)
   (let ((prev-window (get-mru-window nil t t)))
