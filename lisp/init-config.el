@@ -3,20 +3,21 @@
 ;;;; init-default
 (set-language-environment "UTF-8")
 
-(setq ns-use-native-fullscreen nil)
-(setq ns-use-fullscreen-animation nil)
-(run-at-time "5sec" nil
-             (lambda ()
-               (let ((fullscreen (frame-parameter (selected-frame) 'fullscreen)))
-                 ;; If emacs has in fullscreen status, maximized window first, drag from Mac's single space.
-                 (when (memq fullscreen '(fullscreen fullboth))
-                   (set-frame-parameter (selected-frame) 'fullscreen 'maximized))
-                 ;; Manipulating a frame without waiting for the fullscreen
-                 ;; animation to complete can cause a crash, or other unexpected
-                 ;; behavior, on macOS (bug#28496).
-                 (when (featurep 'cocoa) (sleep-for 0.5))
-                 ;; Call `toggle-frame-fullscreen' to fullscreen emacs.
-                 (toggle-frame-fullscreen))))
+; full screen in macOS
+;; (setq ns-use-native-fullscreen nil)
+;; (setq ns-use-fullscreen-animation nil)
+;; (run-at-time "5sec" nil
+;;              (lambda ()
+;;                (let ((fullscreen (frame-parameter (selected-frame) 'fullscreen)))
+;;                  ;; If emacs has in fullscreen status, maximized window first, drag from Mac's single space.
+;;                  (when (memq fullscreen '(fullscreen fullboth))
+;;                    (set-frame-parameter (selected-frame) 'fullscreen 'maximized))
+;;                  ;; Manipulating a frame without waiting for the fullscreen
+;;                  ;; animation to complete can cause a crash, or other unexpected
+;;                  ;; behavior, on macOS (bug#28496).
+;;                  (when (featurep 'cocoa) (sleep-for 0.5))
+;;                  ;; Call `toggle-frame-fullscreen' to fullscreen emacs.
+;;                  (toggle-frame-fullscreen))))
 
 (setq visible-bell t)
 

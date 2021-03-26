@@ -134,7 +134,8 @@
     ctable
     concurrent;dependency
     deferred
-    epc)
+    epc
+    moonscript)
   "Packages to install from melpa-unstable.")
 
 (defvar melpa-stable-banned-packages nil
