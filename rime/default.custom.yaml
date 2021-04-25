@@ -1,1 +1,16 @@
-/mnt/c/Users/Pastnontra/AppData/Roaming/Rime/default.custom.yaml
+# default.custom.yaml  
+# save it to:   
+#   ~/.config/ibus/rime  (linux)  
+#   ~/Library/Rime       (macos)  
+#   %APPDATA%\Rime       (windows)  
+
+patch:  
+  schema_list:  
+    - schema: double_pinyin_flypy  # 小鶴雙拼
+    - schema: emoji         # emoji 表情
+    - schema: ipa_xsampa    # X-SAMPA 國際音標  
+
+emacs_editing:
+  __append:
+    - { when: composing, accept: Control+p, send: Page_Up }
+    - { when: composing, accept: Control+n, send: Page_Down }

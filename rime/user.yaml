@@ -1,1 +1,11 @@
-/mnt/c/Users/Pastnontra/AppData/Roaming/Rime/user.yaml
+var:
+  last_build_time: 1618899447
+  option:
+    ascii_punct: false
+    full_shape: false
+    simplification: true
+  previously_selected_schema: double_pinyin_flypy
+  schema_access_time:
+    bopomofo: 1602772857
+    double_pinyin_flypy: 1612358244
+    luna_pinyin: 1607138955
