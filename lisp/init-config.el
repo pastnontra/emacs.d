@@ -68,7 +68,7 @@
   (set-fontset-font (frame-parameter nil 'font)
                     charset
                         (font-spec :family "思源黑体")))
-(setq eaf-python-command "python.exe")
+(when *win64* (setq eaf-python-command "python.exe"))
 
 ;;; theme
 (load-theme 'doom-monokai-pro t)
@@ -105,7 +105,7 @@
 (setq rime-posframe-properties
       (list :background-color "#333333"
             :foreground-color "#dcdccc"
-            ;; :font "Arial-14"
+            :font "Arial-14"
             :internal-border-width 10))
 
 (setq rime-posframe-style 'vertical)
