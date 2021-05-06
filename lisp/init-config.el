@@ -27,16 +27,6 @@
 (require 'compile-dwim)
 (require 'smart-compile)
 
-;; Windows path
-(let ((msys2root "C:\\msys2\\"))
-  (setenv "PATH" (concat
-				  msys2root "mingw64\\libexec\\emacs\\28.0.50\\x86_64-w64-mingw32" ";"
-	   			  msys2root "mingw64\\bin" ";"
-	   			  msys2root "usr\\bin" ";"
-	   			  (getenv "PATH")))
-  ;;without this the new added $PATH value won't be inherite by exec-path
-  (setq exec-path (split-string (getenv "PATH") path-separator)))
-
 ;;; Keybindings
 (require 'company)
 (with-eval-after-load 'company (define-key company-active-map (kbd "C-n") 'company-select-next)
@@ -48,7 +38,8 @@
                                (define-key company-active-map (kbd "C-u") nil))
 
 (global-set-key (kbd "C-h") 'delete-backward-char)
-(define-key isearch-mode-map "\C-h" 'isearch-delete-char)
+(define-key ivy-minibuffer-map (kbd "C-h") 'ivy-backward-delete-char)
+(define-key ivy-minibuffer-map (kbd "C-w") 'ivy-backward-kill-word)
 
 
 ;;;; init-appearance
@@ -96,7 +87,8 @@
 (setq rime-translate-keybindings '("C-h"
                                    "C-p"
                                    "C-n"
-                                   "C-`"))
+                                   "C-`"
+                                   "C-k"))
 
 
 (setq default-input-method "rime"
