@@ -127,5 +127,7 @@
 (evil-define-key 'normal org-mode-map (kbd "j") 'evil-next-visual-line
                                       (kbd "k") 'evil-previous-visual-line)
 
+;; show link content when idle, may could be optimized.
+(custom-set-variables '(help-at-pt-display-when-idle t))
 
 (provide 'init-config)
