@@ -38,6 +38,7 @@
                                (define-key company-active-map (kbd "C-u") nil))
 
 (global-set-key (kbd "C-h") 'delete-backward-char)
+(require 'ivy)
 (define-key ivy-minibuffer-map (kbd "C-h") 'ivy-backward-delete-char)
 (define-key ivy-minibuffer-map (kbd "C-w") 'ivy-backward-kill-word)
 
@@ -104,6 +105,11 @@
 
 (setq rime-cursor "˰")
 
+;;;init-git
+(require 'git-gutter)
+(custom-set-variables '(git-gutter:modified-sign "*"))
+(set-face-foreground 'git-gutter:modified "deep sky blue")
+(set-face-foreground 'git-gutter:added "chartreuse")
 
 ;;; init-org
 (add-hook 'org-mode-hook (lambda () (setq electric-pair-mode t)))
@@ -115,7 +121,7 @@
 (setq org-superstar-special-todo-items t)
 (setq org-ellipsis " ▾")
 (setq org-hide-emphasis-markers t)
-
+(setq tooltip-use-echo-area (not tooltip-use-echo-area))
 
 ;;; Keybindings
 (evil-define-key 'normal org-mode-map (kbd "j") 'evil-next-visual-line
