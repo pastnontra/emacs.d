@@ -114,6 +114,7 @@
 
 
 ;;; init-org
+(add-hook 'org-mode-hook (lambda () (setq electric-pair-mode t)))
 ;;; Appearance
 (require 'org-superstar)
 (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))

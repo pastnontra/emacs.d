@@ -402,7 +402,7 @@ If nothing is selected, use the word under cursor as function name to look up."
 
 
 (defun my-hint-untracked-files ()
-    "If untracked files and committed files share same extension, warn users."
+  "If untracked files and committed files share same extension, warn users."
 
   ;; don't scan whole home directory
   (unless (string= (file-truename default-directory) (file-truename "~/"))
