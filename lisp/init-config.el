@@ -29,6 +29,10 @@
 
 ;;; Keybindings
 
+;; tansitional settings
+(with-eval-after-load 'company 
+  (define-key company-active-map (kbd "C-n") #'company-select-next)
+  (define-key company-active-map (kbd "C-p") #'company-select-previous))
 (global-set-key (kbd "C-h") 'delete-backward-char)
 (require 'ivy)
 (define-key ivy-minibuffer-map (kbd "C-h") 'ivy-backward-delete-char)
