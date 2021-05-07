@@ -9,6 +9,10 @@
 
 (with-eval-after-load 'company
 
+  (define-key company-active-map (kbd "C-h") nil)
+  (define-key company-active-map (kbd "C-w") nil)
+  (define-key company-active-map (kbd "C-u") nil)
+
   (defun my-company-number ()
     "Forward to `company-complete-number'.
 Unless the number is potentially part of the candidate.
