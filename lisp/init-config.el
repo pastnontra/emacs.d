@@ -3,6 +3,12 @@
 ;;;; init-default
 (set-language-environment "UTF-8")
 
+;; System
+(defun wsl-browse-url-xdg-open (url &optional ignored)
+  (interactive (browse-url-interactive-arg "URL: "))
+  (shell-command-to-string (concat "explorer.exe " url)))
+(when *wsl* (advice-add #'browse-url-xdg-open :override #'wsl-browse-url-xdg-open))
+
 ; full screen in macOS
 ;; (setq ns-use-native-fullscreen nil)
 ;; (setq ns-use-fullscreen-animation nil)
@@ -22,6 +28,9 @@
 (setq visible-bell t)
 
 ;; (setq enable-recursive-minibuffers t)
+(require 'keyfreq)
+(keyfreq-mode 1)
+(keyfreq-autosave-mode 1)
 
 ;; compile
 (require 'compile-dwim)
@@ -29,10 +38,6 @@
 
 ;;; Keybindings
 
-;; tansitional settings
-(with-eval-after-load 'company 
-  (define-key company-active-map (kbd "C-n") #'company-select-next)
-  (define-key company-active-map (kbd "C-p") #'company-select-previous))
 (global-set-key (kbd "C-h") 'delete-backward-char)
 (require 'ivy)
 (define-key ivy-minibuffer-map (kbd "C-h") 'ivy-backward-delete-char)
@@ -56,6 +61,7 @@
   (set-fontset-font (frame-parameter nil 'font)
                     charset
                         (font-spec :family "思源黑体")))
+
 (when *win64* (setq eaf-python-command "python.exe"))
 
 ;;; theme
