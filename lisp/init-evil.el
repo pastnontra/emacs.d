@@ -669,8 +669,8 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
           (my-ensure 'wucuo)
           (let* ((wucuo-flyspell-start-mode "normal"))
             (wucuo-spell-check-internal)))
-  "fe" 'flyspell-goto-next-error
-  "fa" 'flyspell-auto-correct-word
+  ;; "fe" 'flyspell-goto-next-error
+  ;; "fa" 'flyspell-auto-correct-word
   "lb" 'langtool-check-buffer
   "ll" 'langtool-goto-next-error
   "pe" 'flymake-goto-prev-error
@@ -757,6 +757,7 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
 
   ;; emacs/eshell
   "eb" 'eval-buffer
+  "ed" 'eval-defun
   "ee" 'eval-expression
   "es" 'eval-last-sexp
 
@@ -779,6 +780,7 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "hF" 'find-function
   "hf" 'counsel-describe-function
   "hk" 'describe-key
+  "hm" 'describe-mode
   "hv" 'counsel-describe-variable
 
   ;; jump
@@ -789,6 +791,7 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "n" 'narrow-or-widen-dwim
 
   ;; org
+  "oo" 'browse-url-xdg-open
 
   "t" 'random-healthy-color-theme
 

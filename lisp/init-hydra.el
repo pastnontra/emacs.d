@@ -443,7 +443,7 @@ _SPC_ cancel _o_nly this     _d_elete
                        (setq git-link-use-commit t))
                      :after-exit (setq git-link-use-commit nil)
                      :color blue)
-"
+  "
 Git:
 [_dd_] Diff               [_ri_] Rebase closest
 [_dc_] Diff staged        [_s_] Show commit
@@ -558,5 +558,12 @@ _w_ where is something defined
   ("w" where-is))
 (global-set-key (kbd "C-c C-q") 'hydra-describe/body)
 
+(defhydra hydra-spellchecker (:color blue :hint nil)
+  "
+[_a_] auto correct
+[_n_] next error
+"
+  ("n" 'flyspell-goto-next-error))
+(global-set-key (kbd "C-c f") 'hydra-spellchecker/body)
 (provide 'init-hydra)
 ;;; init-hydra.el ends here
