@@ -17,9 +17,10 @@
 (setq *cygwin* (eq system-type 'cygwin) )
 (setq *linux* (or (eq system-type 'gnu/linux) (eq system-type 'linux)) )
 (setq *unix* (or *linux* (eq system-type 'usg-unix-v) (eq system-type 'berkeley-unix)) )
+; TODO: Linux test
+(setq *wsl*   (and (eq system-type 'gnu/linux) (string-match "-[Mm]icrosoft" operating-system-release)))
 (setq *emacs26* (>= emacs-major-version 26))
 (setq *emacs27* (>= emacs-major-version 27))
-(setq *wsl*   (and (eq system-type 'gnu/linux) (string-match "-[Mm]icrosoft" operating-system-release)))
 ;; don't GC during startup to save time
 (setq gc-cons-percentage 0.6)
 (setq gc-cons-threshold most-positive-fixnum)
