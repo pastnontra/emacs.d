@@ -2,6 +2,7 @@
 
 ;;;; init-default
 (set-language-environment "UTF-8")
+(setq word-wrap-by-category t)
 
 ;; System
 (defun wsl-browse-url-xdg-open (url &optional ignored)
@@ -115,6 +116,7 @@
 
 ;;; init-org
 (add-hook 'org-mode-hook (lambda () (setq electric-pair-mode t)))
+
 ;;; Appearance
 (require 'org-superstar)
 (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
