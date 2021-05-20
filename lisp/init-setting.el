@@ -47,8 +47,9 @@
 (define-key ivy-minibuffer-map (kbd "C-w") 'ivy-backward-kill-word)
 
 
-;;;; init-appearance
-;;; font
+;;; init-ui
+
+;; { font
 ;; (set-face-attribute 'default nil :font "hack 12")
 ;; (setq face-font-rescale-alist '(("等距更纱黑体 T SC" . 1)))
 
@@ -77,7 +78,7 @@
 ;; (set-background-color "#1C1C1C") ; SUMI for comment?
 
 
-;;; init-language
+;;; init-lang
 
 ;; rime
 (require 'rime)
@@ -119,9 +120,9 @@
 
 
 ;;; init-org
-(add-hook 'org-mode-hook (lambda () (setq electric-pair-mode t)))
+(add-hook 'org-mode-hook #'electric-pair-mode)
 
-;;; Appearance
+;; Appearance
 (require 'org-superstar)
 (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
 (setq org-superstar-cycle-headline-bullets t)
@@ -131,7 +132,7 @@
 (setq org-hide-emphasis-markers t)
 (setq tooltip-use-echo-area (not tooltip-use-echo-area))
 
-;;; Keybindings
+;; Keybindings
 (evil-define-key 'normal org-mode-map (kbd "j") 'evil-next-visual-line
                                       (kbd "k") 'evil-previous-visual-line)
 
