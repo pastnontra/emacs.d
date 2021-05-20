@@ -161,11 +161,11 @@
   ;; It is my config
   ;; (require-init 'init-eaf t)
   (require-init 'init-nox t)
-  (require-init 'init-config t)
+  (require-init 'init-setting t)
   (require-init 'init-package t)
 
   (unless (my-vc-merge-p)
-    ;; @see https://www.reddit.com/r/emacs/comments/4q4ixw/how_to_forbid_emacs_to_touch_configuration_files/
+    ;; @see https://www.reddit.com/r/emacs/comments/4q4ixw/how_to_forbid_emacs_to_touch_cgonfiguration_files/
     ;; See `custom-file' for details.
     (setq custom-file (expand-file-name (concat my-emacs-d "custom-set-variables.el")))
     (if (file-exists-p custom-file) (load custom-file t t))
