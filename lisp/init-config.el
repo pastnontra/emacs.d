@@ -81,7 +81,6 @@
 (require 'rime)
 
 (when *is-a-mac*
-  (setq rime-user-data-dir "~/Library/Rime")
   (setq rime-librime-root "/usr/local/share/librime/dist")
   (setq rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include"))
 
@@ -130,6 +129,7 @@
 ;;; Keybindings
 (evil-define-key 'normal org-mode-map (kbd "j") 'evil-next-visual-line
                                       (kbd "k") 'evil-previous-visual-line)
+
 
 ;; show link content when idle, may could be optimized.
 (custom-set-variables '(help-at-pt-display-when-idle t))
