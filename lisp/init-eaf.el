@@ -1,7 +1,6 @@
 ;; -*- coding: utf-8; lexical-binding: t; -*-
 
-(unless *is-a-mac*
-  (require 'eaf))
+(require 'eaf)
 
 ;; Jupyter
 
