@@ -1,6 +1,6 @@
 ;; -*- coding: utf-8; lexical-binding: t; -*-
 
-;;;; init-default
+;;; init-default
 (set-language-environment "UTF-8")
 (setq word-wrap-by-category t)
 
@@ -10,25 +10,8 @@
   (shell-command-to-string (concat "explorer.exe " url)))
 (when *wsl* (advice-add #'browse-url-xdg-open :override #'wsl-browse-url-xdg-open))
 
-; full screen in macOS
-;; (setq ns-use-native-fullscreen nil)
-;; (setq ns-use-fullscreen-animation nil)
-;; (run-at-time "5sec" nil
-;;              (lambda ()
-;;                (let ((fullscreen (frame-parameter (selected-frame) 'fullscreen)))
-;;                  ;; If emacs has in fullscreen status, maximized window first, drag from Mac's single space.
-;;                  (when (memq fullscreen '(fullscreen fullboth))
-;;                    (set-frame-parameter (selected-frame) 'fullscreen 'maximized))
-;;                  ;; Manipulating a frame without waiting for the fullscreen
-;;                  ;; animation to complete can cause a crash, or other unexpected
-;;                  ;; behavior, on macOS (bug#28496).
-;;                  (when (featurep 'cocoa) (sleep-for 0.5))
-;;                  ;; Call `toggle-frame-fullscreen' to fullscreen emacs.
-;;                  (toggle-frame-fullscreen))))
-
 (setq visible-bell t)
 
-;; (setq enable-recursive-minibuffers t)
 (require 'keyfreq)
 (keyfreq-mode 1)
 (keyfreq-autosave-mode 1)
@@ -37,27 +20,14 @@
 (require 'compile-dwim)
 (require 'smart-compile)
 
-;;; Keybindings
-
-;; Another way to achive the same function and fix electric pair problem. Below is the old approach.
+;; Keybindings
 (global-set-key (kbd "C-h") (kbd "<backspace>"))
-;; (global-set-key (kbd "C-h") 'delete-backward-char)
+
 (require 'ivy)
-;; (define-key ivy-minibuffer-map (kbd "C-h") 'ivy-backward-delete-char)
 (define-key ivy-minibuffer-map (kbd "C-w") 'ivy-backward-kill-word)
 
 
 ;;; init-ui
-
-;; { font
-;; (set-face-attribute 'default nil :font "hack 12")
-;; (setq face-font-rescale-alist '(("等距更纱黑体 T SC" . 1)))
-
-;; (dolist (charset '(han kana symbol cjk-misc bopomofo))
-;;   (set-fontset-font (frame-parameter nil 'font)
-;;                     charset
-;;                         (font-spec :family "等距更纱黑体 T SC")))
-
 (set-face-attribute 'default nil :font "hack 12")
 (setq face-font-rescale-alist '(("思源黑体" . 1)))
 
@@ -68,18 +38,10 @@
 
 (when *win64* (setq eaf-python-command "python.exe"))
 
-;;; theme
+;; theme
 (load-theme 'doom-monokai-pro t)
-;; In light environment, there are little different between above 3 color
-;; (set-background-color "#000000") ; BLACK
-;; (set-background-color "#080808") ; KURO
-;; (set-background-color "#0C0C0C") ; RO
-;; (set-background-color "#0B1013") ; KUROTSURUBAMI
-;; (set-background-color "#1C1C1C") ; SUMI for comment?
-
 
 ;;; init-lang
-
 ;; rime
 (require 'rime)
 
