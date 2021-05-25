@@ -31,10 +31,6 @@
       undo-strong-limit 8000000
       undo-outer-limit 8000000)
 
-(defvar my-use-m-for-matchit nil
-  "If t, use \"m\" key for `evil-matchit-mode'.
-And \"%\" key is also restored to `evil-jump-item'.")
-
 ;; {{ @see https://github.com/timcharper/evil-surround for tutorial
 (my-run-with-idle-timer 2 #'global-evil-surround-mode)
 (with-eval-after-load 'evil-surround
@@ -303,8 +299,6 @@ If the character before and after CH is space or tab, CH is NOT slash"
 ;; I prefer Emacs way after pressing ":" in evil-mode
 (define-key evil-ex-completion-map (kbd "C-a") 'move-beginning-of-line)
 (define-key evil-ex-completion-map (kbd "C-b") 'backward-char)
-(define-key evil-ex-completion-map (kbd "M-p") 'previous-complete-history-element)
-(define-key evil-ex-completion-map (kbd "M-n") 'next-complete-history-element)
 
 (define-key evil-normal-state-map "Y" (kbd "y$"))
 ;; (define-key evil-normal-state-map (kbd "RET") 'ivy-switch-buffer-by-pinyin) ; RET key is preserved for occur buffer
@@ -554,20 +548,6 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
    (t
     (message "Can only beautify code written in python/javascript"))))
 
-(defun my-open-pdf-from-history ()
-  "Open pdf and go to page from history."
-  (interactive)
-  (let* ((link (completing-read "Open pdf:::page: " my-pdf-view-from-history)))
-    (when link
-      (let* ((items (split-string link ":::"))
-             (pdf-file (nth 0 items))
-             (pdf-page (string-to-number (nth 1 items))))
-        (my-ensure 'org)
-        (my-focus-on-pdf-window-then-back
-         (lambda (pdf-file)
-           (when (string= (file-name-base pdf-file) (file-name-base pdf-file))
-             (my-pdf-view-goto-page pdf-page))))))))
-
 (my-comma-leader-def
   ;; "," 'evilnc-comment-operator
   ;; "bf" 'beginning-of-defun
@@ -751,7 +731,8 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "g" '(:ignore t :which-key "git")
   "h" '(:ignore t :which-key "help")
   "j" '(:ignore t :which-key "jump")
-  "o" '(:ignore t :which-key "org")
+  "o" '(:ignore t :which-key "open")
+  "p" '(:ignore t :which-key "quit")
   "w" '(:ignore t :which-key "windows")
   "s" '(:ignore t :which-key "system'")
 
@@ -804,9 +785,11 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
 
   "n" 'narrow-or-widen-dwim
 
-  ;; org
+  ;; open
   "oo" 'browse-url-xdg-open
 
+  ;; quit
+  "qq" 'save
   "t" 'random-healthy-color-theme
 
   "v" 'er/expand-region
@@ -836,6 +819,7 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "w TAB" 'alternate-window
 
   "r" 'evilmr-replace-in-buffer
+
   ;; system
   "sc" 'copy-to-x-clipboard
   "sv" 'paste-from-x-clipboard
@@ -879,32 +863,6 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "SPC ui" 'gud-stepi
   "SPC uc" 'gud-cont
   "SPC uf" 'gud-finish)
-
-;; per-major-mode setup
-
-(general-create-definer my-javascript-leader-def
-  :prefix ","
-  :non-normal-prefix "M-SPC"
-  :states '(normal motion insert emacs)
-  :keymaps 'js2-mode-map)
-
-(my-javascript-leader-def
-  "SPC de" 'js2-display-error-list
-  "SPC nn" 'js2-next-error
-  "SPC te" 'js2-mode-toggle-element
-  "SPC tf" 'js2-mode-toggle-hide-functions)
-;; }}
-
-(defun my-evil-delete-hack (orig-func &rest args)
-  "Press `dd' to delete lines in `wgrep-mode' in evil directly."
-  ;; make buffer writable
-  (if (and (boundp 'wgrep-prepared) wgrep-prepared)
-      (wgrep-toggle-readonly-area))
-  (apply orig-func args)
-  ;; make buffer read-only
-  (if (and (boundp 'wgrep-prepared) wgrep-prepared)
-      (wgrep-toggle-readonly-area)))
-(advice-add 'evil-delete :around #'my-evil-delete-hack)
 
 ;; {{ Use `;` as leader key, for searching something
 (general-create-definer my-semicolon-leader-def
@@ -1035,27 +993,6 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
 (my-run-with-idle-timer 4 #'evil-find-char-pinyin-mode)
 ;; }}
 
-;; {{ Port of vim-textobj-syntax.
-;; It provides evil text objects for consecutive items with same syntax highlight.
-;; press "vah" or "vih"
-(require 'evil-textobj-syntax)
-;; }}
-
-;; {{ evil-args
-;; bind evil-args text objects
-(define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
-(define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
-
-;; bind evil-forward/backward-args
-(define-key evil-normal-state-map "L" 'evil-forward-arg)
-(define-key evil-normal-state-map "H" 'evil-backward-arg)
-(define-key evil-motion-state-map "L" 'evil-forward-arg)
-(define-key evil-motion-state-map "H" 'evil-backward-arg)
-
-;; bind evil-jump-out-args
-(define-key evil-normal-state-map "K" 'evil-jump-out-args)
-;; }}
-
 ;; ;; In insert mode, press "fg" in 0.3 second to trigger my-counsel-company
 ;; ;; Run "grep fg english-words.txt", got "afghan".
 ;; ;; "afgan" is rarely used when programming
@@ -1106,16 +1043,67 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   ;; Here is the workaround
   (setq evil-default-cursor t))
 
+;; {{ per-major-mode setup
+(general-create-definer my-javascript-leader-def
+  :prefix "SPC"
+  :non-normal-prefix "M-SPC"
+  :states '(normal motion insert emacs)
+  :keymaps 'js2-mode-map)
+
+(my-javascript-leader-def
+  "de" 'js2-display-error-list
+  "nn" 'js2-next-error
+  "te" 'js2-mode-toggle-element
+  "tf" 'js2-mode-toggle-hide-functions)
+
+(general-create-definer my-org-leader-def
+  :prefix ";"
+  :non-normal-prefix "M-;"
+  :states '(normal motion visual)
+  :keymaps 'org-mode-map)
+
+(my-org-leader-def
+  "f" 'my-open-pdf-from-history
+  "n" 'my-open-pdf-next-page
+  "g" 'my-open-pdf-goto-page
+  "p" 'my-open-pdf-previous-page)
+;; }}
+
 (defun alternate-window ()
   (interactive)
   (let ((prev-window (get-mru-window nil t t)))
   (unless prev-window (user-error "Last window not found."))
   (select-window prev-window)))
 
-
 ;; @see https://github.com/emacs-evil/evil-surround/pull/48
 (evil-define-key 'visual evil-surround-mode-map "s" 'evil-surround-region)
 
 (define-key evil-normal-state-map "t" 'avy-goto-char-timer)
+
+;; {{ per-major-mode setup
+(general-create-definer my-javascript-leader-def
+  :prefix "SPC"
+  :non-normal-prefix "M-SPC"
+  :states '(normal motion insert emacs)
+  :keymaps 'js2-mode-map)
+
+(my-javascript-leader-def
+  "de" 'js2-display-error-list
+  "nn" 'js2-next-error
+  "te" 'js2-mode-toggle-element
+  "tf" 'js2-mode-toggle-hide-functions)
+
+(general-create-definer my-org-leader-def
+  :prefix ";"
+  :non-normal-prefix "M-;"
+  :states '(normal motion visual)
+  :keymaps 'org-mode-map)
+
+(my-org-leader-def
+  "f" 'my-open-pdf-from-history
+  "n" 'my-open-pdf-next-page
+  "g" 'my-open-pdf-goto-page
+  "p" 'my-open-pdf-previous-page)
+;; }}
 
 (provide 'init-evil)

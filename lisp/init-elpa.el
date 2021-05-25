@@ -42,7 +42,6 @@
     company-native-complete
     js2-mode ; need new features
     git-timemachine ; stable version is broken when git rename file
-    evil-textobj-syntax
     highlight-symbol
     undo-fu
     command-log-mode
@@ -336,8 +335,6 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
 (require-package 'evil-nerd-commenter)
 (require-package 'evil-surround)
 (require-package 'evil-visualstar)
-(require-package 'evil-args)
-(require-package 'evil-textobj-syntax)
 (require-package 'undo-fu)
 (require-package 'counsel-css)
 (require-package 'auto-package-update)
