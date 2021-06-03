@@ -5,7 +5,7 @@
 
 (let* ((minver "25.1"))
   (when (version< emacs-version minver)
-    (error "Emacs v%s or higher is required." minver)))
+    (error "Emacs v%s or higher is required" minver)))
 
 (setq user-init-file (or load-file-name (buffer-file-name)))
 (setq user-emacs-directory (file-name-directory user-init-file))
@@ -163,7 +163,6 @@
   (require-init 'init-nox t)
   (require-init 'init-doommodeline t)
   (require-init 'init-setting t)
-  (require-init 'init-package t)
 
   (unless (my-vc-merge-p)
     ;; @see https://www.reddit.com/r/emacs/comments/4q4ixw/how_to_forbid_emacs_to_touch_configuration_files/
