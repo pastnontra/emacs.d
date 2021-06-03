@@ -163,6 +163,7 @@
 
 ;; What to display as the version while a new one is being loaded
 (setq doom-modeline-env-load-string "...")
+(setq doom-modeline-percent-position nil)
 
 ;; Hooks that run before/after the modeline version string is updated
 (setq doom-modeline-before-update-env-hook nil)
