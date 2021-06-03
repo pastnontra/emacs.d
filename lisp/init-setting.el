@@ -28,6 +28,7 @@
 
 
 ;;; init-ui
+;; font
 (set-face-attribute 'default nil :font "hack 12")
 (setq face-font-rescale-alist '(("思源黑体" . 1)))
 
@@ -40,6 +41,8 @@
 
 ;; theme
 (load-theme 'doom-monokai-pro t)
+
+(column-number-mode 1)
 
 ;;; init-lang
 ;; rime
@@ -73,8 +76,11 @@
 (setq rime-cursor "˰")
 
 
+;;; init-tex
+(setq TeX-auto-save t)
+(setq TeX-parse-self t)
 
-;;;init-git
+;;; init-git
 (require 'git-gutter)
 (custom-set-variables '(git-gutter:modified-sign "*"))
 (set-face-foreground 'git-gutter:modified "deep sky blue")
@@ -97,5 +103,14 @@
 ;; Keybindings
 (evil-define-key 'normal org-mode-map (kbd "j") 'evil-next-visual-line
                                       (kbd "k") 'evil-previous-visual-line)
+
+;; packages
+(require 'org-journal)
+(setq org-journal-dir "~/Dropbox/notes/journal/")
+(setq org-journal-file-type 'weekly)
+
+;; init-eaf
+(add-to-list 'load-path "~/.emacs.d/site-lisp/emacs-application-framework/")
+(require 'eaf)
 
 (provide 'init-setting)
