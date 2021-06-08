@@ -738,7 +738,7 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
 
   "SPC" 'counsel-M-x
   "TAB" (lambda () (interactive) (switch-to-buffer nil)) ; last buffer
-  ";" 'evilnc-comment-or-uncomment-lines
+  ";" 'evilnc-comment-or-uncomment-lines ; it could be replaced by =gcc=
 
   ;; app
 
@@ -812,10 +812,12 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "wl" 'evil-window-right
   "wk" 'evil-window-up
   "wj" 'evil-window-down
-  "wq" 'delete-window ; I dislike this keybindingb
+  "wo" 'delete-other-windows
+  "wq" 'delete-window ; I dislike this keybinding
   "wu" 'my-transient-winner-undo
-  ;"wr" resize
-  "ww" 'delete-other-windows
+  ;; "wr" resize use a hydra menu
+  ;; "w=" recover the original status layout
+  "ww" 'evil-window-next
   "w TAB" 'alternate-window
 
   "r" 'evilmr-replace-in-buffer
