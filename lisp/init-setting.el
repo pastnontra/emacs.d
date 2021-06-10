@@ -109,11 +109,15 @@
 (evil-define-key 'normal org-mode-map (kbd "j") 'evil-next-visual-line
                                       (kbd "k") 'evil-previous-visual-line)
 
+;; features
+(setq org-todo-keywords (quote ((sequence "WAIT(w@/!)" "TODO(t)" "STRT(s)" "|" "DONE(d!/!)" "CANC(c@/!)"))))
+
 ;; packages
 (require 'org-journal)
 (setq org-journal-dir "~/Dropbox/notes/journal/")
+(setq org-journal-file-format "%Y%m%d.org")
 
-;; init-eaf
+;;; init-eaf
 (add-to-list 'load-path "~/.emacs.d/site-lisp/emacs-application-framework/")
 (require 'eaf)
 
