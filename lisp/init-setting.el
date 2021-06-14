@@ -2,6 +2,7 @@
 
 ;;; init-default
 (set-language-environment "UTF-8")
+(setq sentence-end-double-space nil)
 (setq word-wrap-by-category t)
 
 ;; System
