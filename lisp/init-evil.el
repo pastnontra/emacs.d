@@ -360,7 +360,7 @@ If the character before and after CH is space or tab, CH is NOT slash"
 ;; I learn this trick from ReneFroger, need latest expand-region
 ;; @see https://github.com/redguardtoo/evil-matchit/issues/38
 (define-key evil-visual-state-map (kbd "v") 'er/expand-region)
-(define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up) ;evil-want-u-scorll
+(define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up) ; evil-want-u-scorll
 (define-key evil-insert-state-map (kbd "C-u") 'evil-delete-back-to-indentation)
 ;; It's not the final version for indent
 (define-key evil-insert-state-map (kbd "<backtab>") 'evil-shift-left-line)
@@ -368,9 +368,11 @@ If the character before and after CH is space or tab, CH is NOT slash"
 (define-key evil-insert-state-map (kbd "C-e") 'move-end-of-line)
 (define-key evil-insert-state-map (kbd "C-d") 'delete-char)
 (define-key evil-insert-state-map (kbd "C-k") 'kill-line)
-(define-key evil-insert-state-map (kbd "M-j") 'yas-expand)
-(define-key evil-emacs-state-map (kbd "M-j") 'yas-expand)
-
+;; https://emacs.stackexchange.com/questions/9631/what-is-the-difference-between-tab-and-tab
+(define-key evil-insert-state-map (kbd "TAB") 'yas-expand)
+(define-key evil-insert-state-map (kbd "<tab>") 'yas-expand)
+(define-key evil-emacs-state-map (kbd "TAB") 'yas-expand)
+(define-key evil-emacs-state-map (kbd "<tab>") 'yas-expand)
 ;; {{
 (defvar evil-global-markers-history nil)
 (defun my-evil-set-marker-hack (char &optional pos advance)
@@ -732,14 +734,15 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "g" '(:ignore t :which-key "git")
   "h" '(:ignore t :which-key "help")
   "j" '(:ignore t :which-key "jump")
+  "n" '(:ignore t :which-key "note")
   "o" '(:ignore t :which-key "open")
   "p" '(:ignore t :which-key "quit")
+  "t" '(:ignore t :which-key "toggle")
   "w" '(:ignore t :which-key "windows")
   "s" '(:ignore t :which-key "system'")
 
   "SPC" 'counsel-M-x
   "TAB" (lambda () (interactive) (switch-to-buffer nil)) ; last buffer
-  ";" 'evilnc-comment-or-uncomment-lines ; it could be replaced by =gcc=
 
   ;; app
 
@@ -784,16 +787,19 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "je" 'end-of-defun
   "ju" 'backward-up-list
 
-  "n" 'narrow-or-widen-dwim
+  ;; note
+  "m" 'narrow-or-widen-dwim
+  "nj" 'org-journal-new-entry
 
   ;; open
   "oo" 'browse-url-xdg-open
 
   ;; quit
-  "qq" 'save
-  "t" 'random-healthy-color-theme
+   "qq" 'save-buffers-kill-emacs
 
-  "v" 'er/expand-region
+  ;; toggle
+  "tt" 'random-healthy-color-theme
+
 
   ;; windows
   "0" 'winum-select-window-0-or-10
@@ -1108,5 +1114,8 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "g" 'my-open-pdf-goto-page
   "p" 'my-open-pdf-previous-page)
 ;; }}
+
+;; (global-unset-key (kbd"C-i"))
+;; (define-key evil-normal-state-map (kbd"C-i") 'evil-jump-forward)
 
 (provide 'init-evil)
