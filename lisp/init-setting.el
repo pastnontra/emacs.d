@@ -5,17 +5,24 @@
 (setq sentence-end-double-space nil)
 (setq word-wrap-by-category t)
 
+;; Files
+(add-to-list 'recentf-exclude "/home/[a-z]+/Dropbox/notes/journal/")
+
 ;; System
 (defun wsl-browse-url-xdg-open (url &optional ignored)
   (interactive (browse-url-interactive-arg "URL: "))
   (shell-command-to-string (concat "explorer.exe " url)))
 (when *wsl* (advice-add #'browse-url-xdg-open :override #'wsl-browse-url-xdg-open))
 
-(setq visible-bell t)
+(setq visible-bell nil
+      ring-bell-function #'ignore)
 
 (require 'keyfreq)
 (keyfreq-mode 1)
 (keyfreq-autosave-mode 1)
+
+;; company
+(setq company-idle-delay 0.3)
 
 ;; compile
 (require 'compile-dwim)
@@ -23,7 +30,6 @@
 
 ;; Keybindings
 (global-set-key (kbd "C-h") (kbd "<backspace>"))
-
 (require 'ivy)
 (define-key ivy-minibuffer-map (kbd "C-w") 'ivy-backward-kill-word)
 
@@ -108,18 +114,25 @@
 
 ;; Keybindings
 (evil-define-key 'normal org-mode-map (kbd "j") 'evil-next-visual-line
-                                      (kbd "k") 'evil-previous-visual-line)
+                                      (kbd "k") 'evil-previous-visual-line
+                                      (kbd "C-i") 'evil-jump-forward)
 
-;; features
+;; Features
 (setq org-todo-keywords (quote ((sequence "WAIT(w@/!)" "TODO(t)" "STRT(s)" "|" "DONE(d!/!)" "CANC(c@/!)"))))
+(setq org-id-ts-format "%Y-%m-%d-%H%M%S")
+(setq org-id-method 'ts)
 
-;; packages
+;; org-journal
+(setq org-agenda-files "~/Dropbox/notes/journal/")
 (require 'org-journal)
 (setq org-journal-dir "~/Dropbox/notes/journal/")
 (setq org-journal-file-format "%Y%m%d.org")
+(setq org-journal-date-format "%a, %Y-%m-%d")
+(setq org-journal-carryover-items "")
 
 ;;; init-eaf
 (add-to-list 'load-path "~/.emacs.d/site-lisp/emacs-application-framework/")
 (require 'eaf)
+
 
 (provide 'init-setting)
