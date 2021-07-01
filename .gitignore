@@ -74,9 +74,9 @@ eaf/
 eln-cache/
 nox/
 **/.DS_Store
-site-lisp/emacs-application-framework
 quelpa/
 rime/
 lisp/package-lock.json
 lisp/package.json
 org-roam.db
+bookmark
