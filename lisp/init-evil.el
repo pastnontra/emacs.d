@@ -807,7 +807,6 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
 
 
   ;; windows
-  "0" 'winum-select-window-0-or-10
   "1" 'winum-select-window-1
   "2" 'winum-select-window-2
   "3" 'winum-select-window-3
