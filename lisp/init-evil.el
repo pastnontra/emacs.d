@@ -788,8 +788,13 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "ju" 'backward-up-list
 
   ;; note
+  "nb" 'org-roam-buffer-toggle
+  "nc" 'org-roam-capture
+  "nd" 'org-roam-dailies-capture-today
+  "nf" 'org-roam-node-find
+  "ni" 'org-roam-node-insert
+
   "m" 'narrow-or-widen-dwim
-  "nj" 'org-journal-new-entry
 
   ;; open
   "oo" 'browse-url-xdg-open

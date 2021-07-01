@@ -6,7 +6,7 @@
 (setq word-wrap-by-category t)
 
 ;; Files
-(add-to-list 'recentf-exclude "/home/[a-z]+/Dropbox/notes/journal/")
+(add-to-list 'recentf-exclude "/home/[a-z]+/dailies/")
 
 ;; System
 (defun wsl-browse-url-xdg-open (url &optional ignored)
@@ -20,6 +20,11 @@
 (require 'keyfreq)
 (keyfreq-mode 1)
 (keyfreq-autosave-mode 1)
+
+(require 'magit)
+(defun magit-submodule-remove+ ()
+  (interactive)
+  (magit-submodule-remove (list (magit-read-module-path "Remove module")) "--force" nil))
 
 ;; company
 (setq company-idle-delay 0.3)
@@ -119,20 +124,19 @@
 
 ;; Features
 (setq org-todo-keywords (quote ((sequence "WAIT(w@/!)" "TODO(t)" "STRT(s)" "|" "DONE(d!/!)" "CANC(c@/!)"))))
-(setq org-id-ts-format "%Y-%m-%d-%H%M%S")
 (setq org-id-method 'ts)
 
-;; org-journal
-(setq org-agenda-files "~/Dropbox/notes/journal/")
-(require 'org-journal)
-(setq org-journal-dir "~/Dropbox/notes/journal/")
-(setq org-journal-file-format "%Y%m%d.org")
-(setq org-journal-date-format "%a, %Y-%m-%d")
-(setq org-journal-carryover-items "")
-
-;;; init-eaf
-(add-to-list 'load-path "~/.emacs.d/site-lisp/emacs-application-framework/")
-(require 'eaf)
+;; org-roam
+(add-to-list 'load-path "~/.emacs.d/site-lisp/org-roam")
+(load-library "org-roam")
+(setq org-roam-directory "~/notes")
+(setq org-roam-dailies-directory "~/dailies/")
+(setq org-roam-dailies-capture-templates
+      '(("d" "default" entry
+         "* %?"
+         :if-new (file+head "%<%Y-%m-%d>.org"
+                            "#+title: %<%Y-%m-%d, %A>\n"))))
+(org-roam-setup)
 
 
 (provide 'init-setting)
