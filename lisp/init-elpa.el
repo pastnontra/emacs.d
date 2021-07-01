@@ -386,9 +386,6 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
 (require-package 'typescript-mode)
 ;; run "M-x pdf-tool-install" at debian and open pdf in GUI Emacs
 (require-package 'pdf-tools)
-(require-package 'pyim)
-(require-package 'pyim-wbdict) ; someone may use wubi IME, not me
-(require-package 'pyim-basedict) ; may not necessary
 (require-package 'esup)
 
 ;; {{ Fixed expiring GNU ELPA keys
