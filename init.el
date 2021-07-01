@@ -159,7 +159,7 @@
   (require-init 'init-flymake t)
 
   ;; It is my config
-  ;; (require-init 'init-eaf t)
+  (require-init 'init-eaf t)
   (require-init 'init-nox t)
   (require-init 'init-doommodeline t)
   (require-init 'init-setting t)

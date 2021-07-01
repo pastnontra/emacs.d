@@ -152,7 +152,6 @@
     zoutline
     company-c-headers
     company-statistics
-    org-roam
     ;; not installed
     visual-fill-column
     ;; my installed
@@ -166,6 +165,12 @@
     all-the-icons
     doom-modeline
     org-journal
+    emacsql-sqlite
+    magit-section
+    transient
+    magit
+    git-commit
+    with-editor
     ;; depended by chemacs2
     kv)
   "Packages to install from melpa-unstable.")
@@ -414,7 +419,7 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
 (require-package 'magit)
 (require-package 'which-key)
 (require-package 'highlight-symbol)
-(require-package 'org-roam)
+;; (require-package 'org-roam)
 
 ;; most popular 100 themee
 (my-install-popular-themes
