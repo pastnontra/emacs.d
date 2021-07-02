@@ -5,9 +5,6 @@
 (setq sentence-end-double-space nil)
 (setq word-wrap-by-category t)
 
-;; Files
-(add-to-list 'recentf-exclude "/home/[a-z]+/dailies/")
-
 ;; System
 (defun wsl-browse-url-xdg-open (url &optional ignored)
   (interactive (browse-url-interactive-arg "URL: "))
@@ -22,9 +19,9 @@
 (keyfreq-autosave-mode 1)
 
 (require 'magit)
-(defun magit-submodule-remove+ ()
+(defun magit-submodule-remove-force ()
   (interactive)
-  (magit-submodule-remove (list (magit-read-module-path "Remove module")) "--force" nil))
+  (magit-submodule-remove (list (magit-read-module-path "Remove module")) "--force" nil))
 
 ;; company
 (setq company-idle-delay 0.3)
@@ -103,7 +100,7 @@
 (add-hook 'org-mode-hook #'electric-pair-mode)
 
 ;; Appearance
-(require 'org-superstar)
+;; (require 'org-superstar)
 (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
 (setq org-superstar-cycle-headline-bullets t)
 (setq org-hide-leading-stars t)
@@ -129,8 +126,6 @@
 ;; org-roam
 (add-to-list 'load-path "~/.emacs.d/site-lisp/org-roam")
 (load-library "org-roam")
-(setq org-roam-directory "~/notes")
-(setq org-roam-dailies-directory "~/dailies/")
 (setq org-roam-dailies-capture-templates
       '(("d" "default" entry
          "* %?"
