@@ -137,7 +137,6 @@
     regex-tool
     legalese
     htmlize
-    pyim-basedict
     scratch
     session
     inflections
@@ -164,6 +163,7 @@
     moonscript
     all-the-icons
     doom-modeline
+    wc-mode
     org-journal
     emacsql-sqlite
     magit-section
@@ -416,6 +416,7 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
 (require-package 'magit)
 (require-package 'which-key)
 (require-package 'highlight-symbol)
+(require-package 'wc-mode)
 ;; (require-package 'org-roam)
 
 ;; most popular 100 themee

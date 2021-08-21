@@ -125,6 +125,7 @@
 
 ;; org-roam
 (add-to-list 'load-path "~/.emacs.d/site-lisp/org-roam")
+(add-to-list 'load-path "~/.emacs.d/site-lisp/org-roam/extensions/")
 (load-library "org-roam")
 (setq org-roam-dailies-capture-templates
       '(("d" "default" entry
@@ -132,6 +133,6 @@
          :if-new (file+head "%<%Y-%m-%d>.org"
                             "#+title: %<%Y-%m-%d, %A>\n"))))
 (org-roam-setup)
-
+(require 'org-roam-dailies)
 
 (provide 'init-setting)

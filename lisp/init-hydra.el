@@ -472,7 +472,7 @@ Git:
   ("dr" (progn (magit-diff-range (my-git-commit-id))))
   ("cc" magit-commit-create)
   ("ca" magit-commit-amend)
-  ("ja" (magit-commit-amend "--reuse-message=HEAD --no-verify"))
+  ("ja" (magit-commit-amend '("--reuse-message=HEAD" "--no-verify")))
   ("au" magit-stage-modified)
   ("Q" git-gutter-toggle)
   ("f" my-git-find-file-in-commit)
@@ -558,12 +558,12 @@ _w_ where is something defined
   ("w" where-is))
 (global-set-key (kbd "C-c C-q") 'hydra-describe/body)
 
-(defhydra hydra-spellchecker (:color blue :hint nil)
-  "
-[_a_] auto correct
-[_n_] next error
-"
-  ("n" 'flyspell-goto-next-error))
-(global-set-key (kbd "C-c f") 'hydra-spellchecker/body)
+;; (defhydra hydra-spellchecker (:color blue :hint nil)
+;;   "
+;; [_a_] auto correct
+;; [_n_] next error
+;; "
+;;   ("n" 'flyspell-goto-next-error))
+;; (global-set-key (kbd "C-c f") 'hydra-spellchecker/body)
 (provide 'init-hydra)
 ;;; init-hydra.el ends here
