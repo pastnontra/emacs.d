@@ -354,7 +354,6 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
 (require-package 'hydra)
 (require-package 'ivy-hydra) ; @see https://oremacs.com/2015/07/23/ivy-multiaction/
 (require-package 'web-mode)
-(require-package 'emms)
 (require-package 'iedit)
 (require-package 'undo-tree)
 (require-package 'evil)
@@ -526,6 +525,10 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
    zenburn-theme
    zerodark-theme
    ))
+;; }}
+
+;; {{ trivial packages which has extrea ependency
+(require-package 'emms)
 ;; }}
 
 ;; kill buffer without my confirmation
