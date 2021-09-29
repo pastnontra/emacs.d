@@ -8,7 +8,6 @@
 (require 'eaf-music-player)
 (require 'eaf-pdf-viewer)
 (require 'eaf-file-browser)
-(require 'eaf-mindmap)
 (require 'eaf-netease-cloud-music)
 (require 'eaf-jupyter)
 (require 'eaf-browser)

@@ -154,6 +154,9 @@
     ;; not installed
     visual-fill-column
     ;; my installed
+    annalist
+    evil-collection
+    quickrun
     rime
     org-superstar
     ctable
@@ -402,6 +405,8 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
 (require-package 'ctable)
 (require-package 'deferred)
 (require-package 'epc)
+(require-package 'quickrun)
+(require-package 'evil-collection)
 
 (when *emacs26*
   ;; org => ppt, org v8.3 is required (Emacs 25 uses org v8.2)

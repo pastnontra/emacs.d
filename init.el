@@ -21,9 +21,6 @@
 (setq *wsl*   (and (eq system-type 'gnu/linux) (string-match "-[Mm]icrosoft" operating-system-release)))
 (setq *emacs26* (>= emacs-major-version 26))
 (setq *emacs27* (>= emacs-major-version 27))
-(setq inhibit-startup-message t
-      ;; speed startup, learned from doom emacs
-      initial-major-mode 'fundamental-mode)
 
 ;; don't GC during startup to save time
 (setq gc-cons-percentage 0.6)
@@ -145,6 +142,10 @@
   (require-init 'init-writting t)
   (require-init 'init-hydra) ; hotkey is required everywhere
   ;; use evil mode (vi key binding)
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
+  (when (require 'evil-collection nil t)
+    (evil-collection-init))
   (require-init 'init-evil) ; init-evil dependent on init-clipboard
 
   ;; ediff configuration should be last so it can override
@@ -163,6 +164,7 @@
   (require-init 'init-flymake t)
 
   ;; It is my config
+  (require 'quickrun)
   (require-init 'init-eaf t)
   (require-init 'init-nox t)
   (require-init 'init-doommodeline t)
@@ -177,8 +179,6 @@
     ;; my personal setup, other major-mode specific setup need it.
     ;; It's dependent on *.el in `my-site-lisp-dir'
     (load (expand-file-name "~/.custom.el") t nil)))
-
-(set-background-color "#121212")
 
 ;; @see https://www.reddit.com/r/emacs/comments/55ork0/is_emacs_251_noticeably_slower_than_245_on_windows/
 ;; Emacs 25 does gc too frequently

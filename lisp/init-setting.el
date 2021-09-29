@@ -24,11 +24,8 @@
   (magit-submodule-remove (list (magit-read-module-path "Remove module")) "--force" nil))
 
 ;; company
-(setq company-idle-delay 0.3)
+(setq company-idle-delay 0.5)
 
-;; compile
-(require 'compile-dwim)
-(require 'smart-compile)
 
 ;; Keybindings
 (global-set-key (kbd "C-h") (kbd "<backspace>"))
@@ -39,12 +36,12 @@
 ;;; init-ui
 ;; font
 (set-face-attribute 'default nil :font "hack 12")
-(setq face-font-rescale-alist '(("思源黑体" . 1)))
+(setq face-font-rescale-alist '(("Source Han Mono SC" . 1)))
 
 (dolist (charset '(han kana symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
                     charset
-                        (font-spec :family "思源黑体")))
+                        (font-spec :family "Source Han Mono SC")))
 
 (when *win64* (setq eaf-python-command "python.exe"))
 
@@ -100,7 +97,6 @@
 (add-hook 'org-mode-hook #'electric-pair-mode)
 
 ;; Appearance
-;; (require 'org-superstar)
 (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
 (setq org-superstar-cycle-headline-bullets t)
 (setq org-hide-leading-stars t)
@@ -120,6 +116,20 @@
                                       (kbd "C-i") 'evil-jump-forward)
 
 ;; Features
+(defun capture-new-file ()
+  (let ((name (read-string "Name: ")))
+    (expand-file-name (format "%s.org"
+                              name) "~/inbox")))
+
+(setq org-default-notes-file "~/notes/Warning.org")
+(setq org-capture-templates
+      '(("i" "inbox" entry
+         (file capture-new-file)
+         "* TODO %?")
+        ("f" "foo" entry
+         (file "")
+         "* DONE %?\n  :PROPERTIES:\n  :ID:       %Y%-%m-%d\n  :END:")))
+
 (setq org-todo-keywords (quote ((sequence "WAIT(w@/!)" "TODO(t)" "STRT(s)" "|" "DONE(d!/!)" "CANC(c@/!)"))))
 (setq org-id-method 'ts)
 
@@ -127,12 +137,23 @@
 (add-to-list 'load-path "~/.emacs.d/site-lisp/org-roam")
 (add-to-list 'load-path "~/.emacs.d/site-lisp/org-roam/extensions/")
 (load-library "org-roam")
+(require 'org-roam-dailies)
+(setq org-roam-dailies-directory "~/dailies")
 (setq org-roam-dailies-capture-templates
       '(("d" "default" entry
-         "* %?"
+         "* %? %i"
          :if-new (file+head "%<%Y-%m-%d>.org"
                             "#+title: %<%Y-%m-%d, %A>\n"))))
-(org-roam-setup)
-(require 'org-roam-dailies)
+
+;;; init-term
+(defun term-mode-hook-setup ()
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-c") 'term-send-raw)
+    (set-transient-map map (lambda () t))
+  (define-key evil-insert-state-map (kbd "C-n") 'term-send-raw)))
+(add-hook 'term-mode-hook 'term-mode-hook-setup)
+
+(with-eval-after-load 'term-mode
+  (setq evil-emacs-state-cursor 'bar))
 
 (provide 'init-setting)

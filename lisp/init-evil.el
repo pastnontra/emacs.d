@@ -264,7 +264,7 @@ If the character before and after CH is space or tab, CH is NOT slash"
              (special-mode . emacs)
              (grep-mode . emacs)
              (Info-mode . emacs)
-             (term-mode . emacs)
+             (term-mode . insert)
              (sdcv-mode . emacs)
              (anaconda-nav-mode . emacs)
              (log-edit-mode . emacs)
@@ -799,6 +799,7 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "nd" 'org-roam-dailies-capture-today
   "nf" 'org-roam-node-find
   "ni" 'org-roam-node-insert
+  "ng" 'org-roam-dailies-goto-today
 
   "m" 'narrow-or-widen-dwim
 
@@ -1125,5 +1126,7 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
 
 ;; (global-unset-key (kbd"C-i"))
 ;; (define-key evil-normal-state-map (kbd"C-i") 'evil-jump-forward)
+
+(evil-collection-init 'term-mode)
 
 (provide 'init-evil)
