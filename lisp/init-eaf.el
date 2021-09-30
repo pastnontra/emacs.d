@@ -26,5 +26,12 @@
 ;;     ("C-m" . "")))
 
 
+(when *wsl* (setq ip_address
+                  (shell-command-to-string "grep nameserver /etc/resolv.conf | awk '{printf $2}'")))
+(setq eaf-proxy-type "http")
+(setq eaf-proxy-host ip_address)
+;; (setq eaf-proxy-host "172.27.224.1")
+(setq eaf-proxy-port "8889")
 
 (provide 'init-eaf)
+
