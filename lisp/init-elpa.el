@@ -185,7 +185,7 @@
       '(("localelpa" . "~/.emacs.d/localelpa/")
         ;; uncomment below line if you need use GNU ELPA
         ;; ;; ("gnu" . "https://elpa.gnu.org/packages/")
-        ;; ("melpa" . "https://melpa.org/packages/")
+        ("melpa" . "https://melpa.org/packages/")
         ;; ("melpa-stable" . "https://stable.melpa.org/packages/")
 
         ;; Use either 163 or tsinghua mirror repository when official melpa
@@ -200,7 +200,7 @@
         ;; {{ Option 2: tsinghua mirror repository
         ;; ;; @see https://mirror.tuna.tsinghua.edu.cn/help/elpa/ on usage:
         ("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-        ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+        ;; ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
         ;; ("melpa-stable" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa-stable/")
         ;; }}
         ))
@@ -417,6 +417,8 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
   (dolist (theme popular-themes)
     (require-package theme)))
 
+
+(require-package 'doom-modeline)
 (require-package 'magit)
 (require-package 'which-key)
 (require-package 'highlight-symbol)
@@ -428,7 +430,7 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
  '(
    afternoon-theme
    alect-themes
-   ample-theme
+
    ample-zen-theme
    anti-zenburn-theme
    apropospriate-theme
