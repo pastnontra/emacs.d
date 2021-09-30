@@ -138,12 +138,14 @@
 (add-to-list 'load-path "~/.emacs.d/site-lisp/org-roam/extensions/")
 (load-library "org-roam")
 (require 'org-roam-dailies)
-(setq org-roam-dailies-directory "~/dailies")
+(setq org-roam-directory "~/org-roam")
+(setq org-roam-dailies-directory "daily")
 (setq org-roam-dailies-capture-templates
       '(("d" "default" entry
          "* %? %i"
          :if-new (file+head "%<%Y-%m-%d>.org"
                             "#+title: %<%Y-%m-%d, %A>\n"))))
+(org-roam-db-autosync-mode)
 
 ;;; init-term
 (defun term-mode-hook-setup ()
