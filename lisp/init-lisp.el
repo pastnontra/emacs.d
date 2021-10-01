@@ -20,7 +20,7 @@
 (setq-default initial-scratch-message (show-scratch-buffer-message))
 
 ;; A quick way to jump to the definition of a function given its key binding
-;; (global-set-key (kbd "C-h K") 'find-function-on-key)
+(global-set-key (kbd "C-h K") 'find-function-on-key)
 
 (with-eval-after-load 'paredit
   (diminish 'paredit-mode " Par"))
