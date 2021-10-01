@@ -28,8 +28,8 @@
 
 
 ;; Keybindings
-(global-set-key (kbd "C-h") (kbd "<backspace>"))
 (require 'ivy)
+(define-key ivy-minibuffer-map (kbd "C-h") (kbd "<backspace>"))
 (define-key ivy-minibuffer-map (kbd "C-w") 'ivy-backward-kill-word)
 
 
@@ -151,11 +151,8 @@
 (defun term-mode-hook-setup ()
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-c") 'term-send-raw)
-    (set-transient-map map (lambda () t))
-  (define-key evil-insert-state-map (kbd "C-n") 'term-send-raw)))
-(add-hook 'term-mode-hook 'term-mode-hook-setup)
+    (set-transient-map map (lambda () t))))
 
-(with-eval-after-load 'term-mode
-  (setq evil-emacs-state-cursor 'bar))
+(add-hook 'term-mode-hook 'term-mode-hook-setup)
 
 (provide 'init-setting)

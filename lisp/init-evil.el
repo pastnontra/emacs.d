@@ -258,6 +258,7 @@ If the character before and after CH is space or tab, CH is NOT slash"
   (kbd "TAB") 'markdown-cycle)
 
 ;; {{ specify major mode uses Evil (vim) NORMAL state or EMACS original state.
+
 ;; You may delete this setup to use Evil NORMAL state always.
 (dolist (p '((minibuffer-inactive-mode . emacs)
              (calendar-mode . emacs)
@@ -309,6 +310,7 @@ If the character before and after CH is space or tab, CH is NOT slash"
 (define-key evil-insert-state-map (kbd "C-x C-n") 'evil-complete-next-line)
 (define-key evil-insert-state-map (kbd "C-x C-p") 'evil-complete-previous-line)
 (define-key evil-insert-state-map (kbd "C-]") 'aya-expand)
+(define-key evil-insert-state-map (kbd "C-h") (kbd "<backspace>"))
 
 (defun my-search-defun-from-pos (search pos)
   (evil-search search t t pos)
