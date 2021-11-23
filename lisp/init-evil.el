@@ -379,10 +379,10 @@ If the character before and after CH is space or tab, CH is NOT slash"
 (define-key evil-insert-state-map (kbd "C-d") 'delete-char)
 (define-key evil-insert-state-map (kbd "C-k") 'kill-line)
 ;; https://emacs.stackexchange.com/questions/9631/what-is-the-difference-between-tab-and-tab
-(define-key evil-insert-state-map (kbd "TAB") 'yas-expand)
-(define-key evil-insert-state-map (kbd "<tab>") 'yas-expand)
-(define-key evil-emacs-state-map (kbd "TAB") 'yas-expand)
-(define-key evil-emacs-state-map (kbd "<tab>") 'yas-expand)
+;; (define-key evil-insert-state-map (kbd "TAB") 'yas-expand)
+;; (define-key evil-insert-state-map (kbd "<tab>") 'yas-expand)
+;; (define-key evil-emacs-state-map (kbd "TAB") 'yas-expand)
+;; (define-key evil-emacs-state-map (kbd "<tab>") 'yas-expand)
 ;; {{
 (defvar evil-global-markers-history nil)
 (defun my-evil-set-marker-hack (char &optional pos advance)
@@ -663,7 +663,7 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   ;; "sd" 'split-window-horizontally
   ;; "oo" 'delete-other-windows
   ;; }}
-  "xr" 'my-subwindow-setup
+  "cr" 'my-window-setup
   ;; "uu" 'my-transient-winner-undo
   "fs" 'ffip-save-ivy-last
   "fr" 'ivy-resume
@@ -806,6 +806,7 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "m" 'narrow-or-widen-dwim
 
   ;; open
+  "oa" 'org-agenda
   "oo" 'browse-url-xdg-open
 
   ;; quit
@@ -1088,6 +1089,21 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "f" 'my-navigate-in-pdf
   "g" 'my-open-pdf-goto-page)
 ;; }}
+
+;; @see https://github.com/redguardtoo/emacs.d/issues/955
+;; `evil-paste-after' => `current-kill' => `interprogram-paste-function'=> `gui-selection-value'
+;; `gui-selection-value' returns clipboard text from CLIPBOARD or "PRIMARY" clipboard which are
+;; also controlled by `select-enable-clipboard' and `select-enable-primary'.
+;; Please note `evil-visual-update-x-selection' automatically updates PRIMARY clipboard with
+;; visual selection.
+;; I set `my-evil-enable-visual-update-x-selection' to nil to avoid all those extra "features".
+(defvar my-evil-enable-visual-update-x-selection nil
+  "Automatically copy the selected text into evil register.
+I'm not sure this is good idea.")
+(defun my-evil-visual-update-x-selection-hack (orig-func &rest args)
+  (when my-evil-enable-visual-update-x-selection
+    (apply orig-func args)))
+(advice-add 'evil-visual-update-x-selection :around #'my-evil-visual-update-x-selection-hack)
 
 (defun alternate-window ()
   (interactive)

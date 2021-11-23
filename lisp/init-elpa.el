@@ -151,6 +151,9 @@
     zoutline
     company-c-headers
     company-statistics
+    git-modes
+    ws-butler
+    ;; qrencode
     ;; not installed
     visual-fill-column
     ;; my installed
@@ -174,6 +177,7 @@
     magit
     git-commit
     with-editor
+    ivy-rich
     ;; depended by chemacs2
     kv)
   "Packages to install from melpa-unstable.")
@@ -185,21 +189,21 @@
       '(("localelpa" . "~/.emacs.d/localelpa/")
         ;; uncomment below line if you need use GNU ELPA
         ;; ;; ("gnu" . "https://elpa.gnu.org/packages/")
-        ("melpa" . "https://melpa.org/packages/")
+        ;; ("melpa" . "https://melpa.org/packages/")
         ;; ("melpa-stable" . "https://stable.melpa.org/packages/")
 
         ;; Use either 163 or tsinghua mirror repository when official melpa
         ;; is slow or shutdown.
 
         ;; ;; {{ Option 1: 163 mirror repository:
-        ;; ("gnu" . "https://mirrors.163.com/elpa/gnu/")
-        ;; ("melpa" . "https://mirrors.163.com/elpa/melpa/")
+        ("gnu" . "https://mirrors.163.com/elpa/gnu/")
+        ("melpa" . "https://mirrors.163.com/elpa/melpa/")
         ;; ("melpa-stable" . "https://mirrors.163.com/elpa/melpa-stable/")
         ;; ;; }}
 
         ;; {{ Option 2: tsinghua mirror repository
         ;; ;; @see https://mirror.tuna.tsinghua.edu.cn/help/elpa/ on usage:
-        ("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+        ;; ("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
         ;; ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
         ;; ("melpa-stable" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa-stable/")
         ;; }}
@@ -257,20 +261,17 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
     (when add-to-p
       ;; The package is visible through package manager
       (apply orig-func args))))
-(advice-add 'package--add-to-archive-contents :around #'my-package--add-to-archive-contents-hack)
+;; (advice-add 'package--add-to-archive-contents :around #'my-package--add-to-archive-contents-hack)
 
 ;; On-demand installation of packages
 (my-ensure 'package)
 (defun require-package (package &optional min-version no-refresh)
-  "Ask elpa to install given PACKAGE."
-  (cond
-   ((package-installed-p package min-version)
-    t)
-   ((or (assoc package package-archive-contents) no-refresh)
-    (package-install package))
-   (t
-    (package-refresh-contents)
-    (require-package package min-version t))))
+  "Ask elpa to install given PACKAGE with MIN-VERSION.
+IF NO-REFERSH is nil, `package-refresh-contents' is called."
+  (unless (package-installed-p package min-version)
+    (unless (or (assoc package package-archive-contents) no-refresh)
+      (package-refresh-contents))
+    (package-install package)))
 
 ;;------------------------------------------------------------------------------
 ;; Fire up package.el and ensure the following packages are installed.
@@ -285,8 +286,6 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
 (require-package 'csv-mode)
 (require-package 'expand-region) ; I prefer stable version
 (require-package 'fringe-helper)
-(require-package 'gitignore-mode)
-(require-package 'gitconfig-mode)
 (require-package 'wgrep)
 (require-package 'request)
 (require-package 'lua-mode)
@@ -412,25 +411,25 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
   ;; org => ppt, org v8.3 is required (Emacs 25 uses org v8.2)
   (require-package 'org-re-reveal))
 
-(defun my-install-popular-themes (popular-themes)
-  "Install POPULAR-THEMES from melpa."
-  (dolist (theme popular-themes)
-    (require-package theme)))
 
 
 (require-package 'doom-modeline)
+(require-package 'git-modes)
 (require-package 'magit)
 (require-package 'which-key)
 (require-package 'highlight-symbol)
 (require-package 'wc-mode)
+(require-package 'qrencode)
+(require-package 'ws-butler)
+(require-package 'sage-shell-mode)
+(require-package 'graphql-mode)
 ;; (require-package 'org-roam)
 
-;; most popular 100 themee
-(my-install-popular-themes
+(defvar my-color-themes
  '(
    afternoon-theme
    alect-themes
-
+   ample-theme
    ample-zen-theme
    anti-zenburn-theme
    apropospriate-theme
@@ -449,7 +448,6 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
    dakrone-theme
    darkburn-theme
    darkmine-theme
-   darkokai-theme
    darktooth-theme
    django-theme
    doom-themes
@@ -481,6 +479,7 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
    majapahit-theme
    material-theme
    minimal-theme
+   modus-themes
    moe-theme
    molokai-theme
    monochrome-theme
@@ -530,11 +529,21 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
    white-sand-theme
    zen-and-art-theme
    zenburn-theme
-   zerodark-theme
-   ))
+   zerodark-theme)
+ "Color themes for this setup.")
+
+
+;; speed up CI
+(unless my-disable-idle-timer
+  ;; most popular 100 themes
+  (dolist (theme my-color-themes)
+    (require-package theme))
+  (when *emacs27*
+    (require-package 'modus-themes)))
+
 ;; }}
 
-;; {{ trivial packages which has extrea ependency
+;; {{ trivial packages which has extra dependency
 (require-package 'emms)
 ;; }}
 
