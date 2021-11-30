@@ -118,7 +118,7 @@
 ;; Keybindings
 (evil-define-key 'normal org-mode-map (kbd "j") 'evil-next-visual-line
                                       (kbd "k") 'evil-previous-visual-line
-                                      (kbd "C-i") 'evil-jump-forward
+                                      ;; (kbd "C-i") 'evil-jump-forward
                                       (kbd "RET") 'org-ctrl-c-ctrl-c)
 
 ;; Features

@@ -735,40 +735,25 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   :prefix "SPC"
   :states '(normal visual))
 
+(general-create-definer my-local-leader-def
+  ;; :prefix my-local-leader
+  :prefix "SPC m")
+
 (my-space-leader-def
-  "b" '(:ignore t :which-key "buffers")
-  "e" '(:ignore t :which-key "emacs")
-  "f" '(:ignore t :which-key "files")
-  "g" '(:ignore t :which-key "git")
-  "h" '(:ignore t :which-key "help")
-  "j" '(:ignore t :which-key "jump")
-  "n" '(:ignore t :which-key "note")
-  "o" '(:ignore t :which-key "open")
-  "p" '(:ignore t :which-key "quit")
-  "t" '(:ignore t :which-key "toggle")
-  "w" '(:ignore t :which-key "windows")
-  "s" '(:ignore t :which-key "system'")
 
   "SPC" 'counsel-M-x
   "TAB" (lambda () (interactive) (switch-to-buffer nil)) ; last buffer
 
   ;; app
 
-  ;; buffers
+  "b" '(:ignore t :which-key "buffers")
   "bb" 'ivy-switch-buffer-by-pinyin
   "bk" 'kill-buffer-and-window ;; "k" is preserved to replace "C-g"
 
   "c" 'my-compile
 
-  ;; debug
 
-  ;; emacs/eshell
-  "eb" 'eval-buffer
-  "ed" 'eval-defun
-  "ee" 'eval-expression
-  "es" 'eval-last-sexp
-
-  ;; files
+  "f" '(:ignore t :which-key "files")
   "fd" 'find-file-in-current-directory
   "ff" 'counsel-find-file
   "fg" 'counsel-git ; find file
@@ -777,25 +762,25 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "fr" 'counsel-recentf
   "fs" 'find-file-in-project-by-selected
 
-  ;; git
+  "g" '(:ignore t :which-key "git")
   "gg" 'my-counsel-git-grep
   ;; @see https://github.com/pidu/git-timemachine
   ;; p: previous; n: next; w:hash; W:complete hash; g:nth version; q:quit
   "gm" 'my-git-timemachine
 
-  ;; help
+  "h" '(:ignore t :which-key "help")
   "hF" 'find-function
   "hf" 'counsel-describe-function
   "hk" 'describe-key
   "hm" 'describe-mode
   "hv" 'counsel-describe-variable
 
-  ;; jump
+  "j" '(:ignore t :which-key "jump")
   "jb" 'beginning-of-defun
   "je" 'end-of-defun
   "ju" 'backward-up-list
 
-  ;; note
+  "n" '(:ignore t :which-key "note")
   "nb" 'org-roam-buffer-toggle
   "nc" 'org-roam-capture
   "nd" 'org-roam-dailies-capture-today
@@ -805,18 +790,18 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
 
   "m" 'narrow-or-widen-dwim
 
-  ;; open
+  "o" '(:ignore t :which-key "open")
   "oa" 'org-agenda
   "oo" 'browse-url-xdg-open
 
-  ;; quit
+  "q" '(:ignore t :which-key "quit")
    "qq" 'save-buffers-kill-emacs
 
-  ;; toggle
+  "t" '(:ignore t :which-key "toggle")
   "tt" 'random-healthy-color-theme
 
 
-  ;; windows
+  "w" '(:ignore t :which-key "windows")
   "1" 'winum-select-window-1
   "2" 'winum-select-window-2
   "3" 'winum-select-window-3
@@ -843,12 +828,23 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
 
   "r" 'evilmr-replace-in-buffer
 
-  ;; system
+  "s" '(:ignore t :which-key "system'")
   "sc" 'copy-to-x-clipboard
   "sv" 'paste-from-x-clipboard
   "ss" 'my-switch-to-shell
 
   "y" 'hydra-launcher/body)
+
+(my-local-leader-def
+  :states '(normal visual)
+  :keymaps 'emacs-lisp-mode-map
+  "" '(:ignore t :which-key "elisp")
+  "e" '(:ignore t :which-key "emacs")
+  "eb" 'eval-buffer
+  "ed" 'eval-defun
+  "ee" 'eval-last-sexp
+  "eE" 'eval-expression
+  )
 
 ;; Please check "init-ediff.el" which contains `my-space-leader-def' code too
 (my-comma-leader-def
@@ -1145,6 +1141,6 @@ I'm not sure this is good idea.")
 ;; (global-unset-key (kbd"C-i"))
 ;; (define-key evil-normal-state-map (kbd"C-i") 'evil-jump-forward)
 
-(evil-collection-init 'term-mode)
+(evil-collection-init)
 
 (provide 'init-evil)
