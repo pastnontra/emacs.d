@@ -54,133 +54,132 @@
 ;; List of visible packages from melpa-unstable (http://melpa.org).
 ;; Please add the package name into `melpa-include-packages'
 ;; if it's not visible after  `list-packages'.
-(defvar melpa-include-packages
-  '(ace-window ; latest stable is released on year 2014
-    auto-package-update
-    pos-tip
-    web-mode
-    racket-mode
-    nov
-    bbdb
-    esup ; Emacs start up profiler
-    native-complete
-    company-native-complete
-    js2-mode ; need new features
-    git-timemachine ; stable version is broken when git rename file
-    highlight-symbol
-    undo-fu
-    command-log-mode
-    evil ; @see https://github.com/emacs-evil/evil/commit/19cc5f8eef8bfffdec8082b604c7129782acb332
-    ;; lsp-mode ; stable version has performance issue, but unstable version sends too many warnings
-    vimrc-mode
-    rjsx-mode ; fixed the indent issue in jsx
-    package-lint ; for melpa pull request only
-    auto-yasnippet
-    typescript-mode ; the stable version lacks important feature (highlight function names)
-    evil-exchange
-    evil-find-char-pinyin
-    ;; {{ dependencies of stable realgud are too old
-    load-relative
-    loc-changes
-    test-simple
-    ;; }}
-    iedit
-    undo-tree
-    js-doc
-    ;; {{ since stable v0.13.0 released, we go back to stable version
-    ;; ivy
-    ;; counsel
-    ;; swiper
-    ;; }}
-    wgrep
-    ;; {{ themes in melpa unstable
-    ample-theme
-    molokai-theme
-    spacemacs-theme
-    leuven-theme
-    sublime-themes
-    tangotango-theme
-    darkburn-theme
-    ujelly-theme
-    afternoon-theme
-    organic-green-theme
-    inkpot-theme
-    flatui-theme
-    hc-zenburn-theme
-    naquadah-theme
-    seti-theme
-    spacegray-theme
-    jazz-theme
-    espresso-theme
-    phoenix-dark-pink-theme
-    tango-plus-theme
-    twilight-theme
-    minimal-theme
-    noctilux-theme
-    soothe-theme
-    heroku-theme
-    hemisu-theme
-    badger-theme
-    distinguished-theme
-    tao-theme
-    ;; }}
-    groovy-mode
-    company ; I won't wait another 2 years for stable
-    simple-httpd
-    findr
-    mwe-log-commands
-    noflet
-    db
-    creole
-    web
-    buffer-move
-    regex-tool
-    legalese
-    htmlize
-    scratch
-    session
-    inflections
-    lua-mode
-    pomodoro
-    packed
-    keyfreq
-    gitconfig-mode
-    textile-mode
-    w3m
-    workgroups2
-    zoutline
-    company-c-headers
-    company-statistics
-    git-modes
-    ws-butler
-    ;; qrencode
-    ;; not installed
-    visual-fill-column
-    ;; my installed
-    annalist
-    evil-collection
-    quickrun
-    rime
-    org-superstar
-    ctable
-    concurrent ; dependency
-    deferred
-    epc
-    moonscript
-    all-the-icons
-    doom-modeline
-    wc-mode
-    org-journal
-    emacsql-sqlite
-    magit-section
-    transient
-    magit
-    git-commit
-    with-editor
-    ivy-rich
-    ;; depended by chemacs2
-    kv)
-  "Packages to install from melpa-unstable.")
+;; (defvar melpa-include-packages
+;;   '(ace-window ; latest stable is released on year 2014
+;;     auto-package-update
+;;     pos-tip
+;;     web-mode
+;;     racket-mode
+;;     nov
+;;     bbdb
+;;     esup ; Emacs start up profiler
+;;     native-complete
+;;     company-native-complete
+;;     js2-mode ; need new features
+;;     git-timemachine ; stable version is broken when git rename file
+;;     highlight-symbol
+;;     undo-fu
+;;     command-log-mode
+;;     evil ; @see https://github.com/emacs-evil/evil/commit/19cc5f8eef8bfffdec8082b604c7129782acb332
+;;     ;; lsp-mode ; stable version has performance issue, but unstable version sends too many warnings
+;;     vimrc-mode
+;;     rjsx-mode ; fixed the indent issue in jsx
+;;     package-lint ; for melpa pull request only
+;;     auto-yasnippet
+;;     typescript-mode ; the stable version lacks important feature (highlight function names)
+;;     evil-exchange
+;;     evil-find-char-pinyin
+;;     ;; {{ dependencies of stable realgud are too old
+;;     load-relative
+;;     loc-changes
+;;     test-simple
+;;     ;; }}
+;;     iedit
+;;     undo-tree
+;;     js-doc
+;;     ;; {{ since stable v0.13.0 released, we go back to stable version
+;;     ;; ivy
+;;     ;; counsel
+;;     ;; swiper
+;;     ;; }}
+;;     wgrep
+;;     ;; {{ themes in melpa unstable
+;;     ample-theme
+;;     molokai-theme
+;;     spacemacs-theme
+;;     leuven-theme
+;;     sublime-themes
+;;     tangotango-theme
+;;     darkburn-theme
+;;     ujelly-theme
+;;     afternoon-theme
+;;     organic-green-theme
+;;     inkpot-theme
+;;     flatui-theme
+;;     hc-zenburn-theme
+;;     naquadah-theme
+;;     seti-theme
+;;     spacegray-theme
+;;     jazz-theme
+;;     espresso-theme
+;;     phoenix-dark-pink-theme
+;;     tango-plus-theme
+;;     twilight-theme
+;;     minimal-theme
+;;     noctilux-theme
+;;     soothe-theme
+;;     heroku-theme
+;;     hemisu-theme
+;;     badger-theme
+;;     distinguished-theme
+;;     tao-theme
+;;     ;; }}
+;;     groovy-mode
+;;     company ; I won't wait another 2 years for stable
+;;     simple-httpd
+;;     findr
+;;     mwe-log-commands
+;;     noflet
+;;     db
+;;     creole
+;;     web
+;;     buffer-move
+;;     regex-tool
+;;     legalese
+;;     htmlize
+;;     scratch
+;;     session
+;;     inflections
+;;     lua-mode
+;;     pomodoro
+;;     packed
+;;     keyfreq
+;;     gitconfig-mode
+;;     textile-mode
+;;     w3m
+;;     workgroups2
+;;     zoutline
+;;     company-c-headers
+;;     company-statistics
+;;     git-modes
+;;     ws-butler
+;;     ;; qrencode
+;;     ;; not installed
+;;     visual-fill-column
+;;     ;; my installed
+;;     annalist
+;;     evil-collection
+;;     quickrun
+;;     rime
+;;     org-superstar
+;;     ctable
+;;     concurrent ; dependency
+;;     deferred
+;;     epc
+;;     moonscript
+;;     all-the-icons
+;;     doom-modeline
+;;     wc-mode
+;;     emacsql-sqlite
+;;     magit-section
+;;     transient
+;;     magit
+;;     git-commit
+;;     with-editor
+;;     ivy-rich
+;;     ;; depended by chemacs2
+;;     kv)
+;;  "Packages to install from melpa-unstable.")
 
 (defvar melpa-stable-banned-packages nil
   "Banned packages from melpa-stable.")
@@ -270,7 +269,8 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
 IF NO-REFERSH is nil, `package-refresh-contents' is called."
   (unless (package-installed-p package min-version)
     (unless (or (assoc package package-archive-contents) no-refresh)
-      (package-refresh-contents))
+      ;; (package-refresh-contents))
+      (message "Package need to refresh"))
     (package-install package)))
 
 ;;------------------------------------------------------------------------------
@@ -398,9 +398,7 @@ IF NO-REFERSH is nil, `package-refresh-contents' is called."
 ;; }}
 
 ;; my installed
-(require-package 'rime)
-(require-package 'org-superstar)
-(require-package 'org-journal)
+(require-package 'use-package)
 (require-package 'ctable)
 (require-package 'deferred)
 (require-package 'epc)

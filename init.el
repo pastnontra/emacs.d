@@ -2,7 +2,6 @@
 
 ;; Without this comment emacs25 adds (package-initialize) here
 ;; (package-initialize)
-
 (let* ((minver "25.1"))
   (when (version< emacs-version minver)
     (error "Emacs v%s or higher is required" minver)))
@@ -83,6 +82,7 @@
   (require-init 'init-autoload)
   ;; `package-initialize' takes 35% of startup time
   ;; need check https://github.com/hlissner/doom-emacs/wiki/FAQ#how-is-dooms-startup-so-fast for solution
+  (require-init 'init-ui)
   (require-init 'init-modeline)
   (require-init 'init-utils)
   (require-init 'init-file-type)
@@ -165,7 +165,6 @@
   ;; It is my config
   (require 'quickrun)
   (require-init 'init-eaf t)
-  (require-init 'init-nox t)
   (require-init 'init-doommodeline t)
   (require-init 'init-setting t)
 

@@ -236,8 +236,8 @@ It's value could be customized liked \"/usr/bin/firefox\".
         org-refile-targets '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5))
         org-refile-use-outline-path 'file
         org-outline-path-complete-in-steps nil
-        org-todo-keywords (quote ((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)")
-                                  (sequence "WAITING(w@/!)" "SOMEDAY(S)" "PROJECT(P@)" "|" "CANCELLED(c@/!)")))
+        ;; org-todo-keywords (quote ((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)")
+        ;;                           (sequence "WAITING(w@/!)" "SOMEDAY(S)" "PROJECT(P@)" "|" "CANCELLED(c@/!)")))
         org-imenu-depth 9
         ;; @see http://irreal.org/blog/1
         org-src-fontify-natively t))

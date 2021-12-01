@@ -257,46 +257,46 @@ If the character before and after CH is space or tab, CH is NOT slash"
   "gh" 'outline-up-heading
   (kbd "TAB") 'markdown-cycle)
 
-;; {{ specify major mode uses Evil (vim) NORMAL state or EMACS original state.
+;; ;; {{ specify major mode uses Evil (vim) NORMAL state or EMACS original state.
 
-;; You may delete this setup to use Evil NORMAL state always.
-(dolist (p '((minibuffer-inactive-mode . emacs)
-             (calendar-mode . emacs)
-             (special-mode . emacs)
-             (grep-mode . emacs)
-             (Info-mode . emacs)
-             (term-mode . insert)
-             (sdcv-mode . emacs)
-             (anaconda-nav-mode . emacs)
-             (log-edit-mode . emacs)
-             (vc-log-edit-mode . emacs)
-             (magit-log-edit-mode . emacs)
-             (erc-mode . emacs)
-             (neotree-mode . emacs)
-             (w3m-mode . emacs)
-             (gud-mode . emacs)
-             (help-mode . emacs)
-             (eshell-mode . emacs)
-             (shell-mode . emacs)
-             (xref--xref-buffer-mode . emacs)
-             ;;(message-mode . emacs)
-             (epa-key-list-mode . emacs)
-             (fundamental-mode . emacs)
-             (weibo-timeline-mode . emacs)
-             (weibo-post-mode . emacs)
-             (woman-mode . emacs)
-             (sr-mode . emacs)
-             (profiler-report-mode . emacs)
-             (dired-mode . emacs)
-             (compilation-mode . emacs)
-             (speedbar-mode . emacs)
-             (ivy-occur-mode . emacs)
-             (ffip-file-mode . emacs)
-             (ivy-occur-grep-mode . normal)
-             (messages-buffer-mode . normal)
-             (js2-error-buffer-mode . emacs)))
-  (evil-set-initial-state (car p) (cdr p)))
-;; }}
+;; ;; You may delete this setup to use Evil NORMAL state always.
+;; (dolist (p '((minibuffer-inactive-mode . emacs)
+;;              (calendar-mode . emacs)
+;;              (special-mode . emacs)
+;;              (grep-mode . emacs)
+;;              (Info-mode . emacs)
+;;              (term-mode . insert)
+;;              (sdcv-mode . emacs)
+;;              (anaconda-nav-mode . emacs)
+;;              (log-edit-mode . emacs)
+;;              (vc-log-edit-mode . emacs)
+;;              (magit-log-edit-mode . emacs)
+;;              (erc-mode . emacs)
+;;              (neotree-mode . emacs)
+;;              (w3m-mode . emacs)
+;;              (gud-mode . emacs)
+;;              (help-mode . emacs)
+;;              (eshell-mode . emacs)
+;;              (shell-mode . emacs)
+;;              (xref--xref-buffer-mode . emacs)
+;;              ;;(message-mode . emacs)
+;;              (epa-key-list-mode . emacs)
+;;              (fundamental-mode . emacs)
+;;              (weibo-timeline-mode . emacs)
+;;              (weibo-post-mode . emacs)
+;;              (woman-mode . emacs)
+;;              (sr-mode . emacs)
+;;              (profiler-report-mode . emacs)
+;;              (dired-mode . emacs)
+;;              (compilation-mode . emacs)
+;;              (speedbar-mode . emacs)
+;;              (ivy-occur-mode . emacs)
+;;              (ffip-file-mode . emacs)
+;;              (ivy-occur-grep-mode . normal)
+;;              (messages-buffer-mode . normal)
+;;              (js2-error-buffer-mode . emacs)))
+;;   (evil-set-initial-state (car p) (cdr p)))
+;; ;; }}
 
 ;; I prefer Emacs way after pressing ":" in evil-mode
 (define-key evil-ex-completion-map (kbd "C-a") 'move-beginning-of-line)
@@ -310,7 +310,6 @@ If the character before and after CH is space or tab, CH is NOT slash"
 (define-key evil-insert-state-map (kbd "C-x C-n") 'evil-complete-next-line)
 (define-key evil-insert-state-map (kbd "C-x C-p") 'evil-complete-previous-line)
 (define-key evil-insert-state-map (kbd "C-]") 'aya-expand)
-(define-key evil-insert-state-map (kbd "C-h") (kbd "<backspace>"))
 
 (defun my-search-defun-from-pos (search pos)
   (evil-search search t t pos)
@@ -378,11 +377,13 @@ If the character before and after CH is space or tab, CH is NOT slash"
 (define-key evil-insert-state-map (kbd "C-e") 'move-end-of-line)
 (define-key evil-insert-state-map (kbd "C-d") 'delete-char)
 (define-key evil-insert-state-map (kbd "C-k") 'kill-line)
+(define-key evil-insert-state-map (kbd "C-h") (kbd "<backspace>"))
 ;; https://emacs.stackexchange.com/questions/9631/what-is-the-difference-between-tab-and-tab
 ;; (define-key evil-insert-state-map (kbd "TAB") 'yas-expand)
 ;; (define-key evil-insert-state-map (kbd "<tab>") 'yas-expand)
 ;; (define-key evil-emacs-state-map (kbd "TAB") 'yas-expand)
 ;; (define-key evil-emacs-state-map (kbd "<tab>") 'yas-expand)
+
 ;; {{
 (defvar evil-global-markers-history nil)
 (defun my-evil-set-marker-hack (char &optional pos advance)
@@ -570,8 +571,7 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "em" 'shellcop-erase-buffer
   ;; "eb" 'eval-buffer
   "sc" 'scratch
-  ;; "ee" 'eval-expression
-  ;; "aa" 'copy-to-x-clipboard ; used frequently
+  ;; "ee" 'eval-'copy-to-x-clipboard ; used frequently
   "aw" 'ace-swap-window
   "af" 'ace-maximize-window
   "ac" 'aya-create
@@ -740,18 +740,14 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   :prefix "SPC m")
 
 (my-space-leader-def
-
   "SPC" 'counsel-M-x
   "TAB" (lambda () (interactive) (switch-to-buffer nil)) ; last buffer
-
-  ;; app
 
   "b" '(:ignore t :which-key "buffers")
   "bb" 'ivy-switch-buffer-by-pinyin
   "bk" 'kill-buffer-and-window ;; "k" is preserved to replace "C-g"
 
   "c" 'my-compile
-
 
   "f" '(:ignore t :which-key "files")
   "fd" 'find-file-in-current-directory
@@ -788,18 +784,17 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "ni" 'org-roam-node-insert
   "ng" 'org-roam-dailies-goto-today
 
-  "m" 'narrow-or-widen-dwim
-
   "o" '(:ignore t :which-key "open")
   "oa" 'org-agenda
   "oo" 'browse-url-xdg-open
+  "os" 'my-switch-to-shell
 
   "q" '(:ignore t :which-key "quit")
-   "qq" 'save-buffers-kill-emacs
+  "qq" 'save-buffers-kill-emacs
 
   "t" '(:ignore t :which-key "toggle")
   "tt" 'random-healthy-color-theme
-
+  "tn" 'narrow-or-widen-dwim
 
   "w" '(:ignore t :which-key "windows")
   "1" 'winum-select-window-1
@@ -831,15 +826,14 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "s" '(:ignore t :which-key "system'")
   "sc" 'copy-to-x-clipboard
   "sv" 'paste-from-x-clipboard
-  "ss" 'my-switch-to-shell
 
   "y" 'hydra-launcher/body)
 
 (my-local-leader-def
   :states '(normal visual)
-  :keymaps 'emacs-lisp-mode-map
+  :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
   "" '(:ignore t :which-key "elisp")
-  "e" '(:ignore t :which-key "emacs")
+  "e" '(:ignore t :which-key "eval")
   "eb" 'eval-buffer
   "ed" 'eval-defun
   "ee" 'eval-last-sexp
@@ -1141,6 +1135,5 @@ I'm not sure this is good idea.")
 ;; (global-unset-key (kbd"C-i"))
 ;; (define-key evil-normal-state-map (kbd"C-i") 'evil-jump-forward)
 
-(evil-collection-init)
 
 (provide 'init-evil)
