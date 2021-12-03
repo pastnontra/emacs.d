@@ -182,4 +182,9 @@
     "q" 'org-agenda-quit)
   (evil-org-agenda-set-keys))
 
+(use-package calfw
+  :ensure t)
+(use-package calfw-org
+  :ensure t)
+
 (provide 'init-setting)
