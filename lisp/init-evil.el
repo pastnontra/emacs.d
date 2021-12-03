@@ -229,13 +229,15 @@ If the character before and after CH is space or tab, CH is NOT slash"
 (define-key evil-outer-text-objects-map "f" 'my-evil-path-outer-text-object)
 ;; }}
 
-;; {{ https://github.com/syl20bnr/evil-escape
-(global-set-key (kbd "<escape>") 'evil-escape)
-(setq-default evil-escape-key-sequence nil)
-;; (setq-default evil-escape-excluded-states '(emacs-state))
-;; disable evil-escape when input method is on
-(evil-escape-mode 1)
-;; }}
+;; WAIT evil-escape seems useless if you don't want to use key sequence to escape.
+;; - return normal state when emacs state
+(define-key evil-emacs-state-map (kbd "<escape>") 'evil-force-normal-state)
+;; ;; {{ https://github.com/syl20bnr/evil-escape
+;; (global-set-key (kbd "<escape>") 'evil-escape)
+;; (setq-default evil-escape-key-sequence nil)
+;; (setq evil-escape-excluded-states '(motion-state))
+;; (evil-escape-mode 1)
+;; ;; }}
 
 
 ;; Move back the cursor one position when exiting insert mode
@@ -310,6 +312,7 @@ If the character before and after CH is space or tab, CH is NOT slash"
 (define-key evil-insert-state-map (kbd "C-x C-n") 'evil-complete-next-line)
 (define-key evil-insert-state-map (kbd "C-x C-p") 'evil-complete-previous-line)
 (define-key evil-insert-state-map (kbd "C-]") 'aya-expand)
+(define-key evil-motion-state-map (kbd "<escape>") 'nil)
 
 (defun my-search-defun-from-pos (search pos)
   (evil-search search t t pos)
@@ -777,15 +780,14 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "ju" 'backward-up-list
 
   "n" '(:ignore t :which-key "note")
-  "nb" 'org-roam-buffer-toggle
   "nc" 'org-roam-capture
-  "nd" 'org-roam-dailies-capture-today
   "nf" 'org-roam-node-find
   "ni" 'org-roam-node-insert
-  "ng" 'org-roam-dailies-goto-today
 
   "o" '(:ignore t :which-key "open")
   "oa" 'org-agenda
+  "od" 'org-roam-dailies-capture-today
+  "og" 'org-roam-dailies-goto-today
   "oo" 'browse-url-xdg-open
   "os" 'my-switch-to-shell
 
@@ -823,7 +825,7 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
 
   "r" 'evilmr-replace-in-buffer
 
-  "s" '(:ignore t :which-key "system'")
+  "s" '(:ignore t :which-key "system")
   "sc" 'copy-to-x-clipboard
   "sv" 'paste-from-x-clipboard
 
@@ -837,8 +839,16 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "eb" 'eval-buffer
   "ed" 'eval-defun
   "ee" 'eval-last-sexp
-  "eE" 'eval-expression
-  )
+  "eE" 'eval-expression)
+
+(my-local-leader-def
+  :states '(normal visual)
+  :keymaps '(org-mode-map)
+  "" '(:ignore t :which-key "org")
+  "b" 'org-roam-buffer-toggle
+  "d" 'org-deadline
+  "s" 'org-schedule
+  "t" 'org-todo)
 
 ;; Please check "init-ediff.el" which contains `my-space-leader-def' code too
 (my-comma-leader-def

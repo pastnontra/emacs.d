@@ -144,6 +144,8 @@
 ;; org-roam
 (use-package org-roam
   :ensure t
+  :init
+  (setq org-roam-v2-ack t)
   :custom
   (org-roam-directory "~/org-roam")
   (org-roam-dailies-directory "~/dailies")
