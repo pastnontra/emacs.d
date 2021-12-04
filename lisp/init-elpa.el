@@ -399,6 +399,9 @@ IF NO-REFERSH is nil, `package-refresh-contents' is called."
 
 ;; my installed
 (require-package 'use-package)
+(setq use-package-always-ensure t)
+(setq use-package-always-defer t)
+(setq use-package-expand-minimally t)
 (require-package 'ctable)
 (require-package 'deferred)
 (require-package 'epc)

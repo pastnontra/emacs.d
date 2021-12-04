@@ -106,15 +106,12 @@
   ;; :hook org-mode will show: failed to define function org-superstar
   :hook (org-mode . (lambda () (org-superstar-mode 1)))
   :config
-(setq org-superstar-cycle-headline-bullets t)
-(setq org-hide-leading-stars t)
-(setq org-superstar-special-todo-items t)
-(setq org-ellipsis " ▾")
-(setq org-hide-emphasis-markers t)
-(setq tooltip-use-echo-area (not tooltip-use-echo-area)))
-
-
-;; (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+  (setq org-superstar-cycle-headline-bullets t)
+  (setq org-hide-leading-stars t)
+  (setq org-superstar-special-todo-items t)
+  (setq org-ellipsis " ▾")
+  (setq org-hide-emphasis-markers t)
+  (setq tooltip-use-echo-area (not tooltip-use-echo-area)))
 
 
 ;; Keybindings
@@ -147,7 +144,6 @@
 
 ;; org-roam
 (use-package org-roam
-  :ensure t
   :init
   (setq org-roam-v2-ack t)
   :custom
@@ -170,14 +166,12 @@
 (add-hook 'term-mode-hook 'term-mode-hook-setup)
 
 (use-package evil-collection
-  :ensure t
   :after evil
   :config
   (setq evil-collection-calendar-want-org-bindings t
         evil-collection-want-unimpaired-p nil))
 
  (use-package evil-org
-  :ensure t
   :after org
   :hook (org-mode . (lambda () evil-org-mode))
   :config
@@ -186,9 +180,8 @@
     "q" 'org-agenda-quit)
   (evil-org-agenda-set-keys))
 
-(use-package calfw
-  :ensure t)
+(use-package calfw)
 (use-package calfw-org
-  :ensure t)
+  :after calfw)
 
 (provide 'init-setting)
