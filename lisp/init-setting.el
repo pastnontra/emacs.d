@@ -139,6 +139,10 @@
          "* DONE %?\n  :PROPERTIES:\n  :ID:       %Y%-%m-%d\n  :END:")))
 
 (setq org-todo-keywords (quote ((sequence "WAIT(w@/!)" "TODO(t)" "STRT(s)" "|" "DONE(d!/!)" "CANC(c@/!)"))))
+(setq org-todo-keyword-faces
+      '(("STRT" . "yellow")
+        ("WAIT" . "orange")))
+
 (setq org-id-method 'ts)
 
 ;; org-roam
