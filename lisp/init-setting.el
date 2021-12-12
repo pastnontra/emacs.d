@@ -5,7 +5,7 @@
 (setq sentence-end-double-space nil)
 (setq word-wrap-by-category t)
 
-;; System
+;;; init-os
 (defun wsl-browse-url-xdg-open (url &optional ignored)
   (interactive (browse-url-interactive-arg "URL: "))
   (shell-command-to-string (concat "explorer.exe " url)))
@@ -56,7 +56,6 @@
 ;; rime
 
 (use-package rime
-  :ensure t
   :config
   (when *is-a-mac*
     (setq rime-librime-root "/usr/local/share/librime/dist")
@@ -97,50 +96,162 @@
 
 
 ;;; init-org
-(add-hook 'org-mode-hook #'electric-pair-mode)
 
-;; Appearance
-(use-package org-superstar
-  :ensure t
-  :after org
-  ;; :hook org-mode will show: failed to define function org-superstar
-  :hook (org-mode . (lambda () (org-superstar-mode 1)))
+(use-package org
+  :ensure nil
+  :hook electric-pair-mode
+  :custom
+  (org-ellipsis " ▾")
+  (org-hide-leading-stars t)
+  (org-hide-emphasis-markers t)
+  (org-todo-keywords (quote ((sequence "WAIT(w@/W!)" "TODO(t)" "STRT(s)" "|" "DONE(d!/!)" "CANC(c@/!)"))))
+  (org-todo-keyword-faces
+   '(("STRT" . "yellow")
+     ("WAIT" . "orange")
+     ("CANC" . "dark red")))
+  (org-default-notes-file "~/notes/Warning.org")
+  (org-capture-templates
+   '(("i" "inbox" entry
+      (file capture-new-file)
+      "* TODO %?")
+     ("f" "foo" entry
+      (file "")
+      "* DONE %?\n  :PROPERTIES:\n  :ID:       %Y%-%m-%d\n  :END:")))
+  (org-id-method 'ts)
+  ;; setq tooltip-use-echo-area (not tooltip-use-echo-area)) ;; WAIT obsoleted?
   :config
-  (setq org-superstar-cycle-headline-bullets t)
-  (setq org-hide-leading-stars t)
-  (setq org-superstar-special-todo-items t)
-  (setq org-ellipsis " ▾")
-  (setq org-hide-emphasis-markers t)
-  (setq tooltip-use-echo-area (not tooltip-use-echo-area)))
+  ;; copy from doom, see org-ctrl-c-ret after.
+  ;; depended, doom-emacs/modules/lang/org/autoload/org-tables.el
+  (defun +org/table-previous-row ()
+    "Go to the previous row (same column) in the current table. Before doing so,
+re-align the table if necessary. (Necessary because org-mode has a
+`org-table-next-row', but not `org-table-previous-row')"
+    (interactive)
+    (org-table-maybe-eval-formula)
+    (org-table-maybe-recalculate-line)
+    (if (and org-table-automatic-realign
+             org-table-may-need-update)
+        (org-table-align))
+    (let ((col (org-table-current-column)))
+      (beginning-of-line 0)
+      (when (or (not (org-at-table-p)) (org-at-table-hline-p))
+        (beginning-of-line))
+      (org-table-goto-column col)
+      (skip-chars-backward "^|\n\r")
+      (when (org-looking-at-p " ")
+        (forward-char))))
 
+  (defun +org-get-todo-keywords-for (&optional keyword)
+    "Returns the list of todo keywords that KEYWORD belongs to."
+    (when keyword
+      (cl-loop for (type . keyword-spec)
+               in (cl-remove-if-not #'listp org-todo-keywords)
+               for keywords =
+               (mapcar (lambda (x) (if (string-match "^\\([^(]+\\)(" x)
+                                       (match-string 1 x)
+                                     x))
+                       keyword-spec)
+               if (eq type 'sequence)
+               if (member keyword keywords)
+               return keywords)))
+
+  (defun org-insert-object (direction)
+    (let ((context (org-element-lineage
+                    (org-element-context)
+                    '(table table-row headline inlinetask item plain-list)
+                    t)))
+      (pcase (org-element-type context)
+        ;; Add a new list item (carrying over checkboxes if necessary)
+        ((or `item `plain-list)
+         ;; Position determines where org-insert-todo-heading and org-insert-item
+         ;; insert the new list item.
+         (if (eq direction 'above)
+             (org-beginning-of-item)
+           (org-end-of-item)
+           (backward-char))
+         (org-insert-item (org-element-property :checkbox context))
+         ;; Handle edge case where current item is empty and bottom of list is
+         ;; flush against a new heading.
+         (when (and (eq direction 'below)
+                    (eq (org-element-property :contents-begin context)
+                        (org-element-property :contents-end context)))
+           (org-end-of-item)
+           (org-end-of-line)))
+
+        ;; Add a new table row
+        ((or `table `table-row)
+         (pcase direction
+           ('below (save-excursion (org-table-insert-row t))
+                   (org-table-next-row))
+           ('above (save-excursion (org-shiftmetadown))
+                   (+org/table-previous-row))))
+
+        ;; Otherwise, add a new heading, carrying over any todo state, if
+        ;; necessary.
+        (_
+         (let ((level (or (org-current-level) 1)))
+           ;; I intentionally avoid `org-insert-heading' and the like because they
+           ;; impose unpredictable whitespace rules depending on the cursor
+           ;; position. It's simpler to express this command's responsibility at a
+           ;; lower level than work around all the quirks in org's API.
+           (pcase direction
+             (`below
+              (let (org-insert-heading-respect-content)
+                (goto-char (line-end-position))
+                (org-end-of-subtree)
+                (insert "\n" (make-string level ?*) " ")))
+             (`above
+              (org-back-to-heading)
+              (insert (make-string level ?*) " ")
+              (save-excursion (insert "\n"))))
+           (when-let* ((todo-keyword (org-element-property :todo-keyword context))
+                       (todo-type    (org-element-property :todo-type context)))
+             (org-todo
+              (cond ((eq todo-type 'done)
+                     ;; Doesn't make sense to create more "DONE" headings
+                     (car (+org-get-todo-keywords-for todo-keyword)))
+                    (todo-keyword)
+                    ('todo)))))))
+
+      (when (org-invisible-p)
+        (org-show-hidden-entry))
+      (when (and (bound-and-true-p evil-local-mode)
+                 (not (evil-emacs-state-p)))
+        (evil-insert 1))))
+
+
+  (defun org-insert-object-below (count)
+    "Inserts a new heading, table cell or item below the current one."
+    (interactive "p")
+    (dotimes (_ count) (org-insert-object 'below)))
+
+  (defun org-insert-object-above (count)
+    "Inserts a new heading, table cell or item above the current one."
+    (interactive "p")
+    (dotimes (_ count) (org-insert-object 'above)))
+
+  (defun capture-new-file ()
+    (let ((name (read-string "Name: ")))
+      (expand-file-name (format "%s.org"
+                                name) "~/inbox"))))
 
 ;; Keybindings
 (evil-define-key 'normal org-mode-map (kbd "j") 'evil-next-visual-line
                                       (kbd "k") 'evil-previous-visual-line
                                       ;; (kbd "C-i") 'evil-jump-forward
-                                      (kbd "RET") 'org-ctrl-c-ctrl-c)
+                                      (kbd "RET") 'org-ctrl-c-ctrl-c
+                                      (kbd "C-<return>") 'org-insert-object-below ;; not in visual
+                                      (kbd "C-S-<return>") 'org-insert-object-above) ;; shift opposite
+(evil-define-key 'insert org-mode-map (kbd "C-<return>") 'org-insert-object-below
+                                      (kbd "C-S-<return>") 'org-insert-object-above)
 
-;; Features
-(defun capture-new-file ()
-  (let ((name (read-string "Name: ")))
-    (expand-file-name (format "%s.org"
-                              name) "~/inbox")))
-
-(setq org-default-notes-file "~/notes/Warning.org")
-(setq org-capture-templates
-      '(("i" "inbox" entry
-         (file capture-new-file)
-         "* TODO %?")
-        ("f" "foo" entry
-         (file "")
-         "* DONE %?\n  :PROPERTIES:\n  :ID:       %Y%-%m-%d\n  :END:")))
-
-(setq org-todo-keywords (quote ((sequence "WAIT(w@/!)" "TODO(t)" "STRT(s)" "|" "DONE(d!/!)" "CANC(c@/!)"))))
-(setq org-todo-keyword-faces
-      '(("STRT" . "yellow")
-        ("WAIT" . "orange")))
-
-(setq org-id-method 'ts)
+(use-package org-superstar
+  :after org
+  :hook (org-mode . org-superstar-mode)
+  :custom
+  (org-superstar-headline-bullets-list '(?◉))
+  (org-superstar-cycle-headline-bullets t)
+  (org-superstar-special-todo-items t))
 
 ;; org-roam
 (use-package org-roam
@@ -155,8 +266,9 @@
            "* %? %i"
            :if-new (file+head "%<%Y-%m-%d>.org"
                               "#+title: %<%Y-%m-%d, %A>\n"))))
-  (org-roam-db-autosync-mode)
-)
+  (org-roam-db-autosync-mode))
+
+
 ;;; init-term
 (defun term-mode-hook-setup ()
   (let ((map (make-sparse-keymap)))
@@ -174,6 +286,7 @@
  (use-package evil-org
   :after org
   :hook (org-mode . (lambda () evil-org-mode))
+  ;;hook (org-mode . evil-org-mode) won't load after org-agenda
   :config
   (require 'evil-org-agenda)
   (evil-define-key 'motion org-agenda-mode-map

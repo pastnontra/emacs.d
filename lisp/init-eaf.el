@@ -2,6 +2,7 @@
 
 (use-package eaf
   :load-path "~/.emacs.d/site-lisp/emacs-application-framework" ; Set to "/usr/share/emacs/site-lisp/eaf" if installed from AUR
+  :defer 2
   :init
   (when *wsl* (setq ip_address
                     (shell-command-to-string "grep nameserver /etc/resolv.conf | awk '{printf $2}'")))

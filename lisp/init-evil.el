@@ -231,7 +231,7 @@ If the character before and after CH is space or tab, CH is NOT slash"
 
 ;; WAIT evil-escape seems useless if you don't want to use key sequence to escape.
 ;; - return normal state when emacs state
-(define-key evil-emacs-state-map (kbd "<escape>") 'evil-force-normal-state)
+;; (define-key evil-emacs-state-map (kbd "<escape>") 'evil-force-normal-state)
 ;; ;; {{ https://github.com/syl20bnr/evil-escape
 ;; (global-set-key (kbd "<escape>") 'evil-escape)
 ;; (setq-default evil-escape-key-sequence nil)
