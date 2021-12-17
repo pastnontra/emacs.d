@@ -1,8 +1,7 @@
 ;; -*- coding: utf-8; lexical-binding: t; -*-
 
 (use-package eaf
-  :load-path "~/.emacs.d/site-lisp/emacs-application-framework" ; Set to "/usr/share/emacs/site-lisp/eaf" if installed from AUR
-  :defer 2
+  :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
   :init
   (when *wsl* (setq ip_address
                     (shell-command-to-string "grep nameserver /etc/resolv.conf | awk '{printf $2}'")))
@@ -12,10 +11,10 @@
   ;; (setq eaf-proxy-host "172.27.224.1")
   (setq eaf-proxy-port "8889")
   :custom
-  ; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
   (eaf-browser-continue-where-left-off t)
   (eaf-browser-enable-adblocker t)
   (browse-url-browser-function 'eaf-open-browser)
+  (eaf-kill-process-after-last-buffer-closed t)
   :config
   (defalias 'browse-web #'eaf-open-browser)
   (require 'eaf)
@@ -48,7 +47,4 @@
 ;;     ("C-w" . "eaf-send-key-sequence")
 ;;     ("C-m" . "")))
 
-
-
 (provide 'init-eaf)
-
