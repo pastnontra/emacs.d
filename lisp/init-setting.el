@@ -1,15 +1,71 @@
 ;; -*- coding: utf-8; lexical-binding: t; -*-
 
+
 ;;; init-default
+
 (set-language-environment "UTF-8")
 (setq sentence-end-double-space nil)
 (setq word-wrap-by-category t)
 
-;;; init-os
-(defun wsl-browse-url-xdg-open (url &optional ignored)
-  (interactive (browse-url-interactive-arg "URL: "))
-  (shell-command-to-string (concat "explorer.exe " url)))
-(when *wsl* (advice-add #'browse-url-xdg-open :override #'wsl-browse-url-xdg-open))
+(use-package helpful
+  :commands (helpful-callable
+             helpful-variable
+             helpful-key
+             helpful-at-point)
+  :config
+  (setq helpful-max-buffers 1)
+  ;; don't pop new window
+  (setq helpful-switch-buffer-function
+        (lambda (buf) (if-let ((window (display-buffer-reuse-mode-window buf '((mode . helpful-mode)))))
+                          ;; ensure the helpful window is selected for `helpful-update'.
+                          (select-window window)
+                        ;; line above returns nil if no available window is found
+                        (pop-to-buffer buf))))
+  (defvar moon-helpful-history () "History of helpful, a list of buffers.")
+  (advice-add #'helpful-update :around #'moon-helpful@helpful-update)
+  (advice-add #'helpful--buffer :around (lambda (oldfunc &rest _)
+                                          (let ((buf (apply oldfunc _)))
+                                            (push buf moon-helpful-history)
+                                            buf))))
+
+(defun moon-helpful@helpful-update (oldfunc)
+  "Insert back/forward buttons."
+  (funcall oldfunc)
+  (let ((inhibit-read-only t))
+    (goto-char (point-min))
+    (insert-text-button "[back]"
+                        'action (lambda (&rest _)
+                                  (interactive)
+                                  (moon-helpful-switch-to-buffer (current-buffer) 1)))
+    (insert "  ")
+    (insert-text-button "[forward]"
+                        'action (lambda (&rest _)
+                                  (interactive)
+                                  (moon-helpful-switch-to-buffer (current-buffer)  -1)))
+    (insert "\n\n")))
+
+(defun moon-helpful-switch-to-buffer (buffer &optional offset)
+  "Jump to last SYMBOL in helpful history, offset by OFFSET."
+  (interactive)
+  (require 'seq)
+  (require 'cl-lib)
+  (setq moon-helpful-history (seq-remove (lambda (buf) (not (buffer-live-p buf))) moon-helpful-history))
+  (cl-labels ((find-index (elt lst)
+                          (let ((idx 0)
+                                (len (length lst)))
+                            (while (and (not (eq elt (nth idx lst)))
+                                        (not (eq idx len)))
+                              (setq idx (1+ idx)))
+                            (if (eq idx len)
+                                nil
+                              idx))))
+    (let ((idx (+ (or offset 0) (find-index buffer moon-helpful-history))))
+      (if (or (>= idx (length moon-helpful-history))
+              (< idx 0))
+          (message "No further history.")
+        (switch-to-buffer (nth idx moon-helpful-history))))))
+
+(define-key isearch-mode-map (kbd "C-h") 'isearch-delete-char)
 
 (setq visible-bell nil
       ring-bell-function #'ignore)
@@ -18,77 +74,82 @@
 (keyfreq-mode 1)
 (keyfreq-autosave-mode 1)
 
+
+;;; init-os
+
+(defun wsl-browse-url-xdg-open (url &optional ignored)
+  (interactive (browse-url-interactive-arg "URL: "))
+  (shell-command-to-string (concat "explorer.exe " url)))
+(when *wsl* (advice-add #'browse-url-xdg-open :override #'wsl-browse-url-xdg-open))
+
+
+;;; init-git
+
 (require 'magit)
 (defun magit-submodule-remove-force ()
   (interactive)
   (magit-submodule-remove (list (magit-read-module-path "Remove module")) "--force" nil))
 
 
-;; company
-(setq company-idle-delay 0.5)
-(with-eval-after-load 'company
-(define-key company-active-map (kbd "C-h") (kbd "<backspace>"))
-(define-key company-active-map (kbd "C-w") 'evil-delete-backward-word))
+;;; init-company
 
-;; Keybindings
-(require 'ivy)
+(use-package company
+  :custom
+  (company-idle-delay 0.5)
+  :bind (:map company-active-map
+              ("C-h" . "<backspace>")
+              ("C-M-i" . company-complete)
+              ;; seems override evil kbd
+              ;; ("C-n" . company-select-next)
+              ;; ("C-p" . company-select-previous)
+              ("C-w" . evil-delete-backward-word)))
+
+
+;;; init-ivy
+
+(ivy-rich-mode 1)
 (define-key ivy-minibuffer-map (kbd "C-h") (kbd "<backspace>"))
 (define-key ivy-minibuffer-map (kbd "C-w") 'ivy-backward-kill-word)
-;; (defun isearch-backward-delete-word ()
-;;   "Delete last char of the search string."
-;;   (interactive)
-;;   (unless
-;;       (equal (substring isearch-string -1)
-;;              (or)))
-;;     (isearch-backward-delete-char)))
-
-(define-key isearch-mode-map (kbd "C-h") 'isearch-delete-char)
-;; (define-key isearch-mode-map (kbd "C-w") 'isearch-backward-delete-word)
-
-;;; init-ui
-;; init-ivy
-(ivy-rich-mode 1)
 (with-eval-after-load 'counsel
   (setq ivy-initial-inputs-alist nil))
 
 
 ;;; init-lang
+
 ;; rime
-
 (use-package rime
-  :config
+  :custom
   (when *is-a-mac*
-    (setq rime-librime-root "/usr/local/share/librime/dist")
-    (setq rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include"))
-
-  (setq rime-user-data-dir "~/.emacs.d/rime")
-  (global-set-key (kbd "C-\\") 'toggle-input-method)
-
-  (setq rime-translate-keybindings '("C-h"
-                                     "C-p"
-                                     "C-n"
-                                     "C-`"
-                                     "C-k"))
-
-
-  (setq default-input-method "rime"
-        rime-show-candidate 'posframe)
-
-  (setq rime-posframe-properties
+    (rime-librime-root "/usr/local/share/librime/dist")
+    (rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include"))
+  (default-input-method "rime")
+  (rime-show-candidate 'posframe)
+  (rime-user-data-dir "~/.emacs.d/rime")
+  (rime-posframe-properties
         (list :background-color "#333333"
               :foreground-color "#dcdccc"
               :font "Arial-14"
               :internal-border-width 10))
+  (rime-posframe-style 'vertical)
+  (rime-cursor "˰")
+  :bind
+  ("C-\\" . toggle-input-method)
+  :config
+  (setq rime-translate-keybindings '("C-h"
+                                     "C-p"
+                                     "C-n"
+                                     "C-`"
+                                     "C-k")))
 
-  (setq rime-posframe-style 'vertical)
-
-  (setq rime-cursor "˰"))
 
 ;;; init-tex
+
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
 
+
 ;;; init-git
+
 (require 'git-gutter)
 (custom-set-variables '(git-gutter:modified-sign "*"))
 (set-face-foreground 'git-gutter:modified "deep sky blue")
@@ -270,6 +331,7 @@ re-align the table if necessary. (Necessary because org-mode has a
 
 
 ;;; init-term
+
 (defun term-mode-hook-setup ()
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-c") 'term-send-raw)
@@ -296,5 +358,6 @@ re-align the table if necessary. (Necessary because org-mode has a
 (use-package calfw)
 (use-package calfw-org
   :after calfw)
+
 
 (provide 'init-setting)
