@@ -404,9 +404,9 @@ IF NO-REFERSH is nil, `package-refresh-contents' is called."
 (setq use-package-expand-minimally t)
 (require-package 'ctable)
 (require-package 'deferred)
-(require-package 'epc)
+(use-package epc
+  :defer t)
 (require-package 'quickrun)
-(require-package 'evil-collection)
 
 (when *emacs26*
   ;; org => ppt, org v8.3 is required (Emacs 25 uses org v8.2)

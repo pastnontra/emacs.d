@@ -7,20 +7,29 @@
 (setq sentence-end-double-space nil)
 (setq word-wrap-by-category t)
 
+(use-package recentf
+  :ensure nil
+  :config
+  ;; move to custom?
+  (setq recentf-filename-handlers
+      (append '(abbreviate-file-name) recentf-filename-handlers))
+  (recentf-mode 1))
+
 (use-package helpful
   :commands (helpful-callable
              helpful-variable
              helpful-key
              helpful-at-point)
-  :config
-  (setq helpful-max-buffers 1)
-  ;; don't pop new window
-  (setq helpful-switch-buffer-function
+  :custom
+  (helpful-max-buffers 1)
+  (helpful-switch-buffer-function
         (lambda (buf) (if-let ((window (display-buffer-reuse-mode-window buf '((mode . helpful-mode)))))
                           ;; ensure the helpful window is selected for `helpful-update'.
                           (select-window window)
                         ;; line above returns nil if no available window is found
                         (pop-to-buffer buf))))
+  :config
+  ;; don't pop new window
   (defvar moon-helpful-history () "History of helpful, a list of buffers.")
   (advice-add #'helpful-update :around #'moon-helpful@helpful-update)
   (advice-add #'helpful--buffer :around (lambda (oldfunc &rest _)
@@ -73,6 +82,12 @@
 (require 'keyfreq)
 (keyfreq-mode 1)
 (keyfreq-autosave-mode 1)
+
+(defun clear-messages-buffer ()
+  (interactive)
+  (let ((inhibit-read-only t))
+    (with-current-buffer "*Messages*"
+      (erase-buffer))))
 
 
 ;;; init-os
