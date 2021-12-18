@@ -773,7 +773,8 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "hF" 'helpful-function
   ;; "hf" 'counsel-describe-function
   "hf" 'helpful-callable
-  "hk" 'describe-key
+  "hk" 'helpful-key
+  ;; "hk" 'describe-key
   "hm" 'describe-mode
   ;; "hv" 'counsel-describe-variable
   "hv" 'helpful-variable
@@ -1005,7 +1006,7 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
 ;; press gx twice to exchange, gX to cancel
 ;; change default key bindings (if you want) HERE
 ;; (setq evil-exchange-key (kbd "zx"))
-(my-run-with-idle-timer 4 #'evil-exchange-install)
+;; (my-run-with-idle-timer 4 #'evil-exchange-install)
 ;; }}
 
 ;; {{ @see https://github.com/syl20bnr/spacemacs/blob/master/doc/DOCUMENTATION.org#replacing-text-with-iedit
@@ -1150,5 +1151,9 @@ I'm not sure this is good idea.")
 ;; (global-unset-key (kbd"C-i"))
 ;; (define-key evil-normal-state-map (kbd"C-i") 'evil-jump-forward)
 
+(use-package evil-exchange
+  :after evil
+  :config
+  (evil-exchange-cx-install))
 
 (provide 'init-evil)

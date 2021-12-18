@@ -177,6 +177,7 @@
   :ensure nil
   :hook electric-pair-mode
   :custom
+  (org-startup-indented t)
   (org-ellipsis " ▾")
   (org-hide-leading-stars t)
   (org-hide-emphasis-markers t)
