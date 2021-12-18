@@ -26,7 +26,7 @@
   (require 'eaf-netease-cloud-music)
   (require 'eaf-jupyter)
   (require 'eaf-browser)
-  (require 'eaf-js-video-player)
+  (require 'eaf-video-player)
   (require 'eaf-image-viewer)
   (require 'eaf-file-manager)
   (require 'eaf-video-player)
