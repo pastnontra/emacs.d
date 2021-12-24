@@ -8,6 +8,7 @@
   :hook (emacs-startup . global-page-break-lines-mode))
 
 ;; theme
+(use-package doom-themes)
 (load-theme 'doom-monokai-pro t)
 (set-background-color "#121212")
 
