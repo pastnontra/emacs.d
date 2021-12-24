@@ -9,6 +9,8 @@
 
 (use-package recentf
   :ensure nil
+  :init
+  (add-to-list 'recentf-exclude "~/dailies")
   :config
   ;; move to custom?
   (setq recentf-filename-handlers
@@ -374,6 +376,9 @@ re-align the table if necessary. (Necessary because org-mode has a
 (use-package calfw)
 (use-package calfw-org
   :after calfw)
+
+
+(use-package quickrun)
 
 
 (provide 'init-setting)

@@ -79,6 +79,17 @@
 ;; Which means on every .el and .elc file loaded during start up, it has to runs those regexps against the filename.
 (let* ((file-name-handler-alist nil))
 
+  (unless (my-vc-merge-p)
+    ;; @see https://www.reddit.com/r/emacs/comments/4q4ixw/how_to_forbid_emacs_to_touch_configuration_files/
+    ;; See `custom-file' for details.
+    (setq custom-file (expand-file-name (concat my-emacs-d "custom-set-variables.el")))
+    (if (file-exists-p custom-file) (load custom-file t t))
+
+    ;; my personal setup, other major-mode specific setup need it.
+    ;; It's dependent on *.el in `my-site-lisp-dir'
+    ;; (load (expand-file-name "~/.custom.el") t nil)))
+    (load (expand-file-name "custom.el") t nil))
+
   (require-init 'init-autoload)
   ;; `package-initialize' takes 35% of startup time
   ;; need check https://github.com/hlissner/doom-emacs/wiki/FAQ#how-is-dooms-startup-so-fast for solution
@@ -163,20 +174,11 @@
   (require-init 'init-flymake t)
 
   ;; It is my config
-  (require 'quickrun)
   (require-init 'init-eaf t)
   (require-init 'init-doommodeline t)
   (require-init 'init-setting t)
-
-  (unless (my-vc-merge-p)
-    ;; @see https://www.reddit.com/r/emacs/comments/4q4ixw/how_to_forbid_emacs_to_touch_configuration_files/
-    ;; See `custom-file' for details.
-    (setq custom-file (expand-file-name (concat my-emacs-d "custom-set-variables.el")))
-    (if (file-exists-p custom-file) (load custom-file t t))
-
-    ;; my personal setup, other major-mode specific setup need it.
-    ;; It's dependent on *.el in `my-site-lisp-dir'
-    (load (expand-file-name "~/.custom.el") t nil)))
+  (require-init 'init-dashboard)
+)
 
 ;; @see https://www.reddit.com/r/emacs/comments/55ork0/is_emacs_251_noticeably_slower_than_245_on_windows/
 ;; Emacs 25 does gc too frequently
