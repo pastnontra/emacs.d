@@ -38,23 +38,10 @@
                                    (agenda . "a")
                                    (registers . "e"))
         dashboard-set-footer t
-        dashboard-footer-icon ""
-        ;; dashboard-footer-messages (shell-command-to-string "fortune | cowsay")
-;;         dashboard-footer-messages '(" _________________________________
-;; / It's more than magnificent-it's \\
-;; \\ mediocre. -Samuel Goldwyn       /
-;;  ---------------------------------
-;;         \\   ^__^
-;;          \\  (oo)\\_______
-;;             (__)\\       )\\/\\
-;;                 ||----w |
-;;                 ||     ||
-;; "
-)
+        dashboard-footer-icon "")
 
   (dashboard-setup-startup-hook)
   :config
-
 (defun dashboard-insert-footer ()
   "Insert footer of dashboard."
   (let ((footer (and dashboard-set-footer (dashboard-random-footer))))
@@ -63,7 +50,6 @@
       (dashboard-center-line footer)
       (insert dashboard-footer-icon)
       (insert " ")
-    ;; (insert (shell-command-to-string "fortune | cowsay"))
     (let ((init-info (if (functionp dashboard-init-info)
                          (funcall dashboard-init-info)
                        dashboard-init-info)))
