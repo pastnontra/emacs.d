@@ -1,6 +1,11 @@
 ;; -*- coding: utf-8; lexical-binding: t; -*-
 
+;; (use-package eaf-epc
+;;   :load-path "~/.emacs.d/site-lisp/emacs-application-framework/core/eaf-epc.el"
+;;   :defer t)
+
 (use-package eaf
+  ;; :defer t
   :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
   :init
   (when *wsl* (setq ip_address
@@ -15,6 +20,7 @@
   (eaf-browser-enable-adblocker t)
   (browse-url-browser-function 'eaf-open-browser)
   (eaf-kill-process-after-last-buffer-closed t)
+  (eaf-start-python-process-when-require nil)
   :config
   (defalias 'browse-web #'eaf-open-browser)
   (require 'eaf)
