@@ -839,6 +839,12 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
 
 (my-local-leader-def
   :states '(normal visual)
+  :keymaps '(prog-mode)
+  "r" '(:ignore t :which-key "quickrun")
+  "rr" 'quickrun)
+
+(my-local-leader-def
+  :states '(normal visual)
   :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
   "" '(:ignore t :which-key "elisp")
   "e" '(:ignore t :which-key "eval")

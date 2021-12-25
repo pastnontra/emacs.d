@@ -197,6 +197,8 @@
       (file "")
       "* DONE %?\n  :PROPERTIES:\n  :ID:       %Y%-%m-%d\n  :END:")))
   (org-id-method 'ts)
+  ()
+  (org-modules nil)
   ;; setq tooltip-use-echo-area (not tooltip-use-echo-area)) ;; WAIT obsoleted?
   :config
   ;; copy from doom, see org-ctrl-c-ret after.
@@ -378,7 +380,10 @@ re-align the table if necessary. (Necessary because org-mode has a
   :after calfw)
 
 
-(use-package quickrun)
+(use-package quickrun
+  :defer t
+  :config
+  (quickrun-set-default "c" "c/clang"))
 
 
 (provide 'init-setting)
