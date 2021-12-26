@@ -181,13 +181,13 @@
   :custom
   (org-startup-indented t)
   (org-ellipsis " ▾")
-  (org-hide-leading-stars t)
   (org-hide-emphasis-markers t)
   (org-todo-keywords (quote ((sequence "WAIT(w@/W!)" "TODO(t)" "STRT(s)" "|" "DONE(d!/!)" "CANC(c@/!)"))))
   (org-todo-keyword-faces
-   '(("STRT" . "yellow")
-     ("WAIT" . "orange")
-     ("CANC" . "dark red")))
+   '(("TODO" . "#2dc937")
+     ("STRT" . "yellow")
+     ("WAIT" . "#e7b416")
+     ("CANC" . "#cc3232")))
   (org-default-notes-file "~/notes/Warning.org")
   (org-capture-templates
    '(("i" "inbox" entry
@@ -197,9 +197,21 @@
       (file "")
       "* DONE %?\n  :PROPERTIES:\n  :ID:       %Y%-%m-%d\n  :END:")))
   (org-id-method 'ts)
-  ()
   (org-modules nil)
-  ;; setq tooltip-use-echo-area (not tooltip-use-echo-area)) ;; WAIT obsoleted?
+  (org-fontify-quote-and-verse-blocks t)
+  (org-n-level-faces 1)
+  ;; (tooltip-use-echo-area (not tooltip-use-echo-area)) ;; WAIT obsolete?
+  :custom-face
+  (org-level-1
+   ((t (:foreground "base"))))
+  (org-block-begin-line
+   ((t (:background "#424242" :extend t))))
+  (org-block
+   ((t (:background "#424242" :extend t))))
+  (org-block-end-line
+   ((t (:background "#424242" :extend t))))
+  (org-list-dt
+   ((t (:bold t))))
   :config
   ;; copy from doom, see org-ctrl-c-ret after.
   ;; depended, doom-emacs/modules/lang/org/autoload/org-tables.el
@@ -330,9 +342,20 @@ re-align the table if necessary. (Necessary because org-mode has a
   :after org
   :hook (org-mode . org-superstar-mode)
   :custom
-  (org-superstar-headline-bullets-list '(?◉))
-  (org-superstar-cycle-headline-bullets t)
-  (org-superstar-special-todo-items t))
+  (org-superstar-todo-bullet-alist
+   '(("TODO" . ?☐)
+     ("[ ]"  . ?☐)
+     ("DONE" . ?☑)
+     ("[X]"  . ?☑)))
+  (org-superstar-headline-bullets-list '(?•))
+  (org-superstar-special-todo-items t)
+  ;; TODO Bold item bullets.
+  (org-superstar-item-bullet-alist
+   '((?* . (?✤))
+     (?+ . (?+))
+     (?- . (?⁃))))
+  (org-superstar-leading-bullet ?\s)
+  (org-superstar-leading-fallback ?\s))
 
 ;; org-roam
 (use-package org-roam

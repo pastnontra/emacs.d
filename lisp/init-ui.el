@@ -10,7 +10,7 @@
 ;; theme
 (use-package doom-themes)
 (load-theme 'doom-monokai-pro t)
-(set-background-color "#121212")
+(set-background-color "#212121")
 
 ;; font
 (when window-system
@@ -24,5 +24,14 @@
 )
 
 (column-number-mode 1)
+
+(use-package hl-todo
+  :hook (after-init . global-hl-todo-mode)
+  :custom
+  (hl-todo-keyword-faces '(("TODO" . "#2dc937")
+                           ("STRT" . "#ffdf01")
+                           ("WAIT" . "#FF7E00")
+                           ("DONE" . "#4c4a4d")
+                           ("CANC" . "#cc3232"))))
 
 (provide 'init-ui)
