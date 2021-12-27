@@ -127,6 +127,10 @@
 (ivy-rich-mode 1)
 (define-key ivy-minibuffer-map (kbd "C-h") (kbd "<backspace>"))
 (define-key ivy-minibuffer-map (kbd "C-w") 'ivy-backward-kill-word)
+;; Relative kbd
+(define-key minibuffer-local-map (kbd "C-h") (kbd "<backspace>"))
+(define-key minibuffer-local-map (kbd "C-w") 'ivy-backward-kill-word)
+
 (with-eval-after-load 'counsel
   (setq ivy-initial-inputs-alist nil))
 
@@ -181,7 +185,7 @@
   :custom
   (org-startup-indented t)
   (org-ellipsis " ▾")
-  (org-hide-emphasis-markers t)
+ ;; (org-hide-emphasis-markers t)
   (org-todo-keywords (quote ((sequence "WAIT(w@/W!)" "TODO(t)" "STRT(s)" "|" "DONE(d!/!)" "CANC(c@/!)"))))
   (org-todo-keyword-faces
    '(("TODO" . "#2dc937")
@@ -213,6 +217,10 @@
   (org-list-dt
    ((t (:bold t))))
   :config
+  ;; https://stackoverflow.com/questions/1218238/how-to-make-part-of-a-word-bold-in-org-mode
+  (setcar org-emphasis-regexp-components " \t('\"{[:alpha:]")
+  (setcar (nthcdr 1 org-emphasis-regexp-components) "[:alpha:]- \t.,:!?;'\")}\\")
+  (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
   ;; copy from doom, see org-ctrl-c-ret after.
   ;; depended, doom-emacs/modules/lang/org/autoload/org-tables.el
   (defun +org/table-previous-row ()

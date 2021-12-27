@@ -9,7 +9,7 @@ on:
       - master
   schedule:
     # build at 00:05 everyday
-    - cron:  '5 0 * * *'
+    - cron:  '0 4 * * *'
 
 jobs:
   build:
@@ -18,8 +18,6 @@ jobs:
       fail-fast: false
       matrix:
         emacs_version:
-          - 26.3
-          - 27.1
           - snapshot
     steps:
     - uses: purcell/setup-emacs@master
