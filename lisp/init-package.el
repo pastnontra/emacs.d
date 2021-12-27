@@ -408,6 +408,7 @@ IF NO-REFERSH is nil, `package-refresh-contents' is called."
       use-package-expand-minimally t)
 
 (use-package benchmark-init
+  :load-path "site-lisp/benchmark-init"
   :config
   ;; To disable collection of benchmark data after init is done.
   (add-hook 'after-init-hook 'benchmark-init/deactivate))
