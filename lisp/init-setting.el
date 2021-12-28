@@ -417,12 +417,14 @@ All my (performant) foldings needs are met between this and `org-show-subtree'
 
 ;;; init-term
 
-(defun term-mode-hook-setup ()
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "C-c") 'term-send-raw)
-    (set-transient-map map (lambda () t))))
-
-(add-hook 'term-mode-hook 'term-mode-hook-setup)
+(use-package shell
+  :ensure nil
+  :hook (term-mode . term-mode-hook-setup)
+  :config
+  (defun term-mode-hook-setup ()
+    (let ((map (make-sparse-keymap)))
+      (define-key map (kbd "C-c") 'term-send-raw)
+      (set-transient-map map (lambda () t)))))
 
 
 ;; init-prog
