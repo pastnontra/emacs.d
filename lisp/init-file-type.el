@@ -20,6 +20,7 @@
 (my-add-auto-mode 'emacs-lisp-mode
                "\\.emacs-project\\'"
                "archive-contents\\'"
+               "\\.emacs_workgroups\\'"
                "\\.emacs\\.bmk\\'" )
 ;; }}
 
@@ -118,7 +119,6 @@
 (my-add-auto-mode 'typescript-mode "\\.ts$")
 
 (my-add-auto-mode 'lua-mode "\\.lua$")
-(my-add-auto-mode 'lua-mode "\\.moon$")
 
 (my-add-auto-mode 'markdown-mode "\\.\\(m[k]d\\|markdown\\)\\'")
 
