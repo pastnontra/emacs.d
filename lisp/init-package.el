@@ -407,12 +407,6 @@ IF NO-REFERSH is nil, `package-refresh-contents' is called."
       use-package-minimum-reported-time 0
       use-package-expand-minimally t)
 
-(use-package benchmark-init
-  :load-path "site-lisp/benchmark-init"
-  :config
-  ;; To disable collection of benchmark data after init is done.
-  (add-hook 'after-init-hook 'benchmark-init/deactivate))
-
 (when *emacs26*
   ;; org => ppt, org v8.3 is required (Emacs 25 uses org v8.2)
   (require-package 'org-re-reveal))
