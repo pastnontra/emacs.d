@@ -99,7 +99,6 @@
   (shell-command-to-string (concat "explorer.exe " url)))
 (when *wsl* (advice-add #'browse-url-xdg-open :override #'wsl-browse-url-xdg-open))
 
-
 ;;; init-git
 
 (require 'magit)
@@ -123,6 +122,7 @@
 
 
 ;;; init-ivy
+;; TODO Clean code
 
 (ivy-rich-mode 1)
 (define-key ivy-minibuffer-map (kbd "C-h") (kbd "<backspace>"))
@@ -185,7 +185,7 @@
   :custom
   (org-startup-indented t)
   (org-ellipsis " ▾")
- ;; (org-hide-emphasis-markers t)
+  ;; (org-hide-emphasis-markers t)
   (org-todo-keywords (quote ((sequence "WAIT(w@/W!)" "TODO(t)" "STRT(s)" "|" "DONE(d!/!)" "CANC(c@/!)"))))
   (org-todo-keyword-faces
    '(("TODO" . "#2dc937")
@@ -206,6 +206,7 @@
   (org-n-level-faces 1)
   ;; (tooltip-use-echo-area (not tooltip-use-echo-area)) ;; WAIT obsolete?
   :custom-face
+  ;; TODO Unable to load color "base"
   (org-level-1
    ((t (:foreground "base"))))
   (org-block-begin-line
@@ -380,6 +381,10 @@ re-align the table if necessary. (Necessary because org-mode has a
                               "#+title: %<%Y-%m-%d, %A>\n"))))
   (org-roam-db-autosync-mode))
 
+(use-package calfw)
+(use-package calfw-org
+  :after calfw)
+
 
 ;;; init-term
 
@@ -390,31 +395,12 @@ re-align the table if necessary. (Necessary because org-mode has a
 
 (add-hook 'term-mode-hook 'term-mode-hook-setup)
 
-(use-package evil-collection
-  :after evil
-  :config
-  (setq evil-collection-calendar-want-org-bindings t
-        evil-collection-want-unimpaired-p nil))
 
- (use-package evil-org
-  :after org
-  :hook (org-mode . (lambda () evil-org-mode))
-  ;;hook (org-mode . evil-org-mode) won't load after org-agenda
-  :config
-  (require 'evil-org-agenda)
-  (evil-define-key 'motion org-agenda-mode-map
-    "q" 'org-agenda-quit)
-  (evil-org-agenda-set-keys))
-
-(use-package calfw)
-(use-package calfw-org
-  :after calfw)
-
+;; init-prog
 
 (use-package quickrun
   :defer t
   :config
   (quickrun-set-default "c" "c/clang"))
-
 
 (provide 'init-setting)

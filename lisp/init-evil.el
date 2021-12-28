@@ -1156,12 +1156,26 @@ I'm not sure this is good idea.")
   "p" 'my-open-pdf-previous-page)
 ;; }}
 
-;; (global-unset-key (kbd"C-i"))
-;; (define-key evil-normal-state-map (kbd"C-i") 'evil-jump-forward)
 
 (use-package evil-exchange
   :after evil
   :config
   (evil-exchange-cx-install))
+
+(use-package evil-collection
+  :after evil
+  :config
+  (setq evil-collection-calendar-want-org-bindings t
+        evil-collection-want-unimpaired-p nil))
+
+ (use-package evil-org
+  :after org
+  :hook (org-mode . (lambda () evil-org-mode))
+  ;;hook (org-mode . evil-org-mode) won't load after org-agenda
+  :config
+  (require 'evil-org-agenda)
+  (evil-define-key 'motion org-agenda-mode-map
+    "q" 'org-agenda-quit)
+  (evil-org-agenda-set-keys))
 
 (provide 'init-evil)
