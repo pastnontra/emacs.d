@@ -805,15 +805,15 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "tn" 'narrow-or-widen-dwim
 
   "w" '(:ignore t :which-key "windows")
-  "1" 'winum-select-window-1
-  "2" 'winum-select-window-2
-  "3" 'winum-select-window-3
-  "4" 'winum-select-window-4
-  "5" 'winum-select-window-5
-  "6" 'winum-select-window-6
-  "7" 'winum-select-window-7
-  "8" 'winum-select-window-8
-  "9" 'winum-select-window-9
+  "1" '(winum-select-window-1 :which-key t)
+  "2" '(winum-select-window-2 :which-key t)
+  "3" '(winum-select-window-3 :which-key t)
+  "4" '(winum-select-window-4 :which-key t)
+  "5" '(winum-select-window-5 :which-key t)
+  "6" '(winum-select-window-6 :which-key t)
+  "7" '(winum-select-window-7 :which-key t)
+  "8" '(winum-select-window-8 :which-key t)
+  "9" '(winum-select-window-9 :which-key t)
   "wf" 'my-toggle-full-window
   "wg" 'split-window-horizontally
   "wv" 'split-window-vertically
@@ -837,9 +837,10 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
 
   "y" 'hydra-launcher/body)
 
+;; TODO Display org in mode
 (my-local-leader-def
   :states '(normal visual)
-  :keymaps '(prog-mode)
+  :keymaps '(prog-mode-map)
   "r" '(:ignore t :which-key "quickrun")
   "rr" 'quickrun)
 
@@ -847,7 +848,8 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   :states '(normal visual)
   :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
   "" '(:ignore t :which-key "elisp")
-  "e" '(:ignore t :which-key "eval")
+  "a" 'eval-buffer-list
+  "e" '(:ignore nil :which-key "eval")
   "eb" 'eval-buffer
   "ed" 'eval-defun
   "ee" 'eval-last-sexp
