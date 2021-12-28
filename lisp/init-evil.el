@@ -750,8 +750,6 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "bb" 'ivy-switch-buffer-by-pinyin
   "bk" 'kill-buffer-and-window ;; "k" is preserved to replace "C-g"
 
-  "c" 'my-compile
-
   "f" '(:ignore t :which-key "files")
   "fd" 'find-file-in-current-directory
   "ff" 'counsel-find-file
@@ -805,6 +803,7 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "tn" 'narrow-or-widen-dwim
 
   "w" '(:ignore t :which-key "windows")
+  ;: TODO winum-select-window-1..9
   "1" '(winum-select-window-1 :which-key t)
   "2" '(winum-select-window-2 :which-key t)
   "3" '(winum-select-window-3 :which-key t)
@@ -841,6 +840,7 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
 (my-local-leader-def
   :states '(normal visual)
   :keymaps '(prog-mode-map)
+  "c" 'my-compile
   "r" '(:ignore t :which-key "quickrun")
   "rr" 'quickrun)
 

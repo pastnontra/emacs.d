@@ -181,7 +181,12 @@
 
 (use-package org
   :ensure nil
-  :hook electric-pair-mode
+  :hook
+  (org-mode . electric-pair-mode)
+  (org-tab-first . +org-cycle-only-current-subtree-h)
+  ;; (add-hook 'org-tab-first-hook
+  ;;            #'+org-cycle-only-current-subtree-h)
+
   :custom
   (org-startup-indented t)
   (org-ellipsis " ▾")
@@ -335,7 +340,30 @@ re-align the table if necessary. (Necessary because org-mode has a
   (defun capture-new-file ()
     (let ((name (read-string "Name: ")))
       (expand-file-name (format "%s.org"
-                                name) "~/inbox"))))
+                                name) "~/inbox")))
+
+  (defun +org-cycle-only-current-subtree-h (&optional arg)
+    "Toggle the local fold at the point, and no deeper.
+`org-cycle's standard behavior is to cycle between three levels: collapsed,
+subtree and whole document. This is slow, especially in larger org buffer. Most
+of the time I just want to peek into the current subtree -- at most, expand
+*only* the current subtree.
+All my (performant) foldings needs are met between this and `org-show-subtree'
+(on zO for evil users), and `org-cycle' on shift-TAB if I need it."
+    (interactive "P")
+    (unless (eq this-command 'org-shifttab)
+      (save-excursion
+        (org-beginning-of-line)
+        (let (invisible-p)
+          (when (and (org-at-heading-p)
+                     (or org-cycle-open-archived-trees
+                         (not (member org-archive-tag (org-get-tags))))
+                     (or (not arg)
+                         (setq invisible-p (outline-invisible-p (line-end-position)))))
+            (unless invisible-p
+              (setq org-cycle-subtree-status 'subtree))
+            (org-cycle-internal-local)
+            t))))))
 
 ;; Keybindings
 (evil-define-key 'normal org-mode-map (kbd "j") 'evil-next-visual-line
@@ -365,6 +393,7 @@ re-align the table if necessary. (Necessary because org-mode has a
      (?- . (?⁃))))
   (org-superstar-leading-bullet ?\s)
   (org-superstar-leading-fallback ?\s))
+
 
 ;; org-roam
 (use-package org-roam
