@@ -8,14 +8,11 @@
   ;; :defer t
   :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
   :init
-  (when *wsl* (setq ip_address
-                    (shell-command-to-string "grep nameserver /etc/resolv.conf | awk '{printf $2}'")))
-  (when *win64* (setq eaf-python-command "python.exe"))
-  (setq eaf-proxy-type "http")
-  (setq eaf-proxy-host ip_address)
-  ;; (setq eaf-proxy-host "172.27.224.1")
-  (setq eaf-proxy-port "8889")
   :custom
+  (when *win64* (setq eaf-python-command "python.exe"))
+  (eaf-proxy-type "http")
+  (when *wsl* (eaf-proxy-host (shell-command-to-string "grep nameserver /etc/resolv.conf | awk '{printf $2}'")))
+  (eaf-proxy-port "8889")
   (eaf-browser-continue-where-left-off t)
   (eaf-browser-enable-adblocker t)
   (browse-url-browser-function 'eaf-open-browser)
