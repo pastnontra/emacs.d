@@ -7,7 +7,6 @@
 (use-package eaf
   ;; :defer t
   :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
-  :init
   :custom
   (when *win64* (setq eaf-python-command "python.exe"))
   (eaf-proxy-type "http")
