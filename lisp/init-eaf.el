@@ -1,12 +1,7 @@
 ;; -*- coding: utf-8; lexical-binding: t; -*-
 
-;; (use-package eaf-epc
-;;   :load-path "~/.emacs.d/site-lisp/emacs-application-framework/core/eaf-epc.el"
-;;   :defer t)
-
 (use-package eaf
-  ;; :defer t
-  :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
+  :load-path "site-lisp/emacs-application-framework"
   :custom
   (when *win64* (setq eaf-python-command "python.exe"))
   (eaf-proxy-type "http")
@@ -33,20 +28,6 @@
   (require 'eaf-file-manager)
   (require 'eaf-video-player)
   (require 'eaf-file-sender)
-  (require 'eaf-org-previewer)
-  ;; (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-  ;; (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-  ;; (eaf-bind-key take_photo "p" eaf-camera-keybinding)
-  ;;(eaf-bind-key nil "M-q" eaf-browser-keybinding);; unbind, see more in the Wiki
-  )
-
-
-
-;; Jupyter
-
-;; (defcustom eaf-jupyter-keybinding
-;;   `(,("C-h" ."eaf-send-key-sequence")
-;;     ("C-w" . "eaf-send-key-sequence")
-;;     ("C-m" . "")))
+  (require 'eaf-org-previewer))
 
 (provide 'init-eaf)

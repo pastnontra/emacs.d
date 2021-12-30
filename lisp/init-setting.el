@@ -208,6 +208,7 @@
   (org-id-method 'ts)
   (org-modules nil)
   (org-fontify-quote-and-verse-blocks t)
+  (help-at-pt-display-when-idle t)
   (org-n-level-faces 1)
   ;; (tooltip-use-echo-area (not tooltip-use-echo-area)) ;; WAIT obsolete?
   :custom-face
@@ -425,7 +426,6 @@ All my (performant) foldings needs are met between this and `org-show-subtree'
     (let ((map (make-sparse-keymap)))
       (define-key map (kbd "C-c") 'term-send-raw)
       (set-transient-map map (lambda () t)))))
-
 
 ;; init-prog
 
