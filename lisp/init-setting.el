@@ -111,9 +111,10 @@
 
 (use-package company
   :custom
+  ;; Need to change
   (company-idle-delay 0.5)
   :bind (:map company-active-map
-              ("C-h" . "<backspace>")
+              ("C-h" . [backspace])
               ("C-M-i" . company-complete)
               ;; seems override evil kbd
               ;; ("C-n" . company-select-next)
