@@ -33,7 +33,7 @@ jobs:
       run: git clone https://github.com/Pastnontra/emacs.d.git .emacs.d
   
     - name: Install eaf
-      run: .emacs.d/site-lisp/emacs-application-framework --install-all-apps
+      run: .emacs.d/site-lisp/emacs-application-framework/install-eaf.py --install-all-apps
 
     - name: Run tests
       run: make test
