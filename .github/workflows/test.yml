@@ -30,7 +30,7 @@ jobs:
       run: sudo pacman -S aspell aspell-en
   
     - name: Install eaf
-      run:.emacs.d/site-lisp/emacs-application-framework --install-all-apps
+      run: .emacs.d/site-lisp/emacs-application-framework --install-all-apps
 
     - name: Run tests
       run: make test
