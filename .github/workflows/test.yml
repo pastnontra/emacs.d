@@ -35,5 +35,12 @@ jobs:
     - name: Install eaf
       run: /home/runner/.emacs.d/site-lisp/emacs-application-framework/install-eaf.py --install-all-apps
 
+    - name: ls eaf app
+      run: ls /home/runner/.emacs.d/site-lisp/emacs-application-framework/app/
+
     - name: Run tests
       run: make test
+
+    - name: ls eaf again
+      run: ls /home/runner/.emacs.d/site-lisp/emacs-application-framework/app/
+
