@@ -42,5 +42,6 @@ jobs:
       run: make test
 
     - name: ls eaf again
+      if: always()
       run: ls /home/runner/.emacs.d/site-lisp/emacs-application-framework/app/
 
