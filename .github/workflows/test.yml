@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: arch-latest
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -27,7 +27,7 @@ jobs:
       run: emacs --version
 
     - name: Install dependency
-      run: sudo pacman -S aspell aspell-en
+      run: sudo apt-get install aspell aspell-en
   
     - name: Install eaf
       run: .emacs.d/site-lisp/emacs-application-framework --install-all-apps
