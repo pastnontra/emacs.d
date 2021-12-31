@@ -190,6 +190,7 @@
 
   :custom
   (org-startup-indented t)
+  (org-src-tab-acts-natively t)
   (org-ellipsis " ▾")
   ;; (org-hide-emphasis-markers t)
   (org-todo-keywords (quote ((sequence "WAIT(w@/W!)" "TODO(t)" "STRT(s)" "|" "DONE(d!/!)" "CANC(c@/!)"))))

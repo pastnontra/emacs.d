@@ -3,17 +3,14 @@ name: CI
 on:
   push:
     branches:
-      - master
-  pull_request:
-    branches:
-      - master
+      - main
   schedule:
     # build at 00:05 everyday
     - cron:  '5 0 * * *'
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: arch-latest
     strategy:
       fail-fast: false
       matrix:
@@ -30,7 +27,10 @@ jobs:
       run: emacs --version
 
     - name: Install dependency
-      run: sudo apt install aspell aspell-en
+      run: sudo pacman -S aspell aspell-en
+  
+    - name: Install eaf
+      run:.emacs.d/site-lisp/emacs-application-framework --install-all-apps
 
     - name: Run tests
       run: make test
