@@ -30,10 +30,10 @@ jobs:
       run: sudo apt-get install aspell aspell-en
 
     - name: Try to clone before
-      run: git clone https://github.com/Pastnontra/emacs.d.git .emacs.d
+      run: git clone https://github.com/Pastnontra/emacs.d.git /home/runner/.emacs.d
   
     - name: Install eaf
-      run: .emacs.d/site-lisp/emacs-application-framework/install-eaf.py --install-all-apps
+      run: /hoem/runner/.emacs.d/site-lisp/emacs-application-framework/install-eaf.py --install-all-apps
 
     - name: Run tests
       run: make test
