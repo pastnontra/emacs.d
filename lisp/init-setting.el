@@ -190,9 +190,11 @@
 
   :custom
   (org-startup-indented t)
+  (org-startup-folded 'content)
   (org-src-tab-acts-natively t)
+  (org-src-fontify-natively t)
+  (org-hide-emphasis-markers t)
   (org-ellipsis " ▾")
-  ;; (org-hide-emphasis-markers t)
   (org-todo-keywords (quote ((sequence "WAIT(w@/W!)" "TODO(t)" "STRT(s)" "|" "DONE(d!/!)" "CANC(c@/!)"))))
   (org-todo-keyword-faces
    '(("TODO" . "#2dc937")
@@ -377,6 +379,9 @@ All my (performant) foldings needs are met between this and `org-show-subtree'
                                       (kbd "C-S-<return>") 'org-insert-object-above) ;; shift opposite
 (evil-define-key 'insert org-mode-map (kbd "C-<return>") 'org-insert-object-below
                                       (kbd "C-S-<return>") 'org-insert-object-above)
+
+(use-package org-appear
+  :hook (org-mode . org-appear-mode))
 
 (use-package org-superstar
   :after org
