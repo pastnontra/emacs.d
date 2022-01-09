@@ -144,7 +144,19 @@
 ;;; init-lang
 (use-package sis
   :config
-  (sis-ism-lazyman-config "1033" "2052" 'im-select)
+  (when *win64*
+    (sis-ism-lazyman-config "1033" "2052" 'im-select))
+  (when *wsl
+    (setq sis-english-source "1033")
+    (setq sis-other-source "2052")
+    (setq sis-do-get (lambda ()
+                       (sis--ensure-dir
+                        (string-trim (shell-command-to-string "im-select.exe")))))
+    (setq sis-do-set (lambda(source)
+                       (sis--ensure-dir
+                        (call-process "/bin/bash" nil t nil "-c" (concat "im-select.exe " source)))))
+
+    (setq sis-external-ism "im-select.exe"))
   (sis-global-respect-mode t)
   (sis-global-context-mode t)
   (sis-global-inline-mode t))
