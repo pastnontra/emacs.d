@@ -124,10 +124,15 @@
 
 ;;; init-ivy
 ;; TODO Clean code
+(use-package ivy
+  :bind (:map ivy-minibuffer-map
+              ("C-h" . [backspace])
+              ("C-w" . ivy-backward-kill-word)))
 
-(ivy-rich-mode 1)
-(define-key ivy-minibuffer-map (kbd "C-h") (kbd "<backspace>"))
-(define-key ivy-minibuffer-map (kbd "C-w") 'ivy-backward-kill-word)
+(use-package ivy-rich
+  :after ivy
+  :config
+(ivy-rich-mode 1))
 ;; Relative kbd
 (define-key minibuffer-local-map (kbd "C-h") (kbd "<backspace>"))
 (define-key minibuffer-local-map (kbd "C-w") 'ivy-backward-kill-word)
@@ -137,6 +142,12 @@
 
 
 ;;; init-lang
+(use-package sis
+  :config
+  (sis-ism-lazyman-config "1033" "2052" 'im-select)
+  (sis-global-respect-mode t)
+  (sis-global-context-mode t)
+  (sis-global-inline-mode t))
 
 ;; rime
 (use-package rime
@@ -403,7 +414,7 @@ All my (performant) foldings needs are met between this and `org-show-subtree'
   (org-superstar-leading-fallback ?\s))
 
 
-;; org-roam
+;; ;; org-roam
 (use-package org-roam
   :init
   (setq org-roam-v2-ack t)
