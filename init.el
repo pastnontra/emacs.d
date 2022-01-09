@@ -71,12 +71,12 @@
                          (directory-files my-site-lisp-dir)))
            load-path))))
 
-;; ;; Benchmark init
-;; (add-to-list 'load-path "~/.emacs.d/site-lisp/benchmark-init/")
-;; (require 'benchmark-init)
-;; (require 'benchmark-init-modes)
-;; (benchmark-init/activate)
-;; (add-hook 'after-init-hook 'benchmark-init/deactivate)
+;; Benchmark init
+(add-to-list 'load-path "~/.emacs.d/site-lisp/benchmark-init/")
+(require 'benchmark-init)
+(require 'benchmark-init-modes)
+(benchmark-init/activate)
+(add-hook 'after-init-hook 'benchmark-init/deactivate)
 
 ;; @see https://www.reddit.com/r/emacs/comments/3kqt6e/2_easy_little_known_steps_to_speed_up_emacs_start/
 ;; Normally file-name-handler-alist is set to
@@ -184,8 +184,8 @@
   (require-init 'init-eaf t)
   (require-init 'init-doommodeline t)
   (require-init 'init-setting t)
-  (require-init 'init-dashboard)
-)
+  (unless *win64*
+   (require-init 'init-dashboard)))
 
 ;; @see https://www.reddit.com/r/emacs/comments/55ork0/is_emacs_251_noticeably_slower_than_245_on_windows/
 ;; Emacs 25 does gc too frequently

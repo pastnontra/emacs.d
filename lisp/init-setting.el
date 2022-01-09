@@ -101,7 +101,7 @@
 
 ;;; init-git
 
-(require 'magit)
+;; (require 'magit)
 (defun magit-submodule-remove-force ()
   (interactive)
   (magit-submodule-remove (list (magit-read-module-path "Remove module")) "--force" nil))
@@ -428,6 +428,7 @@ All my (performant) foldings needs are met between this and `org-show-subtree'
 
 ;; ;; org-roam
 (use-package org-roam
+  :after org
   :init
   (setq org-roam-v2-ack t)
   :custom
@@ -443,7 +444,7 @@ All my (performant) foldings needs are met between this and `org-show-subtree'
 
 (use-package calfw)
 (use-package calfw-org
-  :after calfw)
+  :after (org calfw))
 
 
 ;;; init-term
