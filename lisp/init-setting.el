@@ -146,7 +146,7 @@
   :config
   (when *win64*
     (sis-ism-lazyman-config "1033" "2052" 'im-select))
-  (when *wsl
+  (when *wsl*
     (setq sis-english-source "1033")
     (setq sis-other-source "2052")
     (setq sis-do-get (lambda ()
