@@ -72,7 +72,7 @@
            load-path))))
 
 ;; ;; Benchmark init
-;; (add-to-list 'load-path "site-lisp/benchmark-init")
+;; (add-to-list 'load-path "~/.emacs.d/site-lisp/benchmark-init/")
 ;; (require 'benchmark-init)
 ;; (require 'benchmark-init-modes)
 ;; (benchmark-init/activate)
