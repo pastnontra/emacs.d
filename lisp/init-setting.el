@@ -94,10 +94,31 @@
 
 ;;; init-os
 
-(defun wsl-browse-url-xdg-open (url &optional ignored)
+;; https://emacs-china.org/t/wsl-emacs-windows/18605/3?u=pastnontra
+(defun my/browse-url-generic (url &optional _new-window)
+  ;; new-window ignored
+  "Ask the WWW browser defined by `browse-url-generic-program' to load URL.
+Default to the URL around or before point.  A fresh copy of the
+browser is started up in a new process with possible additional arguments
+`browse-url-generic-args'.  This is appropriate for browsers which
+don't offer a form of remote control."
   (interactive (browse-url-interactive-arg "URL: "))
-  (shell-command-to-string (concat "explorer.exe " url)))
-(when *wsl* (advice-add #'browse-url-xdg-open :override #'wsl-browse-url-xdg-open))
+  (if (not browse-url-generic-program)
+      (error "No browser defined (`browse-url-generic-program')"))
+  (apply 'call-process browse-url-generic-program nil
+	 0 nil
+	 (append browse-url-generic-args
+                 (list (format "start %s"
+                               (replace-regexp-in-string "&" "^&" url))))))
+
+(when (and (eq system-type 'gnu/linux)
+           (string-match
+            "Linux.*Microsoft.*Linux"
+            (shell-command-to-string "uname -a")))
+
+  (setq browse-url-generic-program  "/mnt/c/Windows/System32/cmd.exe"
+        browse-url-generic-args     '("/c")
+        browse-url-browser-function #'my/browse-url-generic))
 
 ;;; init-git
 
@@ -243,11 +264,11 @@
   (org-level-1
    ((t (:foreground "base"))))
   (org-block-begin-line
-   ((t (:background "#424242" :extend t))))
+   ((t (:background "#333" :extend t))))
   (org-block
-   ((t (:background "#424242" :extend t))))
+   ((t (:background "#333" :extend t))))
   (org-block-end-line
-   ((t (:background "#424242" :extend t))))
+   ((t (:background "#333" :extend t))))
   (org-list-dt
    ((t (:bold t))))
   :config
@@ -419,9 +440,9 @@ All my (performant) foldings needs are met between this and `org-show-subtree'
   (org-superstar-special-todo-items t)
   ;; TODO Bold item bullets.
   (org-superstar-item-bullet-alist
-   '((?* . (?✤))
-     (?+ . (?+))
-     (?- . (?⁃))))
+    '(;(?- . (?⁃))
+      (?* . (?✤))
+      (?+ . (?+))))
   (org-superstar-leading-bullet ?\s)
   (org-superstar-leading-fallback ?\s))
 

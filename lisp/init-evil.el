@@ -793,7 +793,6 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "oa" 'org-agenda
   "od" 'org-roam-dailies-capture-today
   "og" 'org-roam-dailies-goto-today
-  "oo" 'browse-url-xdg-open
   "os" 'my-switch-to-shell
 
   "q" '(:ignore t :which-key "quit")

@@ -13,17 +13,20 @@
 (set-background-color "#212121")
 
 ;; font
-(when window-system
-(set-face-attribute 'default nil :font "hack 12")
-(setq face-font-rescale-alist '(("Source Han Mono SC" . 1)))
+(set-face-attribute 'default nil :font "hack 14")
+(setq face-font-rescale-alist '(("Source Han Sans" . 1))
 
 (dolist (charset '(han kana symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
                     charset
-                        (font-spec :family "Source Han Mono SC")))
+                        (font-spec :family "Source Han Sans")))
 )
 
 (column-number-mode 1)
+
+(use-package perfect-margin
+  :config
+  (perfect-margin-mode 1))
 
 (use-package hl-todo
   :hook (after-init . global-hl-todo-mode)
