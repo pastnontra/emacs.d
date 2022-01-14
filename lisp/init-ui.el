@@ -14,13 +14,12 @@
 
 ;; font
 (set-face-attribute 'default nil :font "hack 14")
-(setq face-font-rescale-alist '(("Source Han Sans" . 1))
+(setq face-font-rescale-alist '(("Source Han Sans" . 1)))
 
 (dolist (charset '(han kana symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
                     charset
                         (font-spec :family "Source Han Sans")))
-)
 
 (column-number-mode 1)
 
