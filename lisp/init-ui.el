@@ -13,13 +13,19 @@
 (set-background-color "#212121")
 
 ;; font
+(defun font-available-p (font-name)
+  (find-font (font-spec :name font-name)))
+
+(when
+ (and (font-available-p "hack")
+      (font-available-p "Source Han Sans"))
 (set-face-attribute 'default nil :font "hack 14")
 (setq face-font-rescale-alist '(("Source Han Sans" . 1)))
 
 (dolist (charset '(han kana symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
                     charset
-                        (font-spec :family "Source Han Sans")))
+                        (font-spec :family "Source Han Sans"))))
 
 (column-number-mode 1)
 
