@@ -362,13 +362,7 @@ been initialized."
 (when (eq system-type 'darwin)
   (defcustom eaf--mac-enable-rosetta nil
     "Execute EAF Python process under Rosetta2"
-    :type 'boolean)
-
-  (defvar eaf--mac-switch-to-python nil
-    "Record if Emacs switchs to Python process")
-
-  (defvar eaf--mac-has-focus t
-    "Record if Emacs has focus"))
+    :type 'boolean))
 
 (defcustom eaf-name "*eaf*"
   "Name of EAF buffer."
@@ -556,6 +550,11 @@ A hashtable, key is url and value is title.")
   "Call Python EPC function METHOD and ARGS synchronously."
   (eaf-epc-call-sync eaf-epc-process (read method) args))
 
+(defun eaf--called-from-wsl-on-windows-p ()
+  "Check whether eaf is called by Emacs on WSL and is running on Windows."
+  (and (eq system-type 'gnu/linux)
+       (string-match-p ".exe" eaf-python-command)))
+
 (defun eaf-get-emacs-xid (frame)
   "Get Emacs FRAME xid."
   (if (eaf--called-from-wsl-on-windows-p)
@@ -565,13 +564,17 @@ A hashtable, key is url and value is title.")
 (defun eaf--follow-system-dpi ()
   (if (and (getenv "WAYLAND_DISPLAY") (not (string= (getenv "WAYLAND_DISPLAY") "")))
       (progn
-        ;; We need manually set scale factor when at Gnome/Wayland environment.
-        ;; It is important to set QT_AUTO_SCREEN_SCALE_FACTOR=0
-        ;; otherwise Qt which explicitly force high DPI enabling get scaled TWICE.
-        (setenv "QT_AUTO_SCREEN_SCALE_FACTOR" "0")
+        (cond ((eaf-emacs-running-in-wayland-native)
+               ;; Wayland native need to set QT_AUTO_SCREEN_SCALE_FACTOR=1
+               ;; otherwise Qt window only have half of screen.
+               (setenv "QT_AUTO_SCREEN_SCALE_FACTOR" "1"))
+              (t
+               ;; XWayland need to set QT_AUTO_SCREEN_SCALE_FACTOR=0
+               ;; otherwise Qt which explicitly force high DPI enabling get scaled TWICE.
+               (setenv "QT_AUTO_SCREEN_SCALE_FACTOR" "0")))
         ;; Set EAF application scale factor.
         (setenv "QT_SCALE_FACTOR" "1")
-        ;; Force xwayland to ensure SWay works.
+        ;; Use XCB for input event transfer.
         (setenv "QT_QPA_PLATFORM" "xcb"))
     (setq process-environment
           (seq-filter
@@ -756,14 +759,14 @@ When called interactively, copy to ‘kill-ring’."
   (interactive)
   (if (derived-mode-p 'eaf-mode)
       (if (called-interactively-p 'any)
-          (message "%s" (kill-new (eaf-call-sync "call_function" eaf--buffer-id "get_url")))
-        (eaf-call-sync "call_function" eaf--buffer-id "get_url"))
+          (message "%s" (kill-new (eaf-call-sync "execute_function" eaf--buffer-id "get_url")))
+        (eaf-call-sync "execute_function" eaf--buffer-id "get_url"))
     (user-error "This command can only be called in an EAF buffer!")))
 
 (defun eaf-toggle-fullscreen ()
   "Toggle fullscreen."
   (interactive)
-  (eaf-call-async "execute_function" eaf--buffer-id "toggle_fullscreen" (key-description (this-command-keys-vector))))
+  (eaf-call-async "eval_function" eaf--buffer-id "toggle_fullscreen" (key-description (this-command-keys-vector))))
 
 (defun eaf--make-py-proxy-function (fun)
   "Define elisp command which can call Python function string FUN."
@@ -774,7 +777,7 @@ When called interactively, copy to ‘kill-ring’."
           (interactive)
           ;; Ensure this is only called from EAF buffer
           (if (derived-mode-p 'eaf-mode)
-              (eaf-call-async "execute_function" eaf--buffer-id fun (key-description (this-command-keys-vector)))
+              (eaf-call-async "eval_function" eaf--buffer-id fun (key-description (this-command-keys-vector)))
             (message "%s command can only be called in an EAF buffer!" sym)))
         (format
          "Proxy function to call \"%s\" on the Python side.
@@ -911,47 +914,128 @@ Including title-bar, menu-bar, offset depends on window system, and border."
       (+ (eaf--frame-top frame) (eaf--frame-internal-height frame))
     0))
 
+(defun eaf-emacs-not-use-reparent-technology ()
+  "When Emacs running in macOS、Wayland native or terminal environment,
+we can't use 'cross-process reparent' technicality like we does in X11, XWayland or Windows.
+
+In this situation, we use 'stay on top' technicality that show EAF window when Emacs get focus, hide EAF window when Emacs lost focus.
+
+'Stay on top' technicality is not perfect like 'cross-process reparent' technicality,
+provide at least one way to let everyone experience EAF. ;)"
+  (or (eq system-type 'darwin)              ;macOS
+      (eaf-emacs-running-in-wayland-native) ;Wayland native
+      (not (display-graphic-p))             ;Terminal emulator
+      ))
+
+(defun eaf-emacs-running-in-wayland-native ()
+  (and (eq window-system 'pgtk)
+       (fboundp 'pgtk-backend-display-class)
+       (string-equal (pgtk-backend-display-class) "GdkWaylandDisplay")))
+
 (eval-when-compile
-  (when (eq system-type 'darwin)
-    (defun eaf--mac-focus-change ()
-      "Manage Emacs's focus change"
-      (cond
-       ((string= "Python\n" (shell-command-to-string "app-frontmost --name"))
-        (setq eaf--mac-switch-to-python t))
+  (when (eaf-emacs-not-use-reparent-technology)
+    (cond
+     ((eq system-type 'darwin)
+      (defcustom eaf--mac-safe-focus-change t
+        "Whether to verify the active application on Emacs frame focus change.
 
-       ((string= "Emacs\n" (shell-command-to-string "app-frontmost --name"))
-        (cond
-         (eaf--mac-switch-to-python
-          (setq eaf--mac-switch-to-python nil))
-         ((not eaf--mac-has-focus)
-          (run-with-timer 0.1 nil #'eaf--mac-focus-in)
-          )
-         (eaf--mac-has-focus
-          (eaf--mac-focus-out))))
-       (t (eaf--mac-focus-out))))
+Only set this to nil if you do not use the mouse inside EAF buffers.
+The benefit of setting this to nil is that application switching
+is a lot faster but could be buggy."
+        :type 'boolean)
 
-    (defun eaf--mac-replace-eaf-buffers ()
-      (dolist (window (window-list))
-        (select-window window)
-        (when (eq major-mode 'eaf-mode)
-          (get-buffer-create "*eaf temp*")
-          (switch-to-buffer "*eaf temp*" t))))
+      (defvar eaf--mac-switch-to-python nil
+        "Record if Emacs should switch to Python process.")
 
-    (defun eaf--mac-focus-in ()
-      (setq eaf--mac-has-focus t)
-      (ignore-errors
-        (set-window-configuration (frame-parameter (selected-frame) 'eaf--mac-frame))
-        (bury-buffer "*eaf temp*")))
+      (defvar eaf--mac-has-focus t
+        "Record if Emacs has focus.")
 
-    (defun eaf--mac-focus-out (&optional frame)
-      (when eaf--mac-has-focus
-        (setq eaf--mac-has-focus nil)
-        (set-frame-parameter (or frame (selected-frame)) 'eaf--mac-frame (current-window-configuration))
-        (eaf--mac-replace-eaf-buffers)))
+      (defvar eaf--mac-unsafe-focus-change-timer nil
+        "Use timer to ignore spurious focus events.
 
-    (add-function :after after-focus-change-function #'eaf--mac-focus-change)
-    (add-to-list 'delete-frame-functions #'eaf--mac-focus-out)
-    ))
+This is only used when `eaf--mac-safe-focus-change' is nil.
+
+See
+https://old.reddit.com/r/emacs/comments/\
+kxsgtn/ignore_spurious_focus_events_for/")
+
+      (defun eaf--mac-unsafe-focus-change-handler ()
+        ;; ignore errors related to
+        ;; (wrong-type-argument eaf-epc-manager nil)
+        (ignore-errors
+          (if (frame-focus-state)
+              (eaf--mac-unsafe-focus-in)
+            (eaf--mac-unsafe-focus-out)))
+        (setq eaf--mac-unsafe-focus-change-timer nil))
+
+      (defun eaf--mac-focus-change ()
+        "Manage Emacs's focus change."
+        (if eaf--mac-safe-focus-change
+            (let ((front (shell-command-to-string "app-frontmost --name")))
+              (cond
+               ((string= "Python\n" front)
+                (setq eaf--mac-switch-to-python t))
+
+               ((string= "Emacs\n" front)
+                (cond
+                 (eaf--mac-switch-to-python
+                  (setq eaf--mac-switch-to-python nil))
+                 ((not eaf--mac-has-focus)
+                  (run-with-timer 0.1 nil #'eaf--mac-focus-in))
+                 (eaf--mac-has-focus
+                  (eaf--mac-focus-out))))
+               (t (eaf--mac-focus-out))))
+          (setq eaf--mac-unsafe-focus-change-timer
+                (unless eaf--mac-unsafe-focus-change-timer
+                  (run-at-time 0.06 nil
+                               #'eaf--mac-unsafe-focus-change-handler)))))
+
+      (defun eaf--mac-replace-eaf-buffers ()
+        (dolist (window (window-list))
+          (select-window window)
+          (when (eq major-mode 'eaf-mode)
+            (get-buffer-create "*eaf temp*")
+            (switch-to-buffer "*eaf temp*" t))))
+
+      (defun eaf--mac-focus-in ()
+        (setq eaf--mac-has-focus t)
+        (ignore-errors
+          (set-window-configuration
+           (frame-parameter (selected-frame) 'eaf--mac-frame))
+          (bury-buffer "*eaf temp*")))
+
+      (defun eaf--mac-focus-out (&optional frame)
+        (when eaf--mac-has-focus
+          (setq eaf--mac-has-focus nil)
+          (set-frame-parameter (or frame (selected-frame))
+                               'eaf--mac-frame (current-window-configuration))
+          (eaf--mac-replace-eaf-buffers)))
+
+      (defun eaf--mac-unsafe-focus-in ()
+        (eaf-call-async "show_top_views")
+        (set-window-configuration
+         (frame-parameter (selected-frame) 'eaf--mac-frame)))
+
+      (defun eaf--mac-unsafe-focus-out (&optional frame)
+        (eaf-call-async "hide_top_views")
+        (set-frame-parameter (or frame (selected-frame)) 'eaf--mac-frame
+                             (current-window-configuration)))
+
+      (defun eaf--mac-delete-frame-handler (frame)
+        (if eaf--mac-safe-focus-change
+            (eaf--mac-focus-out frame)
+          (eaf--mac-unsafe-focus-out frame)))
+
+      (add-function :after after-focus-change-function #'eaf--mac-focus-change)
+      (add-to-list 'delete-frame-functions #'eaf--mac-delete-frame-handler))
+     (t
+      (defun eaf--wayland-focus-change ()
+        "Manage Emacs's focus change."
+        (if (frame-focus-state)
+            (eaf-call-async "show_top_views")
+          (eaf-call-async "hide_top_views")))
+      (add-function :after after-focus-change-function #'eaf--wayland-focus-change)
+      ))))
 
 (defun eaf-monitor-configuration-change (&rest _)
   "EAF function to respond when detecting a window configuration change."
@@ -1259,11 +1343,6 @@ WEBENGINE-INCLUDE-PRIVATE-CODEC is only useful when app-name is video-player."
   "A wrapper around `file-name-extension' that downcases the extension of the FILE."
   (downcase (file-name-extension file)))
 
-(defun eaf--called-from-wsl-on-windows-p ()
-  "Check whether eaf is called by Emacs on WSL and is running on Windows."
-  (and (eq system-type 'gnu/linux)
-       (string-match-p ".exe" eaf-python-command)))
-
 (defun eaf--translate-wsl-url-to-windows (path)
   "Translate from a WSL PATH to a Windows path."
   (replace-regexp-in-string "/mnt/\\([a-zA-Z]\\)" "\\1:" path))
@@ -1387,7 +1466,7 @@ So multiple EAF buffers visiting the same file do not sync with each other."
   (let ((confirm-function (cdr (assoc eaf-edit-confirm-action eaf-edit-confirm-function-alist))))
     (if confirm-function
         (funcal confirm-function)
-      (eaf-call-async "update_focus_text" eaf--buffer-id (eaf--encode-string (kill-new (buffer-string))))))
+      (eaf-call-async "set_focus_text" eaf--buffer-id (eaf--encode-string (kill-new (buffer-string))))))
 
   ;; Close confirm window.
   (kill-buffer)
@@ -1399,7 +1478,7 @@ So multiple EAF buffers visiting the same file do not sync with each other."
   (eaf-monitor-configuration-change)
   (when (and eaf-browser-fullscreen-move-cursor-corner
              (string= eaf--buffer-app-name "browser"))
-    (eaf-call-async "execute_function" eaf--buffer-id "move_cursor_to_corner" (key-description (this-command-keys-vector)))))
+    (eaf-call-async "eval_function" eaf--buffer-id "move_cursor_to_corner" (key-description (this-command-keys-vector)))))
 
 ;; Update and load the theme
 (defun eaf-get-theme-mode ()
@@ -1437,7 +1516,7 @@ So multiple EAF buffers visiting the same file do not sync with each other."
           ;; Emacs window cannot get the focus normally if mouse in EAF buffer area.
           ;;
           ;; So we move mouse to frame bottom of Emacs, to make EAF receive input event.
-          (eaf-call-async "execute_function" (or eaf--buffer-id buffer_id) "move_cursor_to_corner" (key-description (this-command-keys-vector)))
+          (eaf-call-async "eval_function" (or eaf--buffer-id buffer_id) "move_cursor_to_corner" (key-description (this-command-keys-vector)))
 
         ;; Activate the window by `wmctrl' when possible
         (if (executable-find "wmctrl")
@@ -1469,14 +1548,6 @@ So multiple EAF buffers visiting the same file do not sync with each other."
           (setq-local default-directory directory))))))
 
 ;;;;;;;;;;;;;;;;;;;; Utils ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun eaf-get-view-info ()
-  (let* ((window-allocation (eaf-get-window-allocation (selected-window)))
-         (x (nth 0 window-allocation))
-         (y (nth 1 window-allocation))
-         (w (nth 2 window-allocation))
-         (h (nth 3 window-allocation)))
-    (format "%s:%s:%s:%s:%s" eaf--buffer-id x y w h)))
-
 (defun eaf-generate-keymap-doc (var)
   "This command use for generate keybindings document Wiki."
   (interactive "vEAF keybinding variable: ")
@@ -1554,7 +1625,7 @@ You can configure a blacklist using `eaf-find-file-ext-blacklist'"
   (other-window +1)
   (if (derived-mode-p 'eaf-mode)
       (progn
-        (eaf-call-async "scroll_other_buffer" (eaf-get-view-info) "up"
+        (eaf-call-async "scroll_other_buffer" eaf--buffer-id "up"
                         (if arg "line" "page"))
         (other-window -1))
     (other-window -1)
@@ -1566,7 +1637,7 @@ You can configure a blacklist using `eaf-find-file-ext-blacklist'"
   (other-window +1)
   (if (derived-mode-p 'eaf-mode)
       (progn
-        (eaf-call-async "scroll_other_buffer" (eaf-get-view-info) "down"
+        (eaf-call-async "scroll_other_buffer" eaf--buffer-id "down"
                         (if arg "line" "page"))
         (other-window -1))
     (other-window -1)
@@ -1579,7 +1650,7 @@ You can configure a blacklist using `eaf-find-file-ext-blacklist'"
   (other-window +1)
   (if (derived-mode-p 'eaf-mode)
       (progn
-        (eaf-call-async "scroll_other_buffer" (eaf-get-view-info)
+        (eaf-call-async "scroll_other_buffer" eaf--buffer-id
                         (if (string-equal direction "up") "up" "down")
                         (if line "line" "page"))
         (other-window -1))

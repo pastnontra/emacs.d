@@ -421,12 +421,12 @@ class BrowserView(QWebEngineView):
     @interactive(insert_or_do=True)
     def scroll_up(self):
         ''' Scroll up.'''
-        self.scroll_wheel(0, -100)
+        self.scroll_wheel(0, -400)
 
     @interactive(insert_or_do=True)
     def scroll_down(self):
         ''' Scroll down.'''
-        self.scroll_wheel(0, 100)
+        self.scroll_wheel(0, 400)
 
     @interactive
     def scroll_up_page(self):
@@ -456,7 +456,7 @@ class BrowserView(QWebEngineView):
         Otherwise, scroll page up.
         '''
         if self.buffer.is_focus() or self.buffer.is_fullscreen:
-            self.buffer.fake_key_event(self.buffer.current_event_string)
+            self.buffer.send_key(self.buffer.current_event_string)
         else:
             self.scroll_up_page()
 
@@ -614,11 +614,16 @@ class BrowserView(QWebEngineView):
         self.eval_js("Marker.gotoMarker('%s', (e) => window.getSelection().collapse(e, 0))" % str(marker))
         self.cleanup_links_dom()
 
-        self.eval_js("CaretBrowsing.setInitialCursor(true);")
+        markEnabled = self.execute_js("CaretBrowsing.markEnabled")
+        # reset to clear caret state so the next sentence can be marked
+        if markEnabled:
+            self.eval_js("CaretBrowsing.shutdown();")
+
+        self.buffer.caret_enable_mark()
+        self.buffer.caret_next_sentence()
         self.buffer.caret_browsing_mode = True
-        eval_in_emacs('eaf--toggle-caret-browsing', ["'t" if self.buffer.caret_browsing_mode else "'nil"])
-        self.buffer.caret_toggle_mark()
-        self.buffer.caret_next_word()
+
+        eval_in_emacs('eaf--toggle-caret-browsing', ["'t"])
 
     def copy_code_content(self, marker):
         ''' Copy the code content according to marker.'''
@@ -637,6 +642,8 @@ class BrowserView(QWebEngineView):
     @interactive
     def set_focus_text(self, new_text):
         ''' Set the focus text.'''
+        new_text = base64.b64decode(new_text).decode("utf-8")
+
         if self.set_focus_text_raw == None:
             self.set_focus_text_raw = self.read_js_content("set_focus_text.js")
 
@@ -722,12 +729,6 @@ class BrowserCookieStorage:
         ''' Clear cookies.'''
         cookie_store.deleteAllCookies()
         open(self.cookie_file, 'w').close()
-
-class HistoryPage():
-    def __init__(self, title, url, hit):
-        self.title = title
-        self.url = url
-        self.hit = float(hit)
 
 class BrowserBuffer(Buffer):
 
@@ -1138,6 +1139,17 @@ class BrowserBuffer(Buffer):
         if self.caret_browsing_mode:
             if self.caret_browsing_mark_activated:
                 self.buffer_widget.eval_js("CaretBrowsing.rotateSelection();")
+
+    @interactive
+    def caret_enable_mark(self):
+        ''' Toggle mark in caret browsing.'''
+        if self.caret_browsing_mode:
+            self.caret_browsing_mark_activated = True
+            if not self.buffer_widget.execute_js("CaretBrowsing.markEnabled"):
+                self.buffer_widget.eval_js("CaretBrowsing.toggleMark();")
+                message_to_emacs("Caret Mark set")
+        else:
+            message_to_emacs("Not in Caret Browsing mode!")
 
     @interactive
     def caret_toggle_mark(self):

@@ -156,7 +156,7 @@ class Buffer(QGraphicsScene):
         ''' Build insert or do.'''
         def _do ():
             if self.is_focus():
-                self.fake_key_event(self.current_event_string)
+                self.send_key(self.current_event_string)
             else:
                 getattr(self, method_name)()
         setattr(self, "insert_or_{}".format(method_name), _do)
@@ -317,7 +317,7 @@ class Buffer(QGraphicsScene):
     def update_with_data(self, update_data):
         pass
 
-    def execute_function(self, function_name):
+    def eval_function(self, function_name):
         ''' Execute function.'''
         getattr(self, function_name)()
 
@@ -341,19 +341,19 @@ class Buffer(QGraphicsScene):
         ''' Execute JavaScript function and return result.'''
         return None
 
-    def call_function(self, function_name):
+    def execute_function(self, function_name):
         ''' Call function.'''
         return getattr(self, function_name)()
 
-    def call_function_with_args(self, function_name, *args, **kwargs):
+    def execute_function_with_args(self, function_name, *args, **kwargs):
         ''' Call function with arguments.'''
         return getattr(self, function_name)(*args, **kwargs)
 
     @abstract
-    def fake_key_event_filter(self, event_string):
+    def send_key_filter(self, event_string):
         pass
 
-    def fake_key_event(self, event_string):
+    def send_key(self, event_string):
         ''' Fake key event.'''
         # Init.
         text = event_string
@@ -381,9 +381,9 @@ class Buffer(QGraphicsScene):
         for widget in self.get_key_event_widgets():
             QApplication.sendEvent(widget, key_press)
 
-        self.fake_key_event_filter(event_string)
+        self.send_key_filter(event_string)
 
-    def fake_key_sequence(self, event_string):
+    def send_key_sequence(self, event_string):
         ''' Fake key sequence.'''
         event_list = event_string.split("-")
 
