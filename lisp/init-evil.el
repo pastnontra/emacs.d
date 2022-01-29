@@ -767,15 +767,12 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "gm" 'my-git-timemachine
 
   "h" '(:ignore t :which-key "help")
+  "hb" 'describe-bindings
   "hc" 'helpful-command
-  ;; "hF" 'find-function
   "hF" 'helpful-function
-  ;; "hf" 'counsel-describe-function
   "hf" 'helpful-callable
   "hk" 'helpful-key
-  ;; "hk" 'describe-key
   "hm" 'describe-mode
-  ;; "hv" 'counsel-describe-variable
   "hv" 'helpful-variable
   "hp" 'helpful-at-point
 
