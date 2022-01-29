@@ -184,7 +184,9 @@ don't offer a form of remote control."
 
     (setq sis-external-ism "im-select.exe"))
   (sis-global-respect-mode t)
-  (sis-global-context-mode t)
+  ;; Cause problem when insert a item after a empty item.
+  ;; - | <-Cursor here
+  ;; (sis-global-context-mode t)
   (sis-global-inline-mode t))
 
 ;; rime
@@ -329,7 +331,9 @@ re-align the table if necessary. (Necessary because org-mode has a
          (if (eq direction 'above)
              (org-beginning-of-item)
            (org-end-of-item)
-           (backward-char))
+           ;; TODO This line Seems not work in my config, and after comment this, everything likely work fine.
+           ;; (backward-char)
+           )
          (org-insert-item (org-element-property :checkbox context))
          ;; Handle edge case where current item is empty and bottom of list is
          ;; flush against a new heading.
