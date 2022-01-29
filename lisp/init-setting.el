@@ -164,6 +164,11 @@ don't offer a form of remote control."
 
 ;;; init-lang
 (use-package sis
+  :init
+  ;; Default lists will slow down the speed of =C-h=.
+  ;; Also can solve by set =sis-respect-prefix-and-buffer= to =nil=.
+  (defvar sis-prefix-override-keys
+    (list "C-c" "C-x"))
   :config
   (when *win64*
     (sis-ism-lazyman-config "1033" "2052" 'im-select))
