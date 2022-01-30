@@ -479,14 +479,15 @@ All my (performant) foldings needs are met between this and `org-show-subtree'
 
 ;;; init-term
 
-(use-package shell
-  :ensure nil
-  :hook (term-mode . term-mode-hook-setup)
+(use-package vterm
+  :hook (vterm-mode . vterm-mode-hook-setup)
   :config
-  (defun term-mode-hook-setup ()
+  ;; TODO Workaround, set C-c instead of prefix.
+  (defun vterm-mode-hook-setup ()
     (let ((map (make-sparse-keymap)))
-      (define-key map (kbd "C-c") 'term-send-raw)
+      (define-key map (kbd "C-c") 'vterm-send-C-c)
       (set-transient-map map (lambda () t)))))
+
 
 ;; init-prog
 
