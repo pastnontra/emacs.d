@@ -772,6 +772,7 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "hF" 'helpful-function
   "hf" 'helpful-callable
   "hk" 'helpful-key
+  "hl" 'view-lossage
   "hm" 'describe-mode
   "hv" 'helpful-variable
   "hp" 'helpful-at-point
