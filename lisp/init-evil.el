@@ -771,11 +771,11 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "hc" 'helpful-command
   "hF" 'helpful-function
   "hf" 'helpful-callable
+  "hh" 'helpful-at-point
   "hk" 'helpful-key
   "hl" 'view-lossage
   "hm" 'describe-mode
   "hv" 'helpful-variable
-  "hp" 'helpful-at-point
 
   "j" '(:ignore t :which-key "jump")
   "jb" 'beginning-of-defun
@@ -857,7 +857,9 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   :states '(normal visual)
   :keymaps '(org-mode-map)
   "" '(:ignore t :which-key "org")
-  "b" 'org-roam-buffer-toggle
+  "b" '(:ignore nil :which-key "org-babel")
+  "bt" 'org-babel-tangle
+  "rb" 'org-roam-buffer-toggle
   "d" 'org-deadline
   "s" 'org-schedule
   "t" 'org-todo)
