@@ -142,6 +142,9 @@ don't offer a form of remote control."
               ;; ("C-p" . company-select-previous)
               ("C-w" . evil-delete-backward-word)))
 
+(use-package company-box
+  :hook (company-mode . company-box-mode))
+
 
 ;;; init-ivy
 ;; TODO Clean code
@@ -213,7 +216,11 @@ don't offer a form of remote control."
                                      "C-n"
                                      "C-`"
                                      "C-k")))
-
+(use-package flyspell-correct
+  :after flyspell
+  :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
+(use-package flyspell-correct-ivy
+  :after flyspell-correct)
 
 ;;; init-tex
 
