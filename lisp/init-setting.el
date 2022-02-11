@@ -499,11 +499,48 @@ All my (performant) foldings needs are met between this and `org-show-subtree'
       (set-transient-map map (lambda () t)))))
 
 
-;; init-prog
+;;; init-prog
 
 (use-package quickrun
   :defer t
   :config
   (quickrun-set-default "c" "c/clang"))
+
+;; LSP
+(use-package lsp-mode
+  :custom
+  ;; enable log only for debug
+  (setq lsp-log-io nil)
+  ;; use `evil-matchit' instead
+  (setq lsp-enable-folding nil)
+  ;; handle yasnippet by myself
+  (setq lsp-enable-snippet nil)
+  (setq lsp-enable-symbol-highlighting t)
+  ;; use find-fine-in-project instead
+  (setq lsp-enable-links t)
+  ;; auto restart lsp
+  (setq lsp-restart 'auto-restart)
+  :config
+  (evil-define-key 'normal lsp-mode-map (kbd "gd") 'lsp-find-definition)
+  (evil-define-key 'normal lsp-mode-map (kbd "gr") 'lsp-find-references)
+  ;; no real time syntax check
+  (setq lsp-diagnostic-package :none)
+  ;; don't watch 3rd party javascript libraries
+  (push "[/\\\\][^/\\\\]*\\.\\(json\\|html\\|jade\\)$" lsp-file-watch-ignored)
+  ;; don't ping LSP language server too frequently
+  (defvar lsp-on-touch-time 0)
+  (defun my-lsp-on-change-hack (orig-fun &rest args)
+    ;; do NOT run `lsp-on-change' too frequently
+    (when (> (- (float-time (current-time))
+                lsp-on-touch-time) 120) ;; 2 mins
+      (setq lsp-on-touch-time (float-time (current-time)))
+      (apply orig-fun args)))
+  (advice-add 'lsp-on-change :around #'my-lsp-on-change-hack))
+
+(use-package lsp-pyright
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-pyright)
+                         (lsp-deferred))))
+
 
 (provide 'init-setting)
