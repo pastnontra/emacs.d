@@ -242,10 +242,13 @@ don't offer a form of remote control."
   :ensure nil
   :hook
   (org-mode . electric-pair-mode)
+  (org-mode . (lambda ()
+           (setq-local electric-pair-inhibit-predicate
+                   `(lambda (c)
+                  (if (char-equal c ?<) t (,electric-pair-inhibit-predicate c))))))
   (org-tab-first . +org-cycle-only-current-subtree-h)
   ;; (add-hook 'org-tab-first-hook
   ;;            #'+org-cycle-only-current-subtree-h)
-
   :custom
   (org-startup-indented t)
   (org-startup-folded 'content)
@@ -463,7 +466,7 @@ All my (performant) foldings needs are met between this and `org-show-subtree'
   (org-superstar-leading-fallback ?\s))
 
 
-;; ;; org-roam
+;; org-roam
 (use-package org-roam
   :after org
   :init
