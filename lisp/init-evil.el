@@ -382,6 +382,7 @@ If the character before and after CH is space or tab, CH is NOT slash"
 (define-key evil-insert-state-map (kbd "C-d") 'delete-char)
 (define-key evil-insert-state-map (kbd "C-k") 'kill-line)
 (define-key evil-insert-state-map (kbd "C-h") (kbd "<backspace>"))
+(setq evil-want-Y-yank-to-eol t)
 ;; https://emacs.stackexchange.com/questions/9631/what-is-the-difference-between-tab-and-tab
 ;; (define-key evil-insert-state-map (kbd "TAB") 'yas-expand)
 ;; (define-key evil-insert-state-map (kbd "<tab>") 'yas-expand)
@@ -791,7 +792,7 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "oa" 'org-agenda
   "od" 'org-roam-dailies-capture-today
   "og" 'org-roam-dailies-goto-today
-  "os" 'my-switch-to-shell
+  "ot" 'vterm
 
   "q" '(:ignore t :which-key "quit")
   "qq" 'save-buffers-kill-emacs
@@ -1177,5 +1178,10 @@ I'm not sure this is good idea.")
   (evil-define-key 'motion org-agenda-mode-map
     "q" 'org-agenda-quit)
   (evil-org-agenda-set-keys))
+
+(use-package evil-anzu
+  :after evil
+  :config
+  (global-anzu-mode 1))
 
 (provide 'init-evil)
