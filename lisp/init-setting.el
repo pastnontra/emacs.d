@@ -138,8 +138,8 @@ don't offer a form of remote control."
               ("C-h" . [backspace])
               ("C-M-i" . company-complete)
               ;; seems override evil kbd
-              ;; ("C-n" . company-select-next)
-              ;; ("C-p" . company-select-previous)
+              ("C-n" . company-select-next)
+              ("C-p" . company-select-previous)
               ("C-w" . evil-delete-backward-word)))
 
 (use-package company-box
@@ -219,8 +219,10 @@ don't offer a form of remote control."
 (use-package flyspell-correct
   :after flyspell
   :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
+
 (use-package flyspell-correct-ivy
-  :after flyspell-correct)
+  :after flySpell-correct)
+
 
 ;;; init-tex
 
@@ -250,6 +252,7 @@ don't offer a form of remote control."
   ;; (add-hook 'org-tab-first-hook
   ;;            #'+org-cycle-only-current-subtree-h)
   :custom
+  (org-agenda-files '("~/dailies"))
   (org-startup-indented t)
   (org-startup-folded 'content)
   (org-src-tab-acts-natively t)
@@ -293,6 +296,7 @@ don't offer a form of remote control."
   (setcar org-emphasis-regexp-components " \t('\"{[:alpha:]")
   (setcar (nthcdr 1 org-emphasis-regexp-components) "[:alpha:]- \t.,:!?;'\")}\\")
   (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
+
   ;; copy from doom, see org-ctrl-c-ret after.
   ;; depended, doom-emacs/modules/lang/org/autoload/org-tables.el
   (defun +org/table-previous-row ()
@@ -431,7 +435,26 @@ All my (performant) foldings needs are met between this and `org-show-subtree'
             (unless invisible-p
               (setq org-cycle-subtree-status 'subtree))
             (org-cycle-internal-local)
-            t))))))
+            t)))))
+
+  ;;; org-babel
+  (defun my/org-babel-execute-src-block (&optional _arg info _params)
+  "Load language if needed"
+  (let* ((lang (nth 0 info))
+         (sym (if (member (downcase lang) '("c" "cpp" "c++")) 'C (intern lang)))
+         (backup-languages org-babel-load-languages))
+    ;; - (LANG . nil) 明确禁止的语言，不加载。
+    ;; - (LANG . t) 已加载过的语言，不重复载。
+    (unless (assoc sym backup-languages)
+      (condition-case err
+          (progn
+            (org-babel-do-load-languages 'org-babel-load-languages (list (cons sym t)))
+            (setq-default org-babel-load-languages (append (list (cons sym t)) backup-languages)))
+        (file-missing
+         (setq-default org-babel-load-languages backup-languages)
+         err)))))
+
+(advice-add 'org-babel-execute-src-block :before #'my/org-babel-execute-src-block))
 
 ;; Keybindings
 (evil-define-key 'normal org-mode-map (kbd "j") 'evil-next-visual-line
@@ -489,6 +512,8 @@ All my (performant) foldings needs are met between this and `org-show-subtree'
 
 ;;; init-term
 
+(setq term-prompt-regexp "^.*❯")
+
 (use-package vterm
   :hook (vterm-mode . vterm-mode-hook-setup)
   :config
@@ -540,7 +565,11 @@ All my (performant) foldings needs are met between this and `org-show-subtree'
 (use-package lsp-pyright
   :hook (python-mode . (lambda ()
                          (require 'lsp-pyright)
-                         (lsp-deferred))))
+                         (lsp)))) ; lsp-defer can't use gd and gr at first.
 
+;; scheme
+(use-package geiser-mit)
+
+(setq initial-major-mode 'org-mode)
 
 (provide 'init-setting)
