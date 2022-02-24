@@ -20,6 +20,12 @@
         (require feature)
       (error nil))))
 
+(defun my-hostname ()
+  "Return stripped output of cli program hostname."
+  (let* ((output (shell-command-to-string "hostname")))
+    ;; Windows DOS might output some extra noise
+    (string-trim (replace-regexp-in-string "hostname" "" output))))
+
 (defun my-git-root-dir ()
   "Git root directory."
   (locate-dominating-file default-directory ".git"))
@@ -308,7 +314,7 @@ For example, you can '(setq my-mplayer-extra-opts \"-fs -ao alsa -vo vdpau\")'."
 
 (defun my-gclip ()
   "Get clipboard content."
-  (let* ((powershell-program (executable-find "powershell.exe")))
+  (let (powershell-program)
     (cond
      ;; Windows
      ((and *win64* (fboundp 'w32-get-clipboard-data))
@@ -316,11 +322,14 @@ For example, you can '(setq my-mplayer-extra-opts \"-fs -ao alsa -vo vdpau\")'."
       (w32-get-clipboard-data))
 
      ;; Windows 10
-     (powershell-program
+     ((and *win64* (setq powershell-program (executable-find "powershell.exe")))
       (string-trim-right
        (with-output-to-string
          (with-current-buffer standard-output
            (call-process powershell-program nil t nil "-command" "Get-Clipboard")))))
+
+     (*cygwin*
+      (string-trim-right (shell-command-to-string "cat /dev/clipboard")))
 
      ;; xclip can handle
      (t
@@ -329,21 +338,35 @@ For example, you can '(setq my-mplayer-extra-opts \"-fs -ao alsa -vo vdpau\")'."
 (defvar my-ssh-client-user nil
   "User name of ssh client.")
 
+(defun my-send-string-to-cli-stdin (string program)
+  "Send STRING to cli PROGRAM's stdin."
+  (with-temp-buffer
+    (insert string)
+    (call-process-region (point-min) (point-max) program)))
+
+(defun my-write-string-to-file (string file)
+  "Write STRING to FILE."
+  (with-temp-buffer
+    (insert string)
+    (write-region (point-min) (point-max) file)))
+
 (defun my-pclip (str-val)
   "Put STR-VAL into clipboard."
-  (let* ((win64-clip-program (executable-find "clip.exe"))
+  (let* (win64-clip-program
          ssh-client)
     (cond
-     ;; Windows 10 or Windows 7
-     ((and win64-clip-program)
-      (with-temp-buffer
-        (insert str-val)
-        (call-process-region (point-min) (point-max) win64-clip-program)))
+     ;; Windows 10
+     ((and *win64* (setq win64-clip-program (executable-find "clip.exe")))
+      (my-send-string-to-cli-stdin str-val win64-clip-program))
 
      ;; Windows
      ((and *win64* (fboundp 'w32-set-clipboard-data))
       ;; Don't know why, but on Windows 7 this API does not work.
       (w32-set-clipboard-data str-val))
+
+     ;; Cygwin
+     (*cygwin*
+      (my-write-string-to-file str-val "/dev/clipboard"))
 
      ;; If Emacs is inside an ssh session, place the clipboard content
      ;; into "~/.tmp-clipboard" and send it back into ssh client

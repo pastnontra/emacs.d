@@ -643,6 +643,7 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "cxr" 'org-clock-report ; `C-c C-x C-r'
   "qq" 'my-multi-purpose-grep
   "dd" 'counsel-etags-grep-current-directory ; it seems can't work
+  "dc" 'my-grep-pinyin-in-current-directory
   ;; "rr" 'my-counsel-recentf
   "da" 'diff-lisp-mark-selected-text-as-a
   "db" 'diff-lisp-diff-a-and-b
@@ -889,9 +890,9 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
   "SPC kk" 'scroll-other-window-up
   ;; "SPC hh" 'random-healthy-color-theme
   ;; "SPC yy" 'hydra-launcher/body
-  "SPC yy" 'hydra-launcher/body
+  "SPC yy" 'my-hydra-zoom/body
   "SPC ii" 'my-toggle-indentation
-  "SPC g" 'hydra-git/body
+  "SPC g" 'my-hydra-git/body
   "SPC ur" 'gud-remove
   "SPC ub" 'gud-break
   "SPC uu" 'gud-run
