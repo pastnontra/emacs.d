@@ -1,7 +1,7 @@
-; ;; -*- coding: utf-8; lexical-binding: t; -*-
+;; -*- coding: utf-8; lexical-binding: t; -*-
 ;
-; (require 'doom-modeline)
-; (doom-modeline-mode 1)
+(require 'doom-modeline)
+(doom-modeline-mode 1)
 ;
 ; ;; How tall the mode-line should be. It's only respected in GUI.
 ; ;; If the actual char height is larger, it respects the actual height.
