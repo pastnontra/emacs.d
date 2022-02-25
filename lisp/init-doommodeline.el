@@ -171,12 +171,12 @@
 
 ;; Below is my configuration
 ;; indicator
-(set-face-attribute 'doom-modeline-evil-emacs-state nil
-                    :foreground "#AB9DF2") ; purple
-
-(set-face-attribute 'doom-modeline-evil-normal-state nil
-                    :foreground "aqua")
-(set-face-attribute 'doom-modeline-project-dir nil
-                    :foreground "#AB9DF2") ; purple
+; (set-face-attribute 'doom-modeline-evil-emacs-state nil
+;                     :foreground "#AB9DF2") ; purple
+;
+; (set-face-attribute 'doom-modeline-evil-normal-state nil
+;                     :foreground "aqua")
+; (set-face-attribute 'doom-modeline-project-dir nil
+;                     :foreground "#AB9DF2") ; purple
 
 (provide 'init-doommodeline)
